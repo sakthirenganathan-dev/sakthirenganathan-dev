@@ -177,14 +177,7 @@ Automatically synchronized through GitHub Actions (`.github/workflows/profile-ci
 
 <div align="center">
 
-<img src="assets/id-dashboard.svg" alt="Shinobi Intelligence Telemetry" width="100%">
-
-<br><br>
-
-<!-- REAL-TIME DYNAMIC COMMIT STREAK -->
-<a href="https://github.com/sakthirenganathan-dev">
-  <img src="https://streak-stats.demolab.com/?user=sakthirenganathan-dev&theme=tokyonight&background=070212&ring=a855f7&fire=06b6d4&currStreakNum=ffffff&sideNums=c084fc&sideLabels=94a3b8&dates=64748b&border=6b21a8&border_radius=16" alt="Sakthi's Live GitHub Streak" width="85%">
-</a>
+<img src="assets/id-dashboard.svg" alt="Shinobi Intelligence Telemetry &amp; Will of Fire Streak Console" width="100%">
 
 </div>
 

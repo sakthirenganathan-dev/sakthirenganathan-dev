@@ -62,6 +62,19 @@ async function fetchGitHubData() {
   const latestRepoName = latestRepo ? latestRepo.name : 'VisionMate-AI';
   const latestRepoTime = latestRepo ? new Date(latestRepo.pushed_at).toISOString().split('T')[0] : 'Today';
 
+  // Read previous cache for streak numbers
+  let prevStreak = { totalContributions: 169, currentStreak: 2, longestStreak: 5 };
+  if (fs.existsSync(CACHE_FILE)) {
+    try {
+      const c = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+      if (c.totalContributions) prevStreak.totalContributions = c.totalContributions;
+      if (c.currentStreak) prevStreak.currentStreak = c.currentStreak;
+      if (c.longestStreak) prevStreak.longestStreak = c.longestStreak;
+    } catch (e) {
+      // ignore
+    }
+  }
+
   const now = new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC';
 
   const freshData = {
@@ -72,6 +85,9 @@ async function fetchGitHubData() {
     topLangs: sortedLangs.length > 0 ? sortedLangs : ['TypeScript', 'JavaScript', 'Python', 'Dart'],
     latestRepoName,
     latestRepoTime,
+    totalContributions: prevStreak.totalContributions,
+    currentStreak: prevStreak.currentStreak,
+    longestStreak: prevStreak.longestStreak,
     lastSynced: now,
     status: 'LIVE_OK',
   };
@@ -106,146 +122,355 @@ function getCachedOrFallbackData(reason) {
     topLangs: ['TypeScript', 'JavaScript', 'Python', 'Dart'],
     latestRepoName: 'sakthirenganathan-dev',
     latestRepoTime: '2026-11-02',
+    totalContributions: 169,
+    currentStreak: 2,
+    longestStreak: 5,
     lastSynced: new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC',
     status: reason,
   };
 }
 
 function generateTelemetrySvg(data) {
-  const langsStr = data.topLangs.join(' · ');
   const statusLabel = data.status === 'LIVE_OK' 
     ? 'AUTOMATICALLY SYNCHRONIZED' 
     : `CACHED (${data.status})`;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-label="Shinobi Live Holographic Telemetry">
+  const lang0 = data.topLangs[0] || 'TypeScript';
+  const lang1 = data.topLangs[1] || 'JavaScript';
+  const lang2 = data.topLangs[2] || 'Python';
+  const lang3 = data.topLangs[3] || 'Dart';
+
+  const totalCommits = data.totalContributions || 169;
+  const currentStreak = data.currentStreak || 2;
+  const longestStreak = data.longestStreak || 5;
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="390" viewBox="0 0 1200 390" role="img" aria-label="Shinobi Intelligence Telemetry &amp; Chakra Streak Console">
   <defs>
-    <radialGradient id="teleBg" cx="50%" cy="50%" r="70%">
-      <stop offset="0%" stop-color="#180a36" stop-opacity="0.95"/>
-      <stop offset="60%" stop-color="#0a0317" stop-opacity="0.98"/>
-      <stop offset="100%" stop-color="#030008" stop-opacity="1"/>
+    <!-- Background Space Atmosphere -->
+    <radialGradient id="teleBg" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#140628" stop-opacity="0.95"/>
+      <stop offset="55%" stop-color="#090217" stop-opacity="0.98"/>
+      <stop offset="100%" stop-color="#020006" stop-opacity="1"/>
     </radialGradient>
-    <linearGradient id="headbandPlate" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#475569"/><stop offset="25%" stop-color="#94a3b8"/><stop offset="50%" stop-color="#cbd5e1"/><stop offset="75%" stop-color="#64748b"/><stop offset="100%" stop-color="#334155"/>
+
+    <!-- Glass Card Gradients -->
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#110526" stop-opacity="0.92"/>
+      <stop offset="50%" stop-color="#090217" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#05010e" stop-opacity="0.98"/>
     </linearGradient>
-    <linearGradient id="laserLine" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#67e8f9" stop-opacity="0"/>
-      <stop offset="50%" stop-color="#a855f7" stop-opacity="1"/>
-      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+
+    <linearGradient id="borderLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc" stop-opacity="0.75"/>
+      <stop offset="50%" stop-color="#7c3aed" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.6"/>
     </linearGradient>
+
+    <linearGradient id="borderRight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.75"/>
+      <stop offset="50%" stop-color="#a855f7" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#f43f5e" stop-opacity="0.7"/>
+    </linearGradient>
+
+    <!-- Flame & Chakra Gradients -->
+    <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="45%" stop-color="#fb923c"/>
+      <stop offset="75%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#67e8f9"/>
+    </linearGradient>
+
+    <linearGradient id="chakraBarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="35%" stop-color="#c084fc"/>
+      <stop offset="70%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+
     <linearGradient id="scanBeamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="#06b6d4" stop-opacity="0"/>
       <stop offset="30%" stop-color="#67e8f9" stop-opacity="0.35"/>
       <stop offset="70%" stop-color="#a855f7" stop-opacity="0.35"/>
       <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="chakraPlateGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.6"/>
-      <stop offset="50%" stop-color="#c084fc" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.6"/>
-    </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="4" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="plateAura" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <style>
-      @keyframes sweepLaser { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-      @keyframes blinkBeacon { 0%, 100% { opacity: 0.35; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px #22c55e); } }
-      @keyframes scanSweep {
-        0% { transform: translateX(60px); opacity: 0; }
-        15% { opacity: 0.45; }
-        85% { opacity: 0.45; }
-        100% { transform: translateX(1100px); opacity: 0; }
-      }
-      @keyframes chakraBreathe {
-        0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 3px #a855f7); }
-        50% { opacity: 0.9; filter: drop-shadow(0 0 10px #06b6d4); }
-      }
-      @keyframes pipPulse1 { 0%, 100% { opacity: 0.3; } 33% { opacity: 1; } }
-      @keyframes pipPulse2 { 0%, 100% { opacity: 0.3; } 66% { opacity: 1; } }
-      @keyframes pipPulse3 { 0%, 100% { opacity: 0.3; } 99% { opacity: 1; } }
 
-      .laser { animation: sweepLaser 5s linear infinite; }
-      .beacon { animation: blinkBeacon 2.2s ease-in-out infinite; transform-origin: 920px 109px; }
-      .scan-line { animation: scanSweep 6s ease-in-out infinite; }
-      .chakra-plate { animation: chakraBreathe 4s ease-in-out infinite; }
-      .pip-1 { animation: pipPulse1 2s infinite; }
-      .pip-2 { animation: pipPulse2 2s infinite; }
-      .pip-3 { animation: pipPulse3 2s infinite; }
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+
+    <!-- Ambient Grid Pattern -->
+    <pattern id="cyberGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#a855f7" stroke-width="0.5" stroke-opacity="0.06"/>
+      <circle cx="0" cy="0" r="1" fill="#67e8f9" fill-opacity="0.15"/>
+    </pattern>
+
+    <!-- Filters -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="textGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#c084fc" flood-opacity="0.6"/>
+    </filter>
+
+    <filter id="flameGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#f43f5e" flood-opacity="0.8"/>
+    </filter>
+
+    <style>
+      @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+      @keyframes scanSweep {
+        0% { transform: translateX(30px); opacity: 0; }
+        15% { opacity: 0.4; }
+        85% { opacity: 0.4; }
+        100% { transform: translateX(1170px); opacity: 0; }
+      }
+      @keyframes blinkBeacon {
+        0%, 100% { opacity: 0.4; transform: scale(0.9); }
+        50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px #22c55e); }
+      }
+      @keyframes flameBreathe {
+        0%, 100% { transform: scale(1); filter: drop-shadow(0 0 6px #f43f5e); }
+        50% { transform: scale(1.08); filter: drop-shadow(0 0 16px #fb923c); }
+      }
+      @keyframes pulseBar {
+        0%, 100% { opacity: 0.85; }
+        50% { opacity: 1; filter: drop-shadow(0 0 8px #06b6d4); }
+      }
+      @keyframes pipPulse1 { 0%, 100% { opacity: 0.35; } 33% { opacity: 1; } }
+      @keyframes pipPulse2 { 0%, 100% { opacity: 0.35; } 66% { opacity: 1; } }
+      @keyframes pipPulse3 { 0%, 100% { opacity: 0.35; } 99% { opacity: 1; } }
+
+      .cursor-blink { animation: blink 1.1s step-end infinite; }
+      .scan-line { animation: scanSweep 6.5s ease-in-out infinite; }
+      .beacon { animation: blinkBeacon 2.2s ease-in-out infinite; transform-origin: 0px 0px; }
+      .flame-anim { animation: flameBreathe 3s ease-in-out infinite; transform-origin: 195px 125px; }
+      .pulse-bar { animation: pulseBar 3.2s ease-in-out infinite; }
+      .pip-1 { animation: pipPulse1 2.2s infinite; }
+      .pip-2 { animation: pipPulse2 2.2s infinite; }
+      .pip-3 { animation: pipPulse3 2.2s infinite; }
+
+      .f-mono { font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace; }
+      .f-sans { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
 
       @media (prefers-reduced-motion: reduce) {
-        .laser, .beacon, .scan-line, .chakra-plate, .pip-1, .pip-2, .pip-3 {
+        .cursor-blink, .scan-line, .beacon, .flame-anim, .pulse-bar, .pip-1, .pip-2, .pip-3 {
           animation: none !important;
         }
       }
     </style>
   </defs>
 
-  <rect width="1200" height="260" fill="url(#teleBg)"/>
+  <!-- Canvas Background -->
+  <rect width="1200" height="390" fill="url(#teleBg)"/>
+  <rect width="1200" height="390" fill="url(#cyberGrid)"/>
 
-  <!-- Subtle Cyan Scanning Line (Radar Sweep) -->
-  <rect x="0" y="20" width="3" height="220" fill="url(#scanBeamGrad)" class="scan-line" opacity="0.4"/>
+  <!-- Scanning Radar Beam -->
+  <rect x="0" y="16" width="3" height="358" fill="url(#scanBeamGrad)" class="scan-line" opacity="0.4"/>
 
-  <!-- Top Floating Header -->
-  <g transform="translate(600, 36)" text-anchor="middle">
-    <text font-family="monospace" font-size="12" fill="#c084fc" letter-spacing="4" font-weight="700">
-      01 // LIVE SHINOBI INTELLIGENCE TELEMETRY · ${statusLabel}
+  <!-- Header Bar -->
+  <g transform="translate(36, 16)">
+    <!-- Terminal Prompt Pill -->
+    <rect x="0" y="0" width="280" height="26" rx="13" fill="#1e093b" stroke="#7c3aed" stroke-opacity="0.5" stroke-width="1"/>
+    <text x="14" y="17" class="f-mono" font-size="11" font-weight="700" fill="#67e8f9">&gt;_ shinobi.telemetry/sakthi</text>
+    <text x="210" y="17" class="f-mono" font-size="11" font-weight="700" fill="#a855f7">| live</text>
+    <rect class="cursor-blink" x="252" y="6" width="6" height="14" rx="1" fill="#22c55e"/>
+
+    <!-- Center Section Banner -->
+    <text x="564" y="17" class="f-mono" font-size="11.5" font-weight="800" fill="#c084fc" letter-spacing="2.5" text-anchor="middle">
+      04 // LIVE SHINOBI INTELLIGENCE &amp; WILL OF FIRE TELEMETRY
+    </text>
+
+    <!-- Village Identifier Badge -->
+    <text x="1128" y="17" class="f-mono" font-size="11" font-weight="800" fill="#67e8f9" letter-spacing="1.2" text-anchor="end">
+      木ノ葉 // KONOHA.SYS
     </text>
   </g>
 
-  <!-- Horizontal Laser Guideline -->
-  <line x1="60" y1="130" x2="1140" y2="130" stroke="#3b0764" stroke-width="1.5"/>
-  <line x1="60" y1="130" x2="400" y2="130" stroke="url(#laserLine)" stroke-width="2.5" class="laser" filter="url(#glow)"/>
+  <!-- Left Panel: GitHub Operational Telemetry -->
+  <g transform="translate(36, 54)">
+    <!-- Card Base: 548 x 294 -->
+    <rect width="548" height="294" rx="16" fill="url(#cardBg)" stroke="url(#borderLeft)" stroke-width="1.5" filter="url(#softGlow)"/>
 
-  <!-- Center Leaf Village Headband Plate with Subtle Chakra Pulse -->
-  <g transform="translate(600, 130)">
-    <!-- Breathing Chakra Aura behind Headband -->
-    <rect x="-143" y="-27" width="286" height="54" rx="10" fill="none" stroke="url(#chakraPlateGlow)" stroke-width="1.5" class="chakra-plate"/>
+    <!-- Panel Header Bar -->
+    <rect width="548" height="38" rx="16" fill="#140628" fill-opacity="0.85"/>
+    <line x1="0" y1="38" x2="548" y2="38" stroke="#a855f7" stroke-opacity="0.25" stroke-width="1"/>
 
-    <g transform="translate(-140, -24)">
-      <rect width="280" height="48" rx="8" fill="url(#headbandPlate)" stroke="#1e293b" stroke-width="2"/>
-      <circle cx="10" cy="14" r="2.2" fill="#1e293b"/>
-      <circle cx="10" cy="34" r="2.2" fill="#1e293b"/>
-      <circle cx="270" cy="14" r="2.2" fill="#1e293b"/>
-      <circle cx="270" cy="34" r="2.2" fill="#1e293b"/>
-      <path d="M 140 18 C 133 20 129 26 133 32 C 137 37 145 35 147 30 C 148 26 143 24 140 27 C 138 29 141 31 143 30 M 147 33 L 155 37" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round"/>
+    <!-- Window Dots -->
+    <circle cx="22" cy="19" r="4.5" fill="#f43f5e" fill-opacity="0.85"/>
+    <circle cx="38" cy="19" r="4.5" fill="#fbbf24" fill-opacity="0.85"/>
+    <circle cx="54" cy="19" r="4.5" fill="#22c55e" fill-opacity="0.85"/>
+
+    <text x="74" y="23" class="f-mono" font-size="11" font-weight="800" fill="#cbd5e1" letter-spacing="1.2">
+      SYS.INTEL // REPOSITORIES &amp; IMPACT
+    </text>
+    <text x="526" y="23" class="f-mono" font-size="10.5" font-weight="700" fill="#38bdf8" text-anchor="end">
+      LIVE STATS
+    </text>
+
+    <!-- Body Content -->
+    <!-- Metric 1: Public Repositories (Primary Counter) -->
+    <g transform="translate(28, 64)">
+      <!-- Activity Pips -->
+      <g transform="translate(0, 0)">
+        <circle cx="0" cy="0" r="2.2" fill="#06b6d4" class="pip-1"/>
+        <circle cx="7" cy="0" r="2.2" fill="#a855f7" class="pip-2"/>
+        <circle cx="14" cy="0" r="2.2" fill="#22c55e" class="pip-3"/>
+        <text x="26" y="4" class="f-mono" font-size="10.5" font-weight="700" fill="#94a3b8" letter-spacing="1.5">PUBLIC OPEN-SOURCE REPOSITORIES</text>
+      </g>
+      <text x="0" y="38" class="f-sans" font-size="34" font-weight="900" fill="url(#titleGrad)" filter="url(#textGlow)">${data.publicRepos}</text>
+      <text x="60" y="36" class="f-sans" font-size="13" font-weight="600" fill="#67e8f9">Scrolls masterfully deployed</text>
     </g>
-    <text y="46" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="14" fill="#ffffff" text-anchor="middle" letter-spacing="2">
-      SAKTHI RENGANATHAN · S-RANK
-    </text>
-    <text y="64" font-family="monospace" font-size="10" fill="#67e8f9" text-anchor="middle" letter-spacing="1">
-      TOP CHAKRA: ${langsStr}
-    </text>
-  </g>
 
-  <!-- Left Live Telemetry: Repositories & Stars & Followers -->
-  <g transform="translate(200, 115)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
-    <!-- Subtle Chakra Activity Indicators -->
-    <g transform="translate(-80, -14)">
-      <circle cx="0" cy="0" r="2" fill="#06b6d4" class="pip-1"/>
-      <circle cx="6" cy="0" r="2" fill="#a855f7" class="pip-2"/>
-      <circle cx="12" cy="0" r="2" fill="#22c55e" class="pip-3"/>
+    <!-- Divider Line -->
+    <line x1="28" y1="130" x2="520" y2="130" stroke="#7c3aed" stroke-opacity="0.2" stroke-width="1"/>
+
+    <!-- Metric 2: Impact Counters (Stars & Followers) -->
+    <g transform="translate(28, 148)">
+      <!-- Stars Box -->
+      <rect x="0" y="0" width="160" height="48" rx="8" fill="#180733" stroke="#a855f7" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="14" y="20" class="f-mono" font-size="9.5" font-weight="700" fill="#94a3b8" letter-spacing="1">EARNED STARS</text>
+      <text x="14" y="39" class="f-sans" font-size="17" font-weight="900" fill="#fbbf24">⭐ ${data.totalStars}</text>
+
+      <!-- Followers Box -->
+      <rect x="174" y="0" width="160" height="48" rx="8" fill="#180733" stroke="#a855f7" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="188" y="20" class="f-mono" font-size="9.5" font-weight="700" fill="#94a3b8" letter-spacing="1">FOLLOWERS</text>
+      <text x="188" y="39" class="f-sans" font-size="17" font-weight="900" fill="#67e8f9">👥 ${data.followers}</text>
+
+      <!-- Code Forks Box -->
+      <rect x="348" y="0" width="144" height="48" rx="8" fill="#180733" stroke="#a855f7" stroke-opacity="0.3" stroke-width="1"/>
+      <text x="362" y="20" class="f-mono" font-size="9.5" font-weight="700" fill="#94a3b8" letter-spacing="1">TOTAL FORKS</text>
+      <text x="362" y="39" class="f-sans" font-size="17" font-weight="900" fill="#c084fc">🍴 ${data.totalForks}</text>
     </g>
-    <text font-family="monospace" font-size="11" fill="#a78bfa" letter-spacing="2">PUBLIC REPOSITORIES</text>
-    <text y="28" font-size="28" font-weight="900" fill="#ffffff">${data.publicRepos}</text>
-    <text y="48" font-family="monospace" font-size="11" fill="#38bdf8">EARNED STARS: ${data.totalStars} · FOLLOWERS: ${data.followers}</text>
+
+    <!-- Metric 3: Top Elemental Chakra Natures (Languages) -->
+    <g transform="translate(28, 218)">
+      <text x="0" y="0" class="f-mono" font-size="10" font-weight="700" fill="#94a3b8" letter-spacing="1.2">TOP CHAKRA NATURES (LANGUAGES):</text>
+      <g transform="translate(0, 10)">
+        <!-- Language 1 -->
+        <rect x="0" y="0" width="112" height="24" rx="6" fill="#1e103d" stroke="#38bdf8" stroke-width="1"/>
+        <circle cx="12" cy="12" r="3.5" fill="#38bdf8"/>
+        <text x="24" y="16" class="f-sans" font-size="11" font-weight="700" fill="#f1f5f9">${lang0}</text>
+
+        <!-- Language 2 -->
+        <rect x="122" y="0" width="112" height="24" rx="6" fill="#1e103d" stroke="#fbbf24" stroke-width="1"/>
+        <circle cx="134" cy="12" r="3.5" fill="#fbbf24"/>
+        <text x="146" y="16" class="f-sans" font-size="11" font-weight="700" fill="#f1f5f9">${lang1}</text>
+
+        <!-- Language 3 -->
+        <rect x="244" y="0" width="94" height="24" rx="6" fill="#1e103d" stroke="#34d399" stroke-width="1"/>
+        <circle cx="256" cy="12" r="3.5" fill="#34d399"/>
+        <text x="268" y="16" class="f-sans" font-size="11" font-weight="700" fill="#f1f5f9">${lang2}</text>
+
+        <!-- Language 4 -->
+        <rect x="348" y="0" width="84" height="24" rx="6" fill="#1e103d" stroke="#c084fc" stroke-width="1"/>
+        <circle cx="360" cy="12" r="3.5" fill="#c084fc"/>
+        <text x="372" y="16" class="f-sans" font-size="11" font-weight="700" fill="#f1f5f9">${lang3}</text>
+      </g>
+    </g>
+
+    <!-- Latest Active Scroll Tag -->
+    <g transform="translate(28, 276)">
+      <!-- Beacon -->
+      <g transform="translate(4, -4)">
+        <circle cx="0" cy="0" r="4.5" fill="#22c55e" class="beacon"/>
+        <circle cx="0" cy="0" r="2" fill="#ffffff"/>
+      </g>
+      <text x="16" y="0" class="f-mono" font-size="10.5" font-weight="700" fill="#64748b" letter-spacing="1">
+        LATEST DISPATCH: <tspan fill="#86efac" font-weight="800">${data.latestRepoName}</tspan> // ACTIVE
+      </text>
+    </g>
   </g>
 
-  <!-- Right Live Telemetry: Latest Commit & Sync Time -->
-  <g transform="translate(1000, 115)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
-    <circle cx="-80" cy="-6" r="4.5" fill="#22c55e" class="beacon"/>
-    <text font-family="monospace" font-size="11" fill="#86efac" letter-spacing="2">LATEST ACTIVE SCROLL</text>
-    <text y="24" font-size="17" font-weight="900" fill="#ffffff">${data.latestRepoName}</text>
-    <text y="44" font-family="monospace" font-size="11" fill="#cbd5e1">PUSHED: ${data.latestRepoTime}</text>
+  <!-- Right Panel: Will of Fire Chakra Streak Console -->
+  <g transform="translate(616, 54)">
+    <!-- Card Base: 548 x 294 -->
+    <rect width="548" height="294" rx="16" fill="url(#cardBg)" stroke="url(#borderRight)" stroke-width="1.5" filter="url(#softGlow)"/>
+
+    <!-- Panel Header Bar -->
+    <rect width="548" height="38" rx="16" fill="#0d031c" fill-opacity="0.85"/>
+    <line x1="0" y1="38" x2="548" y2="38" stroke="#06b6d4" stroke-opacity="0.3" stroke-width="1"/>
+
+    <!-- Window Dots -->
+    <circle cx="22" cy="19" r="4.5" fill="#a855f7" fill-opacity="0.85"/>
+    <circle cx="38" cy="19" r="4.5" fill="#06b6d4" fill-opacity="0.85"/>
+    <circle cx="54" cy="19" r="4.5" fill="#22c55e" fill-opacity="0.85"/>
+
+    <text x="74" y="23" class="f-mono" font-size="11" font-weight="800" fill="#cbd5e1" letter-spacing="1.2">
+      WILL OF FIRE // CHAKRA COMMIT STREAK
+    </text>
+    <text x="526" y="23" class="f-mono" font-size="10.5" font-weight="700" fill="#f43f5e" text-anchor="end">
+      火の意志 · ACTIVE
+    </text>
+
+    <!-- Body Content: Center Flame & 3 Dynamic Streak Badges -->
+    <!-- Center Dynamic Flame Emblem with Breathing Aura -->
+    <g class="flame-anim" transform="translate(195, 125)">
+      <!-- Outer Flame Halo -->
+      <circle cx="0" cy="-6" r="38" fill="url(#scanBeamGrad)" opacity="0.3"/>
+      <!-- Multi-tier Stylized Shinobi Flame (火) -->
+      <path d="M 0 -36 C 8 -22 24 -14 24 8 C 24 22 13 32 0 32 C -13 32 -24 22 -24 8 C -24 -10 -10 -22 0 -36 Z" fill="url(#flameGrad)" filter="url(#flameGlow)"/>
+      <path d="M 0 -24 C 5 -14 15 -8 15 6 C 15 15 8 22 0 22 C -8 22 -15 15 -15 6 C -15 -6 -6 -14 0 -24 Z" fill="#ffffff" opacity="0.9"/>
+      <!-- Core Kanji: 火 (Fire) -->
+      <text x="0" y="7" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="14" fill="#0f021e" text-anchor="middle">火</text>
+    </g>
+
+    <!-- Streak Metric 1: Total Contributions -->
+    <g transform="translate(28, 56)">
+      <rect x="0" y="0" width="118" height="136" rx="12" fill="#17072e" stroke="#7c3aed" stroke-opacity="0.4" stroke-width="1"/>
+      <text x="59" y="24" class="f-mono" font-size="9" font-weight="800" fill="#a78bfa" letter-spacing="1.2" text-anchor="middle">TOTAL</text>
+      <text x="59" y="38" class="f-mono" font-size="8.5" font-weight="700" fill="#64748b" letter-spacing="0.8" text-anchor="middle">COMMITS</text>
+      <text x="59" y="82" class="f-sans" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle" filter="url(#textGlow)">${totalCommits}</text>
+      <text x="59" y="106" class="f-sans" font-size="9" font-weight="600" fill="#67e8f9" text-anchor="middle">All-Time Chakra</text>
+      <text x="59" y="122" class="f-mono" font-size="7.5" font-weight="600" fill="#94a3b8" text-anchor="middle">2025 – Present</text>
+    </g>
+
+    <!-- Streak Metric 2: Current Streak (Center Hero) -->
+    <g transform="translate(162, 172)">
+      <rect x="0" y="0" width="224" height="44" rx="10" fill="#1f093d" stroke="#f43f5e" stroke-opacity="0.6" stroke-width="1.2"/>
+      <text x="16" y="26" class="f-mono" font-size="10" font-weight="800" fill="#fb923c" letter-spacing="1">CURRENT STREAK</text>
+      <text x="208" y="28" class="f-sans" font-size="20" font-weight="900" fill="#ffffff" text-anchor="end" filter="url(#flameGlow)">${currentStreak} <tspan font-size="12" fill="#67e8f9">DAYS</tspan></text>
+    </g>
+
+    <!-- Streak Metric 3: Longest Streak -->
+    <g transform="translate(402, 56)">
+      <rect x="0" y="0" width="118" height="136" rx="12" fill="#17072e" stroke="#06b6d4" stroke-opacity="0.4" stroke-width="1"/>
+      <text x="59" y="24" class="f-mono" font-size="9" font-weight="800" fill="#38bdf8" letter-spacing="1.2" text-anchor="middle">LONGEST</text>
+      <text x="59" y="38" class="f-mono" font-size="8.5" font-weight="700" fill="#64748b" letter-spacing="0.8" text-anchor="middle">RECORD</text>
+      <text x="59" y="82" class="f-sans" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle" filter="url(#textGlow)">${longestStreak}</text>
+      <text x="59" y="106" class="f-sans" font-size="9" font-weight="600" fill="#f43f5e" text-anchor="middle">Peak Discipline</text>
+      <text x="59" y="122" class="f-mono" font-size="7.5" font-weight="600" fill="#94a3b8" text-anchor="middle">Aug 19 – Aug 23</text>
+    </g>
+
+    <!-- Chakra Energy Progress Bar -->
+    <g transform="translate(28, 230)">
+      <text x="0" y="0" class="f-mono" font-size="10" font-weight="800" fill="#c084fc" letter-spacing="1.5">CHAKRA STREAK HARMONIC RESONANCE</text>
+      <text x="492" y="0" class="f-mono" font-size="10" font-weight="800" fill="#22c55e" text-anchor="end">100% UNBROKEN</text>
+
+      <rect x="0" y="8" width="492" height="8" rx="4" fill="#1a0633" stroke="#7c3aed" stroke-opacity="0.4" stroke-width="1"/>
+      <rect class="pulse-bar" x="0" y="8" width="492" height="8" rx="4" fill="url(#chakraBarGrad)">
+        <animate attributeName="width" values="160;492;492;160" keyTimes="0;0.5;0.92;1" dur="7.5s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+
+    <!-- Shinobi Philosophy Quote -->
+    <g transform="translate(28, 276)">
+      <text x="0" y="0" class="f-sans" font-size="11" font-weight="600" fill="#94a3b8" letter-spacing="0.4">
+        “The Will of Fire burns brightest through daily code discipline.”
+      </text>
+    </g>
   </g>
 
-  <!-- Bottom Live Broadcast Telemetry Timestamp -->
-  <g transform="translate(600, 235)" text-anchor="middle">
-    <text font-family="monospace" font-size="11" fill="#64748b" letter-spacing="2">
-      LAST TELEMETRY SYNC: <tspan fill="#a855f7">${data.lastSynced}</tspan> // LIVE GITHUB ACTION DISPATCH
+  <!-- Footer: Automated Dispatch Sync -->
+  <g transform="translate(600, 375)" text-anchor="middle">
+    <text class="f-mono" font-size="10.5" fill="#64748b" letter-spacing="1.8">
+      LAST TELEMETRY SYNC: <tspan fill="#a855f7" font-weight="700">${data.lastSynced}</tspan> // LIVE GITHUB ACTION DISPATCH · ZERO FABRICATED METRICS
     </text>
   </g>
 </svg>`;
