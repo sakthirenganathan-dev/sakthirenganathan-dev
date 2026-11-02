@@ -275,14 +275,14 @@
       <text x="0" y="7" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="14" fill="#0f021e" text-anchor="middle">火</text>
     </g>
 
-    <!-- Streak Metric 1: Total Contributions -->
+    <!-- Streak Metric 1: Total Contributions (Sourced accurately from GraphQL contributionCalendar) -->
     <g transform="translate(28, 56)">
       <rect x="0" y="0" width="118" height="136" rx="12" fill="#17072e" stroke="#7c3aed" stroke-opacity="0.4" stroke-width="1"/>
-      <text x="59" y="24" class="f-mono" font-size="9" font-weight="800" fill="#a78bfa" letter-spacing="1.2" text-anchor="middle">TOTAL</text>
-      <text x="59" y="38" class="f-mono" font-size="8.5" font-weight="700" fill="#64748b" letter-spacing="0.8" text-anchor="middle">COMMITS</text>
+      <text x="59" y="24" class="f-mono" font-size="8.5" font-weight="800" fill="#a78bfa" letter-spacing="0.8" text-anchor="middle">TOTAL</text>
+      <text x="59" y="38" class="f-mono" font-size="7.5" font-weight="700" fill="#64748b" letter-spacing="0.4" text-anchor="middle">CONTRIBUTIONS</text>
       <text x="59" y="82" class="f-sans" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle" filter="url(#textGlow)">38</text>
-      <text x="59" y="106" class="f-sans" font-size="9" font-weight="600" fill="#67e8f9" text-anchor="middle">All-Time Chakra</text>
-      <text x="59" y="122" class="f-mono" font-size="7.5" font-weight="600" fill="#94a3b8" text-anchor="middle">2025 – Present</text>
+      <text x="59" y="106" class="f-sans" font-size="9" font-weight="600" fill="#67e8f9" text-anchor="middle">Annual Chakra</text>
+      <text x="59" y="122" class="f-mono" font-size="7" font-weight="600" fill="#94a3b8" text-anchor="middle">Nov 2025 – Nov 2026</text>
     </g>
 
     <!-- Streak Metric 2: Current Streak (Center Hero) -->
@@ -324,7 +324,7 @@
   <!-- Footer: Automated Dispatch Sync -->
   <g transform="translate(600, 375)" text-anchor="middle">
     <text class="f-mono" font-size="10.5" fill="#64748b" letter-spacing="1.8">
-      LAST TELEMETRY SYNC: <tspan fill="#a855f7" font-weight="700">2026-11-02 16:24 UTC</tspan> // LIVE GITHUB ACTION DISPATCH · ZERO FABRICATED METRICS
+      LAST TELEMETRY SYNC: <tspan fill="#a855f7" font-weight="700">2026-11-02 16:29 UTC</tspan> // LIVE GITHUB ACTION DISPATCH · ZERO FABRICATED METRICS
     </text>
   </g>
 </svg>

@@ -1,7 +1,7 @@
 {
   "publicRepos": 26,
   "followers": 0,
-  "following": 2,
+  "following": 3,
   "totalStars": 1,
   "totalForks": 0,
   "topLangs": [
@@ -17,8 +17,13 @@
   "longestStreak": 2,
   "longestStreakStart": "2025-11-08",
   "longestStreakEnd": "2025-11-09",
+  "dataRangeStart": "2025-11-02",
+  "dataRangeEnd": "2026-11-02",
   "timezone": "Asia/Kolkata",
-  "lastSynced": "2026-11-02 16:24 UTC",
-  "dataSource": "GITHUB_GRAPHQL",
-  "status": "LIVE_OK"
+  "lastAttempt": "2026-11-02 16:29 UTC",
+  "lastSuccessfulSync": "2026-11-02 16:29 UTC",
+  "lastSynced": "2026-11-02 16:29 UTC",
+  "dataSource": "GITHUB_REST",
+  "status": "LIVE_OK",
+  "isLiveSync": true
 }

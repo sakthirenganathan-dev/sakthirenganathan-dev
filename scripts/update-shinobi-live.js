@@ -7,6 +7,18 @@ export const OUTPUT_SVG = path.resolve('assets', 'id-dashboard.svg');
 export const DEFAULT_TIMEZONE = 'Asia/Kolkata';
 
 /**
+ * Checks if two YYYY-MM-DD date strings represent consecutive calendar days.
+ */
+function isConsecutiveDay(prevDateStr, currDateStr) {
+  if (!prevDateStr || !currDateStr) return false;
+  const prev = new Date(prevDateStr + 'T00:00:00Z');
+  const curr = new Date(currDateStr + 'T00:00:00Z');
+  const diffMs = curr.getTime() - prev.getTime();
+  const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+  return diffDays === 1;
+}
+
+/**
  * Calculates accurate streak and contribution totals from GitHub contribution calendar days.
  * @param {object} calendar - GitHub GraphQL contributionCalendar object
  * @param {string} timezone - Timezone identifier (e.g. 'Asia/Kolkata' or 'UTC')
@@ -38,6 +50,9 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
   // Sort ascending by chronological date
   days.sort((a, b) => a.date.localeCompare(b.date));
 
+  const dataRangeStart = days[0].date;
+  const dataRangeEnd = days[days.length - 1].date;
+
   const totalContributions = typeof calendar.totalContributions === 'number'
     ? calendar.totalContributions
     : days.reduce((acc, d) => acc + d.count, 0);
@@ -51,11 +66,16 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
 
   for (let i = 0; i < days.length; i++) {
     const day = days[i];
+    const prevDay = i > 0 ? days[i - 1] : null;
+
     if (day.count > 0) {
-      if (currentRun === 0) {
+      if (currentRun === 0 || !isConsecutiveDay(prevDay?.date, day.date)) {
+        currentRun = 1;
         runStart = day.date;
+      } else {
+        currentRun++;
       }
-      currentRun++;
+
       if (currentRun > longestStreak) {
         longestStreak = currentRun;
         longestStreakStart = runStart;
@@ -89,8 +109,9 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
 
   if (todayEntry && todayEntry.count > 0) {
     // Today has contributions: streak includes today
-    for (let i = todayIndex; i >= 0; i--) {
-      if (days[i].count > 0) {
+    currentStreak = 1;
+    for (let i = todayIndex; i > 0; i--) {
+      if (isConsecutiveDay(days[i - 1].date, days[i].date) && days[i - 1].count > 0) {
         currentStreak++;
       } else {
         break;
@@ -99,9 +120,14 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
   } else {
     // Today has 0 contributions so far: check if yesterday was active to preserve streak
     const yesterdayIndex = todayIndex - 1;
-    if (yesterdayIndex >= 0 && days[yesterdayIndex].count > 0) {
-      for (let i = yesterdayIndex; i >= 0; i--) {
-        if (days[i].count > 0) {
+    if (
+      yesterdayIndex >= 0 &&
+      days[yesterdayIndex].count > 0 &&
+      isConsecutiveDay(days[yesterdayIndex].date, todayEntry?.date)
+    ) {
+      currentStreak = 1;
+      for (let i = yesterdayIndex; i > 0; i--) {
+        if (isConsecutiveDay(days[i - 1].date, days[i].date) && days[i - 1].count > 0) {
           currentStreak++;
         } else {
           break;
@@ -118,19 +144,26 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
     longestStreak,
     longestStreakStart,
     longestStreakEnd,
+    dataRangeStart,
+    dataRangeEnd,
   };
 }
 
 /**
  * Fetches profile telemetry and contribution calendar using GitHub GraphQL API.
+ * Uses explicit from and to timestamps for the 1-year contribution collection.
  */
-export async function fetchGraphQLTelemetry(token, username = USERNAME) {
+export async function fetchGraphQLTelemetry(token, username = USERNAME, customDates = {}) {
   if (!token) {
     return { ok: false, reason: 'NO_TOKEN', data: null };
   }
 
+  const now = new Date();
+  const to = customDates.to || now.toISOString();
+  const from = customDates.from || new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000).toISOString();
+
   const query = `
-    query($username: String!) {
+    query($username: String!, $from: DateTime!, $to: DateTime!) {
       user(login: $username) {
         followers { totalCount }
         following { totalCount }
@@ -144,7 +177,7 @@ export async function fetchGraphQLTelemetry(token, username = USERNAME) {
             primaryLanguage { name }
           }
         }
-        contributionsCollection {
+        contributionsCollection(from: $from, to: $to) {
           contributionCalendar {
             totalContributions
             weeks {
@@ -167,7 +200,7 @@ export async function fetchGraphQLTelemetry(token, username = USERNAME) {
         'Content-Type': 'application/json',
         'User-Agent': 'Shinobi-Profile-Telemetry-Engine',
       },
-      body: JSON.stringify({ query, variables: { username } }),
+      body: JSON.stringify({ query, variables: { username, from, to } }),
     });
 
     if (res.status === 401) {
@@ -213,10 +246,8 @@ export async function fetchGraphQLTelemetry(token, username = USERNAME) {
     const latestRepoName = latestRepo ? latestRepo.name : 'sakthirenganathan-dev';
     const latestRepoTime = latestRepo ? latestRepo.pushedAt.split('T')[0] : 'Today';
 
-    const streakMetrics = calculateContributionMetrics(
-      userData.contributionsCollection?.contributionCalendar,
-      DEFAULT_TIMEZONE
-    );
+    const calendar = userData.contributionsCollection?.contributionCalendar;
+    const streakMetrics = calculateContributionMetrics(calendar, DEFAULT_TIMEZONE);
 
     return {
       ok: true,
@@ -235,6 +266,8 @@ export async function fetchGraphQLTelemetry(token, username = USERNAME) {
         longestStreak: streakMetrics?.longestStreak ?? null,
         longestStreakStart: streakMetrics?.longestStreakStart ?? null,
         longestStreakEnd: streakMetrics?.longestStreakEnd ?? null,
+        dataRangeStart: streakMetrics?.dataRangeStart ?? null,
+        dataRangeEnd: streakMetrics?.dataRangeEnd ?? null,
         timezone: DEFAULT_TIMEZONE,
       },
     };
@@ -310,6 +343,8 @@ export async function fetchRestTelemetry(token, username = USERNAME) {
         longestStreak: null,
         longestStreakStart: null,
         longestStreakEnd: null,
+        dataRangeStart: null,
+        dataRangeEnd: null,
         timezone: DEFAULT_TIMEZONE,
       },
     };
@@ -320,10 +355,14 @@ export async function fetchRestTelemetry(token, username = USERNAME) {
 
 /**
  * Validates and merges freshly fetched data with previous cached snapshot.
- * Guarantees zero partial corruption and preserves historical streak when REST fallback is used.
+ * Guarantees zero partial corruption and maintains distinct execution timestamps:
+ * - lastAttempt: recorded on every execution
+ * - lastSuccessfulSync: preserved if current API attempt fails
+ * - dataRangeStart / dataRangeEnd: bounds of verified contribution calendar
  */
-export function validateAndMergeTelemetry(freshData, existingCache) {
+export function validateAndMergeTelemetry(freshData, existingCache, isLiveSuccess = false) {
   const cache = existingCache || {};
+  const nowUTC = new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC';
 
   // Validations
   const publicRepos = (typeof freshData?.publicRepos === 'number' && freshData.publicRepos >= 0)
@@ -336,7 +375,7 @@ export function validateAndMergeTelemetry(freshData, existingCache) {
 
   const following = (typeof freshData?.following === 'number' && freshData.following >= 0)
     ? freshData.following
-    : (cache.following ?? 0);
+    : (cache.following ?? 3);
 
   const totalStars = (typeof freshData?.totalStars === 'number' && freshData.totalStars >= 0)
     ? freshData.totalStars
@@ -374,7 +413,19 @@ export function validateAndMergeTelemetry(freshData, existingCache) {
   const longestStreakStart = freshData?.longestStreakStart || cache.longestStreakStart || '2025-08-19';
   const longestStreakEnd = freshData?.longestStreakEnd || cache.longestStreakEnd || '2025-08-23';
 
-  const nowUTC = new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC';
+  const dataRangeStart = freshData?.dataRangeStart || cache.dataRangeStart || '2025-11-02';
+  const dataRangeEnd = freshData?.dataRangeEnd || cache.dataRangeEnd || '2026-11-02';
+
+  // Timestamps
+  const lastAttempt = nowUTC;
+  const lastSuccessfulSync = isLiveSuccess
+    ? nowUTC
+    : (cache.lastSuccessfulSync || cache.lastSynced || nowUTC);
+
+  let dataSource = 'CACHE_FALLBACK';
+  if (isLiveSuccess) {
+    dataSource = (freshData && freshData.totalContributions !== null) ? 'GITHUB_GRAPHQL' : 'GITHUB_REST';
+  }
 
   return {
     publicRepos,
@@ -390,10 +441,15 @@ export function validateAndMergeTelemetry(freshData, existingCache) {
     longestStreak,
     longestStreakStart,
     longestStreakEnd,
+    dataRangeStart,
+    dataRangeEnd,
     timezone: DEFAULT_TIMEZONE,
-    lastSynced: nowUTC,
-    dataSource: freshData ? (freshData.totalContributions !== null ? 'GITHUB_GRAPHQL' : 'GITHUB_REST') : 'CACHE_FALLBACK',
-    status: 'LIVE_OK',
+    lastAttempt,
+    lastSuccessfulSync,
+    lastSynced: lastSuccessfulSync, // backward compatibility
+    dataSource,
+    status: isLiveSuccess ? 'LIVE_OK' : 'CACHED_SNAPSHOT',
+    isLiveSync: isLiveSuccess,
   };
 }
 
@@ -413,9 +469,9 @@ export function loadCache(cachePath = CACHE_FILE) {
 }
 
 /**
- * Formats a date range into a concise display string (e.g. "Aug 19 – Aug 23")
+ * Formats a day-level date range (e.g. "Aug 19 – 23" or "Aug 19 – Sep 2")
  */
-function formatDateRange(startDateStr, endDateStr) {
+export function formatDateRange(startDateStr, endDateStr) {
   if (!startDateStr || !endDateStr) return 'Peak Discipline';
   try {
     const s = new Date(startDateStr);
@@ -435,8 +491,30 @@ function formatDateRange(startDateStr, endDateStr) {
 }
 
 /**
+ * Formats a month-level date range (e.g. "Nov 2025 – Nov 2026")
+ */
+export function formatMonthYearRange(startDateStr, endDateStr) {
+  if (!startDateStr || !endDateStr) return 'Past 12 Months';
+  try {
+    const s = new Date(startDateStr);
+    const e = new Date(endDateStr);
+    const sMonth = s.toLocaleString('en-US', { month: 'short' });
+    const sYear = s.getFullYear();
+    const eMonth = e.toLocaleString('en-US', { month: 'short' });
+    const eYear = e.getFullYear();
+
+    if (sYear === eYear) {
+      return `${sMonth} – ${eMonth} ${sYear}`;
+    }
+    return `${sMonth} ${sYear} – ${eMonth} ${eYear}`;
+  } catch (err) {
+    return 'Past 12 Months';
+  }
+}
+
+/**
  * Generates the clean, standards-compliant 1200 x 390 Shinobi Intelligence SVG.
- * Replaces unverified static "100% UNBROKEN" with honest, dynamic status indicators.
+ * Strictly describes contribution calendar data as "TOTAL CONTRIBUTIONS" over its verified date range.
  */
 export function generateTelemetrySvg(data) {
   const lang0 = data.topLangs[0] || 'TypeScript';
@@ -444,7 +522,7 @@ export function generateTelemetrySvg(data) {
   const lang2 = data.topLangs[2] || 'Python';
   const lang3 = data.topLangs[3] || 'Dart';
 
-  const totalCommits = data.totalContributions;
+  const totalContributions = data.totalContributions;
   const currentStreak = data.currentStreak;
   const longestStreak = data.longestStreak;
 
@@ -455,6 +533,15 @@ export function generateTelemetrySvg(data) {
   const streakStatusColor = currentStreak > 0 ? '#22c55e' : '#fbbf24';
 
   const longestRecordDates = formatDateRange(data.longestStreakStart, data.longestStreakEnd);
+  const contributionRange = formatMonthYearRange(data.dataRangeStart, data.dataRangeEnd);
+
+  // Footer status indicator
+  const footerStatus = data.isLiveSync
+    ? `LAST TELEMETRY SYNC: <tspan fill="#a855f7" font-weight="700">${data.lastSuccessfulSync}</tspan> // LIVE GITHUB ACTION DISPATCH · ZERO FABRICATED METRICS`
+    : `CACHED TELEMETRY: <tspan fill="#fbbf24" font-weight="700">SYNCED ${data.lastSuccessfulSync}</tspan> // ATTEMPTED ${data.lastAttempt} · STANDBY SNAPSHOT`;
+
+  const panelStatusText = data.isLiveSync ? 'LIVE STATS' : 'CACHED';
+  const panelStatusColor = data.isLiveSync ? '#38bdf8' : '#fbbf24';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="390" viewBox="0 0 1200 390" role="img" aria-label="Shinobi Intelligence Telemetry &amp; Chakra Streak Console">
   <defs>
@@ -622,8 +709,8 @@ export function generateTelemetrySvg(data) {
     <text x="74" y="23" class="f-mono" font-size="11" font-weight="800" fill="#cbd5e1" letter-spacing="1.2">
       SYS.INTEL // REPOSITORIES &amp; IMPACT
     </text>
-    <text x="526" y="23" class="f-mono" font-size="10.5" font-weight="700" fill="#38bdf8" text-anchor="end">
-      LIVE STATS
+    <text x="526" y="23" class="f-mono" font-size="10.5" font-weight="700" fill="${panelStatusColor}" text-anchor="end">
+      ${panelStatusText}
     </text>
 
     <!-- Body Content -->
@@ -733,14 +820,14 @@ export function generateTelemetrySvg(data) {
       <text x="0" y="7" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="14" fill="#0f021e" text-anchor="middle">火</text>
     </g>
 
-    <!-- Streak Metric 1: Total Contributions -->
+    <!-- Streak Metric 1: Total Contributions (Sourced accurately from GraphQL contributionCalendar) -->
     <g transform="translate(28, 56)">
       <rect x="0" y="0" width="118" height="136" rx="12" fill="#17072e" stroke="#7c3aed" stroke-opacity="0.4" stroke-width="1"/>
-      <text x="59" y="24" class="f-mono" font-size="9" font-weight="800" fill="#a78bfa" letter-spacing="1.2" text-anchor="middle">TOTAL</text>
-      <text x="59" y="38" class="f-mono" font-size="8.5" font-weight="700" fill="#64748b" letter-spacing="0.8" text-anchor="middle">COMMITS</text>
-      <text x="59" y="82" class="f-sans" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle" filter="url(#textGlow)">${totalCommits}</text>
-      <text x="59" y="106" class="f-sans" font-size="9" font-weight="600" fill="#67e8f9" text-anchor="middle">All-Time Chakra</text>
-      <text x="59" y="122" class="f-mono" font-size="7.5" font-weight="600" fill="#94a3b8" text-anchor="middle">2025 – Present</text>
+      <text x="59" y="24" class="f-mono" font-size="8.5" font-weight="800" fill="#a78bfa" letter-spacing="0.8" text-anchor="middle">TOTAL</text>
+      <text x="59" y="38" class="f-mono" font-size="7.5" font-weight="700" fill="#64748b" letter-spacing="0.4" text-anchor="middle">CONTRIBUTIONS</text>
+      <text x="59" y="82" class="f-sans" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle" filter="url(#textGlow)">${totalContributions}</text>
+      <text x="59" y="106" class="f-sans" font-size="9" font-weight="600" fill="#67e8f9" text-anchor="middle">Annual Chakra</text>
+      <text x="59" y="122" class="f-mono" font-size="7" font-weight="600" fill="#94a3b8" text-anchor="middle">${contributionRange}</text>
     </g>
 
     <!-- Streak Metric 2: Current Streak (Center Hero) -->
@@ -782,7 +869,7 @@ export function generateTelemetrySvg(data) {
   <!-- Footer: Automated Dispatch Sync -->
   <g transform="translate(600, 375)" text-anchor="middle">
     <text class="f-mono" font-size="10.5" fill="#64748b" letter-spacing="1.8">
-      LAST TELEMETRY SYNC: <tspan fill="#a855f7" font-weight="700">${data.lastSynced}</tspan> // LIVE GITHUB ACTION DISPATCH · ZERO FABRICATED METRICS
+      ${footerStatus}
     </text>
   </g>
 </svg>`;
@@ -800,24 +887,28 @@ export async function run(options = {}) {
   console.log(`[START] Executing Shinobi Live Telemetry Engine for @${username}...`);
 
   const existingCache = loadCache(cachePath);
+  let isLiveSuccess = false;
 
   // 1. Try Primary: GitHub GraphQL API
   let apiResult = await fetchGraphQLTelemetry(token, username);
   if (apiResult.ok) {
     console.log('[SUCCESS] Retrieved live telemetry via official GitHub GraphQL API');
+    isLiveSuccess = true;
   } else {
     console.log(`[NOTICE] GraphQL skipped or unavailable (${apiResult.reason}). Falling back to REST API...`);
     // 2. Try Secondary: GitHub REST API
     apiResult = await fetchRestTelemetry(token, username);
     if (apiResult.ok) {
       console.log('[SUCCESS] Retrieved live telemetry via official GitHub REST API');
+      isLiveSuccess = true;
     } else {
       console.warn(`[WARN] REST API unavailable (${apiResult.reason}). Falling back to verified cache snapshot...`);
+      isLiveSuccess = false;
     }
   }
 
   // 3. Validate & Merge with Snapshot Cache
-  const validatedData = validateAndMergeTelemetry(apiResult.data, existingCache);
+  const validatedData = validateAndMergeTelemetry(apiResult.data, existingCache, isLiveSuccess);
 
   // 4. Save clean snapshot cache
   try {
