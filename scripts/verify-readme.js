@@ -27,7 +27,7 @@ const requiredSections = [
   '影 · SAKTHI RENGANATHAN · 六道 SHINOBI ARCHITECT',
   '## ✦ 01 // ABOUT ME (THE WAY OF THE CODE SHINOBI)',
   '## ⚡ 02 // AUTHENTIC TECHNOLOGY JUTSU ARSENAL',
-  '## 📜 03 // SELECTED REAL REPOSITORIES (S-RANK SECRET SCROLLS)',
+  '## 📜 03 // FEATURED OPEN-SOURCE REPOSITORIES',
   '## 📊 04 // DYNAMIC GITHUB INTELLIGENCE TELEMETRY',
   '## 🌃 05 // CONTRIBUTION ACTIVITY (HIDDEN LEAF 3D SKYLINE)',
   '## 🌀 06 // SUMMONING ALLIANCE (KUCHIYOSE NO JUTSU)',
@@ -46,10 +46,17 @@ console.log(`Portfolio link in Connect section: ${hasPortfolioLinkInConnect ? 'F
 const hasJavaInTech = content.includes('logo=openjdk') || content.includes('badge/Java-');
 console.log(`Java in Tech Arsenal: ${hasJavaInTech ? 'FAIL (unverified tech present)' : 'PASS (only verified tech)'}`);
 
-if (allExist && !hasPortfolioLinkInConnect && !hasJavaInTech) {
+const hasExaggeratedRanks = content.includes('S-RANK') || content.includes('A-RANK');
+console.log(`S-RANK / A-RANK in README: ${hasExaggeratedRanks ? 'FAIL (exaggerated ranks found)' : 'PASS (neutral categories only)'}`);
+
+// Check id-dashboard.svg for conflict markers
+const dashboardContent = fs.readFileSync('assets/id-dashboard.svg', 'utf8');
+const hasConflictMarkers = dashboardContent.includes('<<<<<<<') || dashboardContent.includes('=======') || dashboardContent.includes('>>>>>>>');
+console.log(`Conflict markers in id-dashboard.svg: ${hasConflictMarkers ? 'FAIL (conflict markers present)' : 'PASS (clean SVG)'}`);
+
+if (allExist && !hasPortfolioLinkInConnect && !hasJavaInTech && !hasExaggeratedRanks && !hasConflictMarkers) {
   console.log('\n>>> ALL VERIFICATION CHECKS PASSED SUCCESSFULLY! <<<');
 } else {
   console.error('\n>>> SOME VERIFICATION CHECKS FAILED! <<<');
   process.exit(1);
 }
-

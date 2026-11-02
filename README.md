@@ -26,7 +26,7 @@
 <table>
   <tr>
     <td width="28%" align="center" valign="middle">
-      <img src="assets/sakthi-shinobi-avatar.png" alt="Sakthi Renganathan" width="220" style="border-radius: 50%; border: 3px solid #8b5cf6; box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);">
+      <img src="assets/sakthi-shinobi-avatar.png" alt="Sakthi Renganathan" width="160" style="border-radius: 50%; border: 3px solid #8b5cf6; box-shadow: 0 0 25px rgba(139, 92, 246, 0.4); max-width: 100%; height: auto;">
       <br><br>
       <sub><b>SAKTHI RENGANATHAN</b><br>Full-Stack Developer · AI Builder</sub>
     </td>
@@ -111,53 +111,53 @@ Every technology listed below is verified against actual project codebases, conf
 
 ---
 
-## 📜 03 // SELECTED REAL REPOSITORIES (S-RANK SECRET SCROLLS)
+## 📜 03 // FEATURED OPEN-SOURCE REPOSITORIES
 
 Each project below is a genuine, active open-source repository with production dependencies.
 
 <table>
   <tr>
-    <th width="32%">Repository Scroll</th>
-    <th width="18%">Classification</th>
-    <th width="50%">Description &amp; Verified Stack</th>
+    <th width="30%">Repository</th>
+    <th width="25%">Category</th>
+    <th width="45%">Description &amp; Verified Stack</th>
   </tr>
   <tr>
     <td><b><a href="https://github.com/sakthirenganathan-dev/VisionMate-AI">VisionMate AI ↗</a></b></td>
-    <td><code>S-RANK // AI &amp; MOBILITY</code></td>
+    <td><code>Computer Vision &amp; Assistive Tech</code></td>
     <td>
-      On-device assistive computer vision suite providing real-time auditory navigation and object detection for visually impaired users.
+      On-device computer vision mobile application providing real-time obstacle detection, distance estimation, and voice guidance.
       <br><sub><b>Stack:</b> Flutter · Dart · TensorFlow Lite · Google ML Kit · TTS</sub>
     </td>
   </tr>
   <tr>
     <td><b><a href="https://github.com/sakthirenganathan-dev/safeMedesAi">SafeMeds AI ↗</a></b></td>
-    <td><code>A-RANK // HEALTHCARE</code></td>
+    <td><code>Healthcare Verification &amp; Alerts</code></td>
     <td>
-      Clinical pharmaceutical safety verification application detecting dangerous drug-to-drug interactions and dosage anomalies.
+      Pharmaceutical verification web application cross-referencing medicine names, manufacturers, and batch numbers against safety recall alerts.
       <br><sub><b>Stack:</b> React 19 · TypeScript · Vite · Tailwind CSS · TanStack Router</sub>
     </td>
   </tr>
   <tr>
     <td><b><a href="https://github.com/sakthirenganathan-dev/isl-healthcare">ISL Healthcare Connect ↗</a></b></td>
-    <td><code>S-RANK // ACCESSIBILITY</code></td>
+    <td><code>Gesture Recognition Prototype</code></td>
     <td>
-      Indian Sign Language translation platform enabling accessible, seamless communication between healthcare workers and deaf patients.
-      <br><sub><b>Stack:</b> TypeScript · React · Python · Computer Vision · REST APIs</sub>
+      Assistive sign-language recognition prototype classifying Sign-MNIST hand gestures and mapping key healthcare vocabulary for clinical contexts.
+      <br><sub><b>Stack:</b> TypeScript · React · Python · OpenCV · PyTorch</sub>
     </td>
   </tr>
   <tr>
     <td><b><a href="https://github.com/sakthirenganathan-dev/RYVEN">RYVEN ↗</a></b></td>
-    <td><code>S-RANK // AGENTIC AI</code></td>
+    <td><code>Autonomous Dev Orchestrator</code></td>
     <td>
-      Autonomous multi-agent orchestration architecture engineered for coordinated local intelligence and task decomposition.
-      <br><sub><b>Stack:</b> Python 3 · Multi-Agent Coordination · Local AI Workflows</sub>
+      Autonomous development orchestration engine executing structured planning, code patch application, test verification, and self-healing fix loops.
+      <br><sub><b>Stack:</b> Python 3 · FastAPI · AST Analysis · Automated Testing Loops</sub>
     </td>
   </tr>
   <tr>
     <td><b><a href="https://github.com/sakthirenganathan-dev/StudyGenAi">StudyGen AI ↗</a></b></td>
-    <td><code>A-RANK // EDTECH</code></td>
+    <td><code>EdTech &amp; Study Companion</code></td>
     <td>
-      Generative educational copilot synthesizing curriculum roadmaps, automated assessments, and interactive learning flashcards.
+      Interactive web platform generating study roadmaps, practice quizzes, flashcards, and document-based notes for accelerated learning.
       <br><sub><b>Stack:</b> React 18 · TypeScript · Vite · Supabase · TanStack Query</sub>
     </td>
   </tr>
