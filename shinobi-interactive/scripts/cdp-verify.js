@@ -105,18 +105,26 @@ server.listen(PORT, async () => {
       setTimeout(resolve, 3000);
     });
 
-    console.log('[CDP] Waiting 3s for WebGL scene and GitHub API data...');
-    await new Promise((r) => setTimeout(r, 3000));
-
     async function capture(filename) {
       const shot = await send('Page.captureScreenshot', { format: 'png' });
       if (shot && shot.data) {
         const buffer = Buffer.from(shot.data, 'base64');
+        
+        // 1. Save to artifact directory
         const outPath = path.join(artifactDir, filename);
         fs.writeFileSync(outPath, buffer);
+        
+        // 2. Also save to workspace screenshots directory
+        const wsScreenshotsDir = path.resolve(__dirname, '..', 'screenshots');
+        if (!fs.existsSync(wsScreenshotsDir)) fs.mkdirSync(wsScreenshotsDir, { recursive: true });
+        fs.writeFileSync(path.join(wsScreenshotsDir, filename), buffer);
+
         console.log(`[CDP] Saved ${filename} (${buffer.length} bytes)`);
       }
     }
+
+    console.log('[CDP] Waiting for React and 3D WebGL to finish rendering...');
+    await new Promise((r) => setTimeout(r, 4500));
 
     // 1. Desktop Stage 0: Hero & Identity
     console.log('[CDP] Capturing Desktop Stage 0 (Identity)...');

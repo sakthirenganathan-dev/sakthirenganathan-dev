@@ -148,7 +148,7 @@ export default function ShinobiHUD({
                 <span className="text-cyan-400 font-bold">{ghData?.totalStars ?? '1'}</span> Star
               </div>
               <div className="px-3 py-1.5 rounded-full bg-purple-950/60 border border-purple-800/50 text-purple-200">
-                <span className="text-cyan-400 font-bold">{ghData?.followers ?? '4'}</span> Followers
+                <span className="text-cyan-400 font-bold">{ghData?.followers ?? '0'}</span> Followers
               </div>
               <div className="px-3 py-1.5 rounded-full bg-purple-950/60 border border-purple-800/50 text-green-300 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
@@ -247,7 +247,7 @@ export default function ShinobiHUD({
                   <Code2 className="w-3.5 h-3.5" /> Frontend & Spatial Motion
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {['React', 'Three.js', 'GSAP', 'JavaScript (ES6+)', 'Tailwind CSS'].map((item) => (
+                  {['TypeScript', 'React', 'JavaScript', 'Three.js', 'GSAP', 'HTML5/CSS3'].map((item) => (
                     <span key={item} className="px-2.5 py-1 rounded bg-black/60 border border-purple-700/40 text-xs font-mono text-slate-200">
                       {item}
                     </span>
@@ -261,7 +261,7 @@ export default function ShinobiHUD({
                   <Cpu className="w-3.5 h-3.5" /> AI & Intelligent Systems
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {['Autonomous Agents', 'LLM Orchestration', 'Local Models', 'Computer Vision'].map((item) => (
+                  {['Autonomous Agents', 'LLM Orchestration', 'Computer Vision', 'Python AI'].map((item) => (
                     <span key={item} className="px-2.5 py-1 rounded bg-black/60 border border-purple-700/40 text-xs font-mono text-slate-200">
                       {item}
                     </span>
@@ -275,7 +275,7 @@ export default function ShinobiHUD({
                   <Layers className="w-3.5 h-3.5" /> Core & Backend Architecture
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {['Java', 'Python', 'Node.js', 'REST APIs', 'Clean Architecture'].map((item) => (
+                  {['Node.js', 'Python', 'REST APIs', 'Clean Architecture', 'Data Structures'].map((item) => (
                     <span key={item} className="px-2.5 py-1 rounded bg-black/60 border border-purple-700/40 text-xs font-mono text-slate-200">
                       {item}
                     </span>
@@ -289,7 +289,7 @@ export default function ShinobiHUD({
                   <Terminal className="w-3.5 h-3.5" /> Mobile & DevOps Engineering
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {['Flutter', 'Git & GitHub', 'GitHub Actions', 'CI/CD Pipelines', 'Linux'].map((item) => (
+                  {['Flutter & Dart', 'Git & GitHub', 'GitHub Actions', 'CI/CD Pipelines'].map((item) => (
                     <span key={item} className="px-2.5 py-1 rounded bg-black/60 border border-purple-700/40 text-xs font-mono text-slate-200">
                       {item}
                     </span>
@@ -386,7 +386,7 @@ export default function ShinobiHUD({
               </div>
               <div className="p-3 rounded-xl bg-purple-950/40 border border-purple-800/40">
                 <span className="text-3xl sm:text-4xl font-black text-purple-300 block">
-                  {loadingGh ? '...' : ghData?.followers ?? '4'}
+                  {loadingGh ? '...' : ghData?.followers ?? '0'}
                 </span>
                 <span className="text-[10px] text-purple-300 uppercase tracking-wider">Followers</span>
               </div>
