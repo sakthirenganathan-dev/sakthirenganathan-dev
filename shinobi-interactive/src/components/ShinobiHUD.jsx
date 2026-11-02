@@ -60,7 +60,7 @@ export default function ShinobiHUD({
   const currentRealm = REALMS[currentStage];
 
   return (
-    <div className="relative z-10 w-screen h-screen flex flex-col justify-between p-6 md:p-10 pointer-events-none select-none">
+    <div className="fixed inset-0 z-10 w-full h-full flex flex-col justify-between p-6 md:p-10 pointer-events-none select-none">
       {/* ==================== TOP NAVIGATION TELEMETRY BAR ==================== */}
       <div className="w-full flex items-center justify-between pointer-events-auto">
         <div className="flex items-center gap-3">
