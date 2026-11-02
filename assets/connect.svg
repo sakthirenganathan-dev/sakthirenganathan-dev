@@ -1,10 +1,127 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="240" viewBox="0 0 1200 240">
-<defs><linearGradient id="g"><stop stop-color="#21143a"/><stop offset="1" stop-color="#0b0816"/></linearGradient></defs>
-<rect width="1200" height="240" rx="24" fill="url(#g)" stroke="#8b5cf6" stroke-width="2"/>
-<text x="48" y="62" fill="#c4b5fd" font-family="monospace" font-size="17" letter-spacing="3">06 / CONNECT · FORM A TEAM</text>
-<text x="48" y="116" fill="#fff" font-family="Arial" font-size="31" font-weight="700">Every great mission starts with a connection.</text>
-<text x="48" y="159" fill="#cbd5e1" font-family="Arial" font-size="17">Open to collaboration, ideas and meaningful builds.</text>
-<g transform="translate(800 90)" font-family="Arial" font-size="16" font-weight="700" text-anchor="middle">
- <a href="https://github.com/sakthirenganathan-dev"><rect width="145" height="58" rx="14" fill="#302052" stroke="#a78bfa"/><text x="72" y="36" fill="#fff">GITHUB ↗</text></a>
- <a href="https://linkedin.com/in/sakthi-renganathan-k"><rect x="165" width="145" height="58" rx="14" fill="#302052" stroke="#a78bfa"/><text x="237" y="36" fill="#fff">LINKEDIN ↗</text></a>
-</g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="connTitle connDesc">
+  <title id="connTitle">Summoning Scroll — Form a Shinobi Alliance</title>
+  <desc id="connDesc">Summoning Jutsu seal portal inviting developers and collaborators to connect via GitHub, LinkedIn, and Portfolio.</desc>
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="connBg" cx="30%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#210a45" stop-opacity="0.95"/>
+      <stop offset="50%" stop-color="#110524" stop-opacity="0.98"/>
+      <stop offset="100%" stop-color="#04010a" stop-opacity="1"/>
+    </radialGradient>
+    <radialGradient id="sealGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c084fc" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#7c3aed" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#3b0764" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="btnGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b0764"/>
+      <stop offset="50%" stop-color="#6b21a8"/>
+      <stop offset="100%" stop-color="#1e0838"/>
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <style>
+      @keyframes spinSeal {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes sealPulse {
+        0%, 100% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.05); filter: drop-shadow(0 0 16px #a855f7); }
+      }
+      .rotate-seal {
+        animation: spinSeal 60s linear infinite;
+        transform-origin: 180px 150px;
+      }
+      .pulse-seal {
+        animation: sealPulse 4s ease-in-out infinite;
+        transform-origin: 180px 150px;
+      }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="300" rx="24" fill="url(#connBg)"/>
+  <rect width="1196" height="296" x="2" y="2" rx="23" fill="none" stroke="#6b21a8" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- ==================== SUMMONING SEAL (KUCHIYOSE NO JUTSU) ==================== -->
+  <g class="pulse-seal">
+    <circle cx="180" cy="150" r="120" fill="url(#sealGlow)"/>
+  </g>
+
+  <g class="rotate-seal" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.85" filter="url(#softGlow)">
+    <!-- Outer Seal Ring -->
+    <circle cx="180" cy="150" r="115" stroke-dasharray="10 8"/>
+    <circle cx="180" cy="150" r="95"/>
+    <circle cx="180" cy="150" r="75" stroke-dasharray="5 7"/>
+    <circle cx="180" cy="150" r="45"/>
+    <!-- Seal Rays and Cross Runes -->
+    <line x1="180" y1="35" x2="180" y2="265" stroke="#c084fc" stroke-width="1.2"/>
+    <line x1="65" y1="150" x2="295" y2="150" stroke="#c084fc" stroke-width="1.2"/>
+    <line x1="98" y1="68" x2="262" y2="232" stroke="#d8b4fe" stroke-width="1"/>
+    <line x1="262" y1="68" x2="98" y2="232" stroke="#d8b4fe" stroke-width="1"/>
+    <!-- Triangle Seal Star -->
+    <polygon points="180,75 245,188 115,188" stroke="#06b6d4" stroke-width="1.5"/>
+    <polygon points="180,225 245,112 115,112" stroke="#06b6d4" stroke-width="1.5"/>
+  </g>
+
+  <!-- Kanji in Center of Seal: 契約 (Pact / Contract) -->
+  <circle cx="180" cy="150" r="28" fill="#17082e" stroke="#e9d5ff" stroke-width="2"/>
+  <text x="180" y="157" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="16" fill="#e9d5ff" text-anchor="middle">契約</text>
+
+  <!-- ==================== RIGHT: ALLIANCE PORTAL DETAILS ==================== -->
+  <g transform="translate(360, 52)">
+    <g>
+      <rect width="260" height="26" rx="13" fill="#1b0c36" stroke="#9333ea" stroke-width="1"/>
+      <circle cx="14" cy="13" r="4" fill="#06b6d4"/>
+      <text x="26" y="17" font-family="monospace" font-size="10" fill="#d8b4fe" font-weight="700" letter-spacing="2">
+        07 / SUMMONING SCROLL · ALLIANCE
+      </text>
+    </g>
+
+    <text y="62" font-family="'Segoe UI', sans-serif" font-size="28" font-weight="900" fill="#ffffff">
+      Initiate Shinobi Communication
+    </text>
+    <text y="92" font-family="'Segoe UI', sans-serif" font-size="16" fill="#cbd5e1">
+      “A shinobi never gives up on the code they believe in.”
+    </text>
+    <text y="116" font-family="'Segoe UI', sans-serif" font-size="14" fill="#94a3b8">
+      Open for mission summons, open-source architecture, and high-performance software builds.
+    </text>
+
+    <!-- 3 Summoning Portals (Links) -->
+    <g transform="translate(0, 148)" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="14">
+      <!-- Portal 1: GitHub -->
+      <g transform="translate(0, 0)">
+        <rect width="210" height="50" rx="12" fill="url(#btnGrad)" stroke="#a855f7" stroke-width="1.5"/>
+        <circle cx="24" cy="25" r="5" fill="#a855f7"/>
+        <text x="38" y="30" fill="#ffffff">GITHUB ↗</text>
+        <text x="120" y="30" font-family="monospace" font-size="11" fill="#c084fc">@sakthirenganathan-dev</text>
+      </g>
+
+      <!-- Portal 2: LinkedIn -->
+      <g transform="translate(230, 0)">
+        <rect width="220" height="50" rx="12" fill="url(#btnGrad)" stroke="#0284c7" stroke-width="1.5"/>
+        <circle cx="24" cy="25" r="5" fill="#38bdf8"/>
+        <text x="38" y="30" fill="#ffffff">LINKEDIN ↗</text>
+        <text x="130" y="30" font-family="monospace" font-size="11" fill="#7dd3fc">sakthi-renganathan</text>
+      </g>
+
+      <!-- Portal 3: Portfolio -->
+      <g transform="translate(470, 0)">
+        <rect width="220" height="50" rx="12" fill="url(#btnGrad)" stroke="#06b6d4" stroke-width="1.5"/>
+        <circle cx="24" cy="25" r="5" fill="#22d3ee"/>
+        <text x="38" y="30" fill="#ffffff">PORTFOLIO ↗</text>
+        <text x="145" y="30" font-family="monospace" font-size="11" fill="#67e8f9">live vercel app</text>
+      </g>
+    </g>
+  </g>
+</svg>
