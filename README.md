@@ -1,19 +1,31 @@
 <div align="center">
 
-<!-- ==================== 1. UNIQUE SHINOBI HERO BANNER ==================== -->
+<!-- ==================== 1. WIDE CINEMATIC HERO BANNER ==================== -->
 <img src="assets/hero.svg" alt="SHINOBI: The Six Paths — Sakthi Renganathan" width="100%">
 
 <br><br>
 
-<!-- ==================== 2. SHORT DEVELOPER INTRODUCTION ==================== -->
-### 影 · SAKTHI RENGANATHAN · 六道 SHINOBI ARCHITECT
-**Full-Stack Developer · AI Systems Builder · Creative Engineer**  
-*Channeling the relentless discipline, precision, and adaptability of a shinobi into modern software craftsmanship.*
+<!-- ==================== SHINOBI STATUS HUD BAR ==================== -->
+<a href="https://github.com/sakthirenganathan-dev"><img src="https://img.shields.io/badge/VILLAGE-HIDDEN%20LEAF%20%E3%83%BB%20%E6%9C%A8%E3%83%8E%E8%91%89-180b33?style=for-the-badge&logo=target&logoColor=c084fc&labelColor=080214" alt="Hidden Leaf Village"/></a>
+<a href="https://github.com/sakthirenganathan-dev"><img src="https://img.shields.io/badge/CHAKRA-LIGHTNING%20%2F%20AI-180b33?style=for-the-badge&logo=lightning&logoColor=06b6d4&labelColor=080214" alt="Chakra Affinity"/></a>
+<a href="https://github.com/sakthirenganathan-dev"><img src="https://img.shields.io/badge/CLASS-SHINOBI%20ARCHITECT-180b33?style=for-the-badge&logo=codeforces&logoColor=a855f7&labelColor=080214" alt="Shinobi Classification"/></a>
+<a href="https://github.com/sakthirenganathan-dev"><img src="https://img.shields.io/badge/STATUS-ACTIVE%20BUILDER-180b33?style=for-the-badge&logo=statuspage&logoColor=22c55e&labelColor=080214" alt="Active Status"/></a>
+
+<br><br>
+
+<!-- ==================== IDENTITY MANIFESTO ==================== -->
+<h2>影 · SAKTHI RENGANATHAN · 六道 SHINOBI ARCHITECT</h2>
+<p>
+  <b>Full-Stack Developer · AI Systems Builder · Creative Motion Engineer</b>
+  <br>
+  <i>“Channeling the relentless discipline, precision, and adaptability of a shinobi into modern software craftsmanship.”</i>
+</p>
 
 <br>
 
-[![GitHub Profile](https://img.shields.io/badge/GitHub-sakthirenganathan--dev-180b33?style=for-the-badge&logo=github&logoColor=c084fc)](https://github.com/sakthirenganathan-dev)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-sakthi--renganathan-180b33?style=for-the-badge&logo=linkedin&logoColor=06b6d4)](https://linkedin.com/in/sakthi-renganathan-k)
+[![GitHub Portal](https://img.shields.io/badge/GitHub-sakthirenganathan--dev-1e0838?style=for-the-badge&logo=github&logoColor=c084fc&labelColor=0a0217)](https://github.com/sakthirenganathan-dev)
+[![LinkedIn Portal](https://img.shields.io/badge/LinkedIn-sakthi--renganathan-1e0838?style=for-the-badge&logo=linkedin&logoColor=06b6d4&labelColor=0a0217)](https://linkedin.com/in/sakthi-renganathan-k)
+[![Email Direct](https://img.shields.io/badge/Direct_Scroll-sakthirenganathan.dev@gmail.com-1e0838?style=for-the-badge&logo=gmail&logoColor=f43f5e&labelColor=0a0217)](mailto:sakthirenganathan.dev@gmail.com)
 
 </div>
 
@@ -25,26 +37,27 @@
 
 <table>
   <tr>
-    <td width="28%" align="center" valign="middle">
-      <img src="assets/sakthi-shinobi-avatar.png" alt="Sakthi Renganathan" width="160" style="border-radius: 50%; border: 3px solid #8b5cf6; box-shadow: 0 0 25px rgba(139, 92, 246, 0.4); max-width: 100%; height: auto;">
+    <td width="26%" align="center" valign="middle">
+      <img src="assets/sakthi-shinobi-avatar.png" alt="Sakthi Renganathan" width="165" style="border-radius: 50%; border: 3px solid #8b5cf6; box-shadow: 0 0 25px rgba(139, 92, 246, 0.45); max-width: 100%; height: auto;">
       <br><br>
-      <sub><b>SAKTHI RENGANATHAN</b><br>Full-Stack Developer · AI Builder</sub>
+      <b>SAKTHI RENGANATHAN</b><br>
+      <sub>Full-Stack Developer · AI Systems Builder</sub>
     </td>
-    <td width="72%" valign="middle">
-      <h3>Disciplined Engineering &amp; Intelligent Systems</h3>
+    <td width="74%" valign="middle">
+      <h3>⚡ Disciplined Engineering &amp; Intelligent Systems</h3>
       <p>
-        I am a <b>Full-Stack Developer and AI Systems Builder</b> focused on engineering reliable, accessible software solutions. Like a shinobi mastering elemental jutsu, I approach software through continuous practice, clean code architecture, and disciplined problem solving.
+        I am a <b>Full-Stack Developer and AI Systems Builder</b> passionate about constructing intelligent, accessible, and resilient digital architectures. Just as a shinobi masters elemental chakra through relentless training, I hone software through modular clean code, deep problem decomposition, and resilient system design.
       </p>
-      <p>
-        My core work spans <b>autonomous AI agent architectures</b>, <b>on-device computer vision accessibility suites</b>, and <b>performant web platforms</b> built with modern TypeScript and Python ecosystems.
-      </p>
+      <blockquote>
+        <i>“A shinobi's true power is not in knowing every technique, but in the relentless discipline to build systems that endure.”</i>
+      </blockquote>
       <br>
-      <b>Core Specializations:</b>
+      <b>Core Operational Specializations:</b>
       <ul>
-        <li><b>Autonomous AI Agents:</b> Multi-agent coordination, local orchestration &amp; automated task pipelines.</li>
-        <li><b>Edge AI &amp; Accessibility:</b> Real-time on-device ML (TensorFlow Lite, Google ML Kit) and multimodal vision.</li>
-        <li><b>Full-Stack Engineering:</b> Modular frontend architectures with React 19/18, TypeScript, and Tailwind CSS.</li>
-        <li><b>Resilient Systems:</b> Automated CI/CD workflows with GitHub Actions, Node.js services, and Linux toolchains.</li>
+        <li>🤖 <b>Autonomous AI Workflows:</b> Multi-agent task planning, local neural models &amp; automated execution loops.</li>
+        <li>👁️ <b>Edge Computer Vision:</b> On-device ML (TensorFlow Lite, Google ML Kit) and real-time auditory accessibility suites.</li>
+        <li>🌐 <b>Modern Frontend Architecture:</b> Modular, high-speed reactive web applications built with React 19/18, TypeScript &amp; Tailwind.</li>
+        <li>⚙️ <b>Resilient Backend &amp; DevOps:</b> Automated CI/CD pipelines with GitHub Actions, Node.js micro-services &amp; Linux toolchains.</li>
       </ul>
     </td>
   </tr>
@@ -60,11 +73,11 @@ Every technology listed below is verified against actual project codebases, conf
 
 <table>
   <tr>
-    <th width="28%" align="left">Chakra Category</th>
-    <th width="72%" align="left">Verified Technologies &amp; Toolchains</th>
+    <th width="28%" align="left">Chakra Domain</th>
+    <th width="72%" align="left">Verified Technologies &amp; Weaponry</th>
   </tr>
   <tr>
-    <td><b>🎨 Frontend &amp; UI Architecture</b></td>
+    <td><b>🎨 01 // Spatial &amp; Frontend Jutsu</b></td>
     <td>
       <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white"/>
       <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black"/>
@@ -76,7 +89,7 @@ Every technology listed below is verified against actual project codebases, conf
     </td>
   </tr>
   <tr>
-    <td><b>🧠 AI &amp; Intelligent Systems</b></td>
+    <td><b>🧠 02 // Neural &amp; Intelligence Jutsu</b></td>
     <td>
       <img src="https://img.shields.io/badge/TensorFlow_Lite-FF6F00?style=flat-square&logo=tensorflow&logoColor=white"/>
       <img src="https://img.shields.io/badge/Google_ML_Kit-4285F4?style=flat-square&logo=google&logoColor=white"/>
@@ -86,7 +99,7 @@ Every technology listed below is verified against actual project codebases, conf
     </td>
   </tr>
   <tr>
-    <td><b>⚙️ Backend &amp; Data Services</b></td>
+    <td><b>⚙️ 03 // Core Backend &amp; Data Jutsu</b></td>
     <td>
       <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=nodedotjs&logoColor=white"/>
       <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white"/>
@@ -95,7 +108,7 @@ Every technology listed below is verified against actual project codebases, conf
     </td>
   </tr>
   <tr>
-    <td><b>📱 Mobile &amp; DevOps Engineering</b></td>
+    <td><b>📱 04 // Mobile &amp; Toolchain Jutsu</b></td>
     <td>
       <img src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white"/>
       <img src="https://img.shields.io/badge/Dart-0175C2?style=flat-square&logo=dart&logoColor=white"/>
@@ -118,8 +131,8 @@ Each project below is a genuine, active open-source repository with production d
 <table>
   <tr>
     <th width="30%">Repository</th>
-    <th width="25%">Category</th>
-    <th width="45%">Description &amp; Verified Stack</th>
+    <th width="26%">Category</th>
+    <th width="44%">Description &amp; Verified Stack</th>
   </tr>
   <tr>
     <td><b><a href="https://github.com/sakthirenganathan-dev/VisionMate-AI">VisionMate AI ↗</a></b></td>
@@ -190,7 +203,7 @@ Automatically synchronized through GitHub Actions (`.github/workflows/profile-ci
 
 ## 🌃 05 // CONTRIBUTION ACTIVITY (HIDDEN LEAF 3D SKYLINE)
 
-Every committed line of code lights up a building in this 3D Hidden Leaf skyline. Automatically synchronized daily via GitHub Actions:
+Every committed line of code illuminates a building in this 3D Hidden Leaf skyline. Automatically synchronized daily via GitHub Actions:
 
 <div align="center">
   <img src="profile-3d-contrib/profile-night-view.svg" alt="Hidden Leaf 3D Contribution City Skyline" width="100%">
@@ -212,9 +225,14 @@ Every committed line of code lights up a building in this 3D Hidden Leaf skyline
 
 <br>
 
-[![GitHub Portal](https://img.shields.io/badge/GitHub-sakthirenganathan--dev-180b33?style=for-the-badge&logo=github&logoColor=c084fc)](https://github.com/sakthirenganathan-dev)
-[![LinkedIn Portal](https://img.shields.io/badge/LinkedIn-sakthi--renganathan-180b33?style=for-the-badge&logo=linkedin&logoColor=06b6d4)](https://linkedin.com/in/sakthi-renganathan-k)
-[![Email Portal](https://img.shields.io/badge/Email-sakthirenganathan.dev@gmail.com-180b33?style=for-the-badge&logo=gmail&logoColor=f43f5e)](mailto:sakthirenganathan.dev@gmail.com)
+[![GitHub Portal](https://img.shields.io/badge/GitHub-sakthirenganathan--dev-180b33?style=for-the-badge&logo=github&logoColor=c084fc&labelColor=080214)](https://github.com/sakthirenganathan-dev)
+[![LinkedIn Portal](https://img.shields.io/badge/LinkedIn-sakthi--renganathan-180b33?style=for-the-badge&logo=linkedin&logoColor=06b6d4&labelColor=080214)](https://linkedin.com/in/sakthi-renganathan-k)
+[![Email Portal](https://img.shields.io/badge/Email-sakthirenganathan.dev@gmail.com-180b33?style=for-the-badge&logo=gmail&logoColor=f43f5e&labelColor=080214)](mailto:sakthirenganathan.dev@gmail.com)
+
+<br><br>
+
+<!-- VISITOR COUNTER -->
+<img src="https://komarev.com/ghpvc/?username=sakthirenganathan-dev&color=8b5cf6&style=for-the-badge&label=SHINOBI%20VISITORS" alt="Shinobi Visitors"/>
 
 <br><br>
 
