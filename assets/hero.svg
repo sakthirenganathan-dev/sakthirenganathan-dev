@@ -1,315 +1,227 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480" role="img" aria-labelledby="heroTitle heroDesc">
-  <title id="heroTitle">SHINOBI: The Six Paths — Sakthi Renganathan</title>
-  <desc id="heroDesc">Cinematic animated Rinnegan-inspired Six Paths developer hero banner featuring glowing chakra rings, lightning energy, and typography.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="hTitle hDesc">
+  <title id="hTitle">SHINOBI: The Six Paths — Cinematic Opening</title>
+  <desc id="hDesc">Seamless cinematic anime developer opening featuring a massive animated Rinnegan vortex, rotating chakra rings, glowing lightning, and fluid typography.</desc>
   <defs>
-    <!-- Background Gradients -->
-    <radialGradient id="nebulaBg" cx="75%" cy="50%" r="70%">
-      <stop offset="0%" stop-color="#240c4a" stop-opacity="0.9"/>
-      <stop offset="40%" stop-color="#120726" stop-opacity="0.95"/>
-      <stop offset="75%" stop-color="#080312" stop-opacity="1"/>
-      <stop offset="100%" stop-color="#040108" stop-opacity="1"/>
+    <!-- Seamless Atmospheric Background -->
+    <radialGradient id="nebulaCore" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#240c4a" stop-opacity="0.95"/>
+      <stop offset="35%" stop-color="#14062b" stop-opacity="0.85"/>
+      <stop offset="70%" stop-color="#080214" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#030008" stop-opacity="1"/>
     </radialGradient>
-    <radialGradient id="rinneganCore" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="20%" stop-color="#e9d5ff"/>
-      <stop offset="50%" stop-color="#a855f7"/>
-      <stop offset="85%" stop-color="#581c87"/>
-      <stop offset="100%" stop-color="#1e0938" stop-opacity="0"/>
+    <radialGradient id="eyeAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="15%" stop-color="#e9d5ff" stop-opacity="0.9"/>
+      <stop offset="45%" stop-color="#a855f7" stop-opacity="0.6"/>
+      <stop offset="80%" stop-color="#6b21a8" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#1e0538" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="cyanChakra" cx="50%" cy="50%" r="50%">
+    <radialGradient id="cyanAura" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.9"/>
       <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.3"/>
       <stop offset="100%" stop-color="#083344" stop-opacity="0"/>
     </radialGradient>
 
-    <!-- Linear Gradients -->
-    <linearGradient id="rinneganViolet" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#d8b4fe"/>
-      <stop offset="50%" stop-color="#9333ea"/>
-      <stop offset="100%" stop-color="#4c1d95"/>
+    <!-- Linear Flow Gradients -->
+    <linearGradient id="violetBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#c084fc" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="70%" stop-color="#06b6d4" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="textShine" x1="0%" y1="0%" x2="200%" y2="0%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="25%" stop-color="#e9d5ff"/>
-      <stop offset="50%" stop-color="#67e8f9"/>
-      <stop offset="75%" stop-color="#c084fc"/>
-      <stop offset="100%" stop-color="#ffffff"/>
-    </linearGradient>
-    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#3b0764"/>
-      <stop offset="20%" stop-color="#a855f7"/>
-      <stop offset="50%" stop-color="#06b6d4"/>
-      <stop offset="80%" stop-color="#9333ea"/>
-      <stop offset="100%" stop-color="#3b0764"/>
-    </linearGradient>
-    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#1e1035" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#0c0517" stop-opacity="0.8"/>
+    <linearGradient id="fadeEdge" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#030008" stop-opacity="0"/>
+      <stop offset="15%" stop-color="#030008" stop-opacity="1"/>
+      <stop offset="85%" stop-color="#030008" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#030008" stop-opacity="0"/>
     </linearGradient>
 
-    <!-- Glow Filters -->
-    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
+    <!-- Glow & Atmosphere Filters -->
     <filter id="highGlow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="12" result="blur1"/>
-      <feGaussianBlur stdDeviation="4" result="blur2"/>
+      <feGaussianBlur stdDeviation="10" result="b1"/>
+      <feGaussianBlur stdDeviation="3" result="b2"/>
       <feMerge>
-        <feMergeNode in="blur1"/>
-        <feMergeNode in="blur2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="b2"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-    
-    <!-- Tomoe Symbol Definition -->
-    <g id="tomoe">
-      <path d="M 0 -10 C 6 -10 10 -6 10 0 C 10 7 4 12 -2 12 C -8 12 -12 7 -12 1 C -12 -5 -7 -7 -3 -7 C -2 -7 -1 -5 -1 -4 C -1 -2 -3 0 -5 1 C -3 0 -1 -2 -1 -4 C -1 -8 -5 -11 -9 -11 C -1 -12 0 -10 0 -10 Z" fill="#ffffff" filter="url(#softGlow)"/>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Tomoe Glyph -->
+    <g id="tomoeMark">
+      <path d="M 0 -11 C 7 -11 11 -7 11 0 C 11 8 4 13 -3 13 C -10 13 -14 7 -14 0 C -14 -7 -8 -9 -4 -9 C -3 -9 -1 -7 -1 -5 C -1 -3 -3 0 -5 1 C -3 0 -1 -2 -1 -5 C -1 -9 -6 -12 -10 -12 C -1 -13 0 -11 0 -11 Z" fill="#ffffff" filter="url(#softGlow)"/>
       <circle cx="0" cy="0" r="3.5" fill="#f5f3ff"/>
     </g>
 
     <style>
-      @keyframes spinClockwise {
+      @keyframes spinCW {
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
       }
-      @keyframes spinCounter {
+      @keyframes spinCCW {
         from { transform: rotate(360deg); }
         to { transform: rotate(0deg); }
       }
-      @keyframes chakraPulse {
-        0%, 100% { transform: scale(1); opacity: 0.85; }
-        50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 25px #a855f7); }
+      @keyframes rinneganPulse {
+        0%, 100% { transform: scale(1); opacity: 0.88; }
+        50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 45px #9333ea); }
       }
-      @keyframes coreGlow {
-        0%, 100% { r: 18px; opacity: 0.9; }
-        50% { r: 24px; opacity: 1; }
-      }
-      @keyframes shimmerSweep {
+      @keyframes beamSlide {
         0% { transform: translateX(-100%); }
         100% { transform: translateX(100%); }
       }
-      @keyframes particleFloat1 {
+      @keyframes emberFloat1 {
         0% { transform: translateY(0) translateX(0); opacity: 0; }
-        30% { opacity: 0.9; }
-        80% { opacity: 0.8; }
-        100% { transform: translateY(-75px) translateX(25px); opacity: 0; }
+        25% { opacity: 0.9; }
+        85% { opacity: 0.7; }
+        100% { transform: translateY(-110px) translateX(40px); opacity: 0; }
       }
-      @keyframes particleFloat2 {
+      @keyframes emberFloat2 {
         0% { transform: translateY(0) translateX(0); opacity: 0; }
-        40% { opacity: 0.8; }
-        80% { opacity: 0.6; }
-        100% { transform: translateY(-90px) translateX(-30px); opacity: 0; }
+        35% { opacity: 0.85; }
+        80% { opacity: 0.5; }
+        100% { transform: translateY(-130px) translateX(-45px); opacity: 0; }
       }
-      @keyframes lightningFlicker {
-        0%, 89%, 93%, 97%, 100% { opacity: 0; }
-        90%, 92% { opacity: 0.85; }
-        94%, 96% { opacity: 1; }
+      @keyframes chidoriFlash {
+        0%, 91%, 95%, 100% { opacity: 0; }
+        92%, 94% { opacity: 0.9; }
+        93% { opacity: 1; }
       }
-      @keyframes textGlowPulse {
-        0%, 100% { filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.4)); }
-        50% { filter: drop-shadow(0 0 20px rgba(103, 232, 249, 0.7)); }
+      @keyframes textShimmer {
+        0%, 100% { filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.5)); }
+        50% { filter: drop-shadow(0 0 28px rgba(103, 232, 249, 0.85)); }
       }
       .spin-slow {
-        animation: spinClockwise 45s linear infinite;
-        transform-origin: 920px 240px;
+        animation: spinCW 50s linear infinite;
+        transform-origin: 600px 240px;
       }
       .spin-reverse {
-        animation: spinCounter 35s linear infinite;
-        transform-origin: 920px 240px;
+        animation: spinCCW 36s linear infinite;
+        transform-origin: 600px 240px;
       }
-      .spin-medium {
-        animation: spinClockwise 25s linear infinite;
-        transform-origin: 920px 240px;
+      .eye-pulse {
+        animation: rinneganPulse 4.5s ease-in-out infinite;
+        transform-origin: 600px 240px;
       }
-      .pulse-eye {
-        animation: chakraPulse 4s ease-in-out infinite;
-        transform-origin: 920px 240px;
+      .lightning-fx {
+        animation: chidoriFlash 5s infinite;
       }
-      .core-pulse {
-        animation: coreGlow 3s ease-in-out infinite;
-      }
-      .lightning {
-        animation: lightningFlicker 6s infinite;
-      }
-      .p1 { animation: particleFloat1 4.5s ease-out infinite; }
-      .p2 { animation: particleFloat2 5.2s ease-out infinite 1.2s; }
-      .p3 { animation: particleFloat1 4.8s ease-out infinite 2.1s; }
-      .p4 { animation: particleFloat2 5.5s ease-out infinite 0.7s; }
-      .title-glow {
-        animation: textGlowPulse 4s ease-in-out infinite;
+      .e1 { animation: emberFloat1 5s ease-out infinite; }
+      .e2 { animation: emberFloat2 6s ease-out infinite 1.5s; }
+      .e3 { animation: emberFloat1 5.5s ease-out infinite 2.8s; }
+      .e4 { animation: emberFloat2 6.5s ease-out infinite 0.8s; }
+      .title-shimmer {
+        animation: textShimmer 4s ease-in-out infinite;
       }
     </style>
   </defs>
 
-  <!-- Canvas Container -->
-  <rect width="1200" height="480" rx="24" fill="url(#nebulaBg)"/>
-  <rect width="1196" height="476" x="2" y="2" rx="23" fill="none" stroke="url(#borderGrad)" stroke-width="2" opacity="0.8"/>
+  <!-- Seamless Canvas (No boxy border, naturally blending edges) -->
+  <rect width="1200" height="520" fill="url(#nebulaCore)"/>
 
-  <!-- High-Tech Shinobi Hex / Grid Lines -->
-  <g opacity="0.12" stroke="#a855f7" stroke-width="1">
-    <line x1="0" y1="80" x2="1200" y2="80"/>
-    <line x1="0" y1="160" x2="1200" y2="160"/>
-    <line x1="0" y1="240" x2="1200" y2="240"/>
-    <line x1="0" y1="320" x2="1200" y2="320"/>
-    <line x1="0" y1="400" x2="1200" y2="400"/>
-    <line x1="120" y1="0" x2="120" y2="480"/>
-    <line x1="260" y1="0" x2="260" y2="480"/>
-    <line x1="400" y1="0" x2="400" y2="480"/>
-    <line x1="540" y1="0" x2="540" y2="480"/>
-    <line x1="680" y1="0" x2="680" y2="480"/>
-    <line x1="820" y1="0" x2="820" y2="480"/>
-    <line x1="960" y1="0" x2="960" y2="480"/>
-    <line x1="1100" y1="0" x2="1100" y2="480"/>
+  <!-- Fluid Horizontal Light Energy Stream -->
+  <g opacity="0.35">
+    <path d="M 0 240 Q 300 180 600 240 T 1200 240" fill="none" stroke="url(#violetBeam)" stroke-width="3" filter="url(#highGlow)"/>
+    <path d="M 0 260 Q 350 320 600 260 T 1200 260" fill="none" stroke="#67e8f9" stroke-width="1.5" opacity="0.4"/>
   </g>
 
-  <!-- Large Watermark Japanese Kanji: 六道 (Six Paths) & 忍 (Shinobi) -->
-  <text x="680" y="320" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="210" fill="#9333ea" opacity="0.06" text-anchor="middle">六道</text>
-  <text x="210" y="390" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="260" fill="#06b6d4" opacity="0.04" text-anchor="middle">忍</text>
+  <!-- Giant Background Kanji Atmosphere (Watermark) -->
+  <text x="600" y="320" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="280" fill="#a855f7" opacity="0.04" text-anchor="middle">六道</text>
+  <text x="180" y="360" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="240" fill="#06b6d4" opacity="0.03" text-anchor="middle">忍</text>
+  <text x="1020" y="360" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="240" fill="#ec4899" opacity="0.03" text-anchor="middle">影</text>
 
-  <!-- ==================== RINNEGAN & SIX PATHS CHAKRA ORB ==================== -->
-  <g class="pulse-eye">
-    <!-- Outer ambient aura -->
-    <circle cx="920" cy="240" r="220" fill="url(#rinneganCore)" opacity="0.55"/>
-    <circle cx="920" cy="240" r="170" fill="url(#cyanChakra)" opacity="0.6"/>
+  <!-- ==================== CENTRAL GIANT RINNEGAN VORTEX ==================== -->
+  <g class="eye-pulse">
+    <!-- Massive Outer Aura -->
+    <circle cx="600" cy="240" r="230" fill="url(#eyeAura)" opacity="0.6"/>
+    <circle cx="600" cy="240" r="160" fill="url(#cyanAura)" opacity="0.5"/>
 
     <!-- Concentric Rinnegan Ripple Rings -->
-    <g fill="none" stroke="url(#rinneganViolet)" stroke-linecap="round" filter="url(#softGlow)">
-      <!-- Ring 6 (Outermost) -->
-      <circle cx="920" cy="240" r="185" stroke-width="2.5" opacity="0.45" stroke-dasharray="14 10"/>
-      <!-- Ring 5 -->
-      <circle cx="920" cy="240" r="150" stroke-width="3" opacity="0.75"/>
-      <!-- Ring 4 -->
-      <circle cx="920" cy="240" r="118" stroke-width="3" opacity="0.85"/>
-      <!-- Ring 3 -->
-      <circle cx="920" cy="240" r="86" stroke-width="3.5" opacity="0.95"/>
-      <!-- Ring 2 -->
-      <circle cx="920" cy="240" r="56" stroke-width="4" opacity="1"/>
-      <!-- Ring 1 (Inner pupil ring) -->
-      <circle cx="920" cy="240" r="28" stroke-width="3.5" stroke="#e9d5ff" opacity="1"/>
+    <g fill="none" stroke="#c084fc" stroke-linecap="round" filter="url(#softGlow)">
+      <circle cx="600" cy="240" r="215" stroke-width="2" opacity="0.35" stroke-dasharray="16 12"/>
+      <circle cx="600" cy="240" r="175" stroke-width="2.5" opacity="0.65"/>
+      <circle cx="600" cy="240" r="135" stroke-width="3" opacity="0.8"/>
+      <circle cx="600" cy="240" r="95" stroke-width="3.5" opacity="0.9"/>
+      <circle cx="600" cy="240" r="60" stroke-width="4" opacity="1"/>
+      <circle cx="600" cy="240" r="30" stroke-width="3.5" stroke="#ffffff" opacity="1"/>
     </g>
 
-    <!-- Center Black Core / Pupil with pulsating glow -->
-    <circle cx="920" cy="240" r="16" fill="#040108" stroke="#ffffff" stroke-width="2.5" filter="url(#highGlow)"/>
-    <circle cx="920" cy="240" r="8" fill="#e9d5ff" class="core-pulse"/>
+    <!-- Pupil Core -->
+    <circle cx="600" cy="240" r="16" fill="#04000a" stroke="#ffffff" stroke-width="2.5" filter="url(#highGlow)"/>
+    <circle cx="600" cy="240" r="7" fill="#67e8f9"/>
   </g>
 
-  <!-- Rotating Six Paths Tomoe Rings (Clockwise & Counter) -->
+  <!-- Outer Rotating Six Paths Tomoe Ring -->
   <g class="spin-slow">
-    <!-- Tomoe placed along Ring 4 (radius 118) -->
-    <g transform="translate(920 122)"><use href="#tomoe"/></g>
-    <g transform="translate(1022 181) rotate(60)"><use href="#tomoe"/></g>
-    <g transform="translate(1022 299) rotate(120)"><use href="#tomoe"/></g>
-    <g transform="translate(920 358) rotate(180)"><use href="#tomoe"/></g>
-    <g transform="translate(818 299) rotate(240)"><use href="#tomoe"/></g>
-    <g transform="translate(818 181) rotate(300)"><use href="#tomoe"/></g>
+    <g transform="translate(600 105)"><use href="#tomoeMark"/></g>
+    <g transform="translate(717 172) rotate(60)"><use href="#tomoeMark"/></g>
+    <g transform="translate(717 308) rotate(120)"><use href="#tomoeMark"/></g>
+    <g transform="translate(600 375) rotate(180)"><use href="#tomoeMark"/></g>
+    <g transform="translate(483 308) rotate(240)"><use href="#tomoeMark"/></g>
+    <g transform="translate(483 172) rotate(300)"><use href="#tomoeMark"/></g>
   </g>
 
+  <!-- Inner Counter-Rotating Tomoe Ring -->
   <g class="spin-reverse">
-    <!-- Inner Tomoe placed along Ring 3 (radius 86) -->
-    <g transform="translate(920 154)"><use href="#tomoe"/></g>
-    <g transform="translate(994 283) rotate(120)"><use href="#tomoe"/></g>
-    <g transform="translate(846 283) rotate(240)"><use href="#tomoe"/></g>
+    <g transform="translate(600 145)"><use href="#tomoeMark"/></g>
+    <g transform="translate(682 288) rotate(120)"><use href="#tomoeMark"/></g>
+    <g transform="translate(518 288) rotate(240)"><use href="#tomoeMark"/></g>
   </g>
 
-  <!-- Chidori / Lightning Chakra Arcs -->
-  <g class="lightning" stroke="#67e8f9" stroke-width="2" fill="none" filter="url(#highGlow)" opacity="0.9">
-    <path d="M 850 180 L 870 195 L 860 215 L 890 230 L 920 240"/>
-    <path d="M 980 160 L 965 190 L 985 210 L 950 235 L 920 240"/>
-    <path d="M 940 320 L 925 290 L 945 270 L 920 240"/>
+  <!-- Chidori Lightning Discharges across the Eye -->
+  <g class="lightning-fx" stroke="#67e8f9" stroke-width="2.5" fill="none" filter="url(#highGlow)" opacity="0.95">
+    <path d="M 480 180 L 520 200 L 505 225 L 560 235 L 600 240"/>
+    <path d="M 720 170 L 680 195 L 705 220 L 650 235 L 600 240"/>
+    <path d="M 640 330 L 615 295 L 635 275 L 600 240"/>
   </g>
 
-  <!-- Floating Chakra Spark Particles -->
+  <!-- Floating Chakra Embers & Particles -->
   <g filter="url(#softGlow)">
-    <circle cx="860" cy="280" r="3" fill="#67e8f9" class="p1"/>
-    <circle cx="980" cy="310" r="2.5" fill="#d8b4fe" class="p2"/>
-    <circle cx="910" cy="170" r="3.2" fill="#c084fc" class="p3"/>
-    <circle cx="1010" cy="220" r="2.2" fill="#38bdf8" class="p4"/>
-    <circle cx="820" cy="230" r="2.8" fill="#e9d5ff" class="p1"/>
-    <circle cx="950" cy="350" r="3.5" fill="#a855f7" class="p3"/>
+    <circle cx="520" cy="300" r="3.5" fill="#67e8f9" class="e1"/>
+    <circle cx="680" cy="320" r="3" fill="#d8b4fe" class="e2"/>
+    <circle cx="580" cy="160" r="3.2" fill="#c084fc" class="e3"/>
+    <circle cx="730" cy="220" r="2.5" fill="#38bdf8" class="e4"/>
+    <circle cx="460" cy="240" r="3" fill="#f472b6" class="e1"/>
+    <circle cx="640" cy="380" r="3.8" fill="#a855f7" class="e3"/>
+    <circle cx="340" cy="260" r="2.8" fill="#67e8f9" class="e2"/>
+    <circle cx="860" cy="240" r="2.8" fill="#c084fc" class="e4"/>
   </g>
 
-  <!-- ==================== LEFT HERO CONTENT & TYPOGRAPHY ==================== -->
+  <!-- ==================== FLOWING CINEMATIC TYPOGRAPHY ==================== -->
   
-  <!-- Top Category Chip -->
-  <g transform="translate(68, 52)">
-    <rect width="360" height="34" rx="17" fill="#1b0e36" stroke="#9333ea" stroke-width="1.5"/>
-    <circle cx="18" cy="17" r="5" fill="#06b6d4" filter="url(#softGlow)"/>
-    <text x="34" y="22" fill="#e9d5ff" font-family="'Segoe UI', Roboto, monospace" font-size="12" font-weight="700" letter-spacing="3">
-      影 · SIX PATHS CHRONICLES · 忍
+  <!-- Top Category Stream (No box, floating glow) -->
+  <g transform="translate(600, 52)" text-anchor="middle">
+    <text font-family="'Segoe UI', Roboto, monospace" font-size="14" font-weight="900" letter-spacing="8" fill="#c084fc" opacity="0.9">
+      ✦ · 影 · THE SIX PATHS CHRONICLES · 忍 · ✦
     </text>
   </g>
 
-  <!-- Main Hero Title -->
-  <g transform="translate(68, 142)" class="title-glow">
-    <text font-family="'Segoe UI', -apple-system, sans-serif" font-weight="900" font-size="58" letter-spacing="2" fill="#ffffff">
-      SAKTHI
-    </text>
-    <text x="250" y="0" font-family="'Segoe UI', -apple-system, sans-serif" font-weight="900" font-size="58" letter-spacing="2" fill="#a855f7">
-      RENGANATHAN
+  <!-- Main Hero Title Banner (Floating cinematic title) -->
+  <g transform="translate(600, 420)" text-anchor="middle" class="title-shimmer">
+    <text font-family="'Segoe UI', -apple-system, sans-serif" font-weight="900" font-size="52" letter-spacing="6" fill="#ffffff">
+      SAKTHI RENGANATHAN
     </text>
   </g>
 
-  <!-- Animated Subtitle -->
-  <g transform="translate(70, 192)">
-    <rect width="480" height="34" rx="8" fill="#130826" stroke="#581c87" stroke-width="1"/>
-    <text x="18" y="23" font-family="'Segoe UI', monospace, sans-serif" font-weight="800" font-size="14" letter-spacing="4" fill="#67e8f9">
+  <!-- Subtitle: FULL-STACK DEVELOPER · AI BUILDER · SHINOBI -->
+  <g transform="translate(600, 462)" text-anchor="middle">
+    <text font-family="'Segoe UI', monospace, sans-serif" font-weight="800" font-size="15" letter-spacing="6" fill="#67e8f9">
       FULL-STACK DEVELOPER · AI BUILDER · SHINOBI
     </text>
   </g>
 
-  <!-- Hero Narrative / Philosophy -->
-  <g transform="translate(70, 260)">
-    <text font-family="'Segoe UI', -apple-system, sans-serif" font-size="18" fill="#e2e8f0" font-weight="400">
-      Channeling creative chakra into full-stack systems, intelligent AI agents,
+  <!-- Narrative Stream (Bottom Floating Line) -->
+  <g transform="translate(600, 495)" text-anchor="middle">
+    <text font-family="'Segoe UI', -apple-system, sans-serif" font-size="14" fill="#94a3b8" letter-spacing="2">
+      CHANNELING CHAKRA INTO INTELLIGENT SYSTEMS, AUTONOMOUS AGENTS &amp; 3D EXPERIENCES
     </text>
-    <text y="28" font-family="'Segoe UI', -apple-system, sans-serif" font-size="18" fill="#cbd5e1" font-weight="400">
-      and immersive web experiences with anime-grade motion &amp; precision.
-    </text>
-  </g>
-
-  <!-- Shinobi Telemetry Stats Strip -->
-  <g transform="translate(70, 340)">
-    <!-- Pill 1: Affinity -->
-    <g transform="translate(0, 0)">
-      <rect width="170" height="58" rx="12" fill="url(#cardGrad)" stroke="#6b21a8" stroke-width="1.5"/>
-      <text x="16" y="22" font-family="monospace" font-size="10" fill="#a855f7" letter-spacing="1.5">NATURE AFFINITY</text>
-      <text x="16" y="44" font-family="'Segoe UI', sans-serif" font-size="15" font-weight="800" fill="#67e8f9">⚡ LIGHTNING / AI</text>
-    </g>
-
-    <!-- Pill 2: Rank -->
-    <g transform="translate(186, 0)">
-      <rect width="170" height="58" rx="12" fill="url(#cardGrad)" stroke="#6b21a8" stroke-width="1.5"/>
-      <text x="16" y="22" font-family="monospace" font-size="10" fill="#a855f7" letter-spacing="1.5">SHINOBI RANK</text>
-      <text x="16" y="44" font-family="'Segoe UI', sans-serif" font-size="15" font-weight="800" fill="#e9d5ff">🔱 S-RANK BUILDER</text>
-    </g>
-
-    <!-- Pill 3: Eye Power -->
-    <g transform="translate(372, 0)">
-      <rect width="170" height="58" rx="12" fill="url(#cardGrad)" stroke="#6b21a8" stroke-width="1.5"/>
-      <text x="16" y="22" font-family="monospace" font-size="10" fill="#a855f7" letter-spacing="1.5">DOUJUTSU STATUS</text>
-      <text x="16" y="44" font-family="'Segoe UI', sans-serif" font-size="15" font-weight="800" fill="#f43f5e">👁️ RINNEGAN AWAKENED</text>
-    </g>
-  </g>
-
-  <!-- HUD Corner Accents -->
-  <g stroke="#9333ea" stroke-width="2.5" fill="none" opacity="0.8">
-    <path d="M 28 44 L 28 28 L 44 28"/>
-    <path d="M 1172 44 L 1172 28 L 1156 28"/>
-    <path d="M 28 436 L 28 452 L 44 452"/>
-    <path d="M 1172 436 L 1172 452 L 1156 452"/>
-  </g>
-
-  <!-- Bottom System Live Bar -->
-  <g transform="translate(70, 434)" font-family="monospace" font-size="11" fill="#a78bfa" letter-spacing="2">
-    <circle cx="6" cy="-4" r="3.5" fill="#22c55e"/>
-    <text x="18" y="0">SYSTEM STATUS: CHAKRA ACTIVE</text>
-    <text x="320" y="0" fill="#64748b">|</text>
-    <text x="340" y="0">LEAF VILLAGE PROTOCOL v4.0</text>
-    <text x="620" y="0" fill="#64748b">|</text>
-    <text x="640" y="0" fill="#67e8f9">SCROLL 01 / SIX PATHS CORE</text>
   </g>
 </svg>

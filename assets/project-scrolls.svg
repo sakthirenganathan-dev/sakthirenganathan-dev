@@ -1,164 +1,139 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="580" viewBox="0 0 1200 580" role="img" aria-labelledby="projTitle projDesc">
-  <title id="projTitle">Secret Project Scrolls — S-Rank Software Archives</title>
-  <desc id="projDesc">Featured project scrolls including VisionMate AI, SafeMeds AI, ISL Healthcare Connect, RYVEN, and StudyGen AI.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" role="img" aria-labelledby="chrTitle chrDesc">
+  <title id="chrTitle">Project Chronicles — Cinematic Developer Journey</title>
+  <desc id="chrDesc">Seamless story-driven developer journey presenting VisionMate AI, SafeMeds AI, ISL Healthcare Connect, RYVEN, and StudyGen AI as cinematic chronicles without card containers.</desc>
   <defs>
-    <!-- Background Gradient -->
-    <radialGradient id="scrollBg" cx="50%" cy="35%" r="70%">
-      <stop offset="0%" stop-color="#180b33" stop-opacity="0.95"/>
-      <stop offset="55%" stop-color="#0d041c" stop-opacity="0.98"/>
-      <stop offset="100%" stop-color="#04010a" stop-opacity="1"/>
+    <!-- Background Atmosphere -->
+    <radialGradient id="chronicleAtmosphere" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#180a36" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="#0b0317" stop-opacity="0.98"/>
+      <stop offset="100%" stop-color="#030008" stop-opacity="1"/>
     </radialGradient>
-    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#1e1038" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#0e061c" stop-opacity="0.95"/>
+
+    <!-- Spine Flow -->
+    <linearGradient id="spineFlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.9"/>
+      <stop offset="25%" stop-color="#10b981" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#f97316" stop-opacity="0.9"/>
+      <stop offset="75%" stop-color="#a855f7" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.9"/>
     </linearGradient>
 
-    <!-- Scroll Roll End Texture -->
-    <linearGradient id="scrollRoller" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#64748b"/>
-      <stop offset="30%" stop-color="#cbd5e1"/>
-      <stop offset="70%" stop-color="#94a3b8"/>
-      <stop offset="100%" stop-color="#334155"/>
-    </linearGradient>
-
-    <!-- Project Glow Gradients -->
-    <linearGradient id="pGlow1" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#3b82f6"/>
-    </linearGradient>
-    <linearGradient id="pGlow2" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#06b6d4"/>
-    </linearGradient>
-    <linearGradient id="pGlow3" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#ef4444"/>
-    </linearGradient>
-    <linearGradient id="pGlow4" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#ec4899"/>
-    </linearGradient>
-    <linearGradient id="pGlow5" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#eab308"/>
-    </linearGradient>
+    <!-- Filters -->
+    <filter id="spineGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
 
     <style>
-      @keyframes pulseGlow {
-        0%, 100% { opacity: 0.7; }
-        50% { opacity: 1; filter: drop-shadow(0 0 8px #a855f7); }
+      @keyframes spinePulse {
+        0%, 100% { stroke-dashoffset: 0; opacity: 0.8; }
+        50% { stroke-dashoffset: -80; opacity: 1; }
       }
-      .scroll-glow {
-        animation: pulseGlow 4s ease-in-out infinite;
+      @keyframes chapterBlink {
+        0%, 100% { opacity: 0.7; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 10px #67e8f9); }
+      }
+      .flow-spine {
+        stroke-dasharray: 40 10;
+        animation: spinePulse 10s linear infinite;
+      }
+      .chapter-node {
+        animation: chapterBlink 3.5s ease-in-out infinite;
       }
     </style>
   </defs>
 
-  <!-- Background -->
-  <rect width="1200" height="580" rx="24" fill="url(#scrollBg)"/>
-  <rect width="1196" height="576" x="2" y="2" rx="23" fill="none" stroke="#6b21a8" stroke-width="1.5" opacity="0.6"/>
+  <!-- Canvas (Seamless, no card container) -->
+  <rect width="1200" height="660" fill="url(#chronicleAtmosphere)"/>
 
-  <!-- Top Strip -->
-  <g transform="translate(50, 44)">
-    <text font-family="monospace" font-size="13" fill="#a78bfa" letter-spacing="3" font-weight="700">05 / SECRET PROJECT SCROLLS</text>
-    <text y="24" font-family="'Segoe UI', sans-serif" font-size="22" font-weight="800" fill="#ffffff">
-      AUTHENTIC SHINOBI CREATIONS · S-RANK &amp; A-RANK MISSIONS
+  <!-- Top Title Strip (Floating) -->
+  <g transform="translate(600, 44)" text-anchor="middle">
+    <text font-family="monospace" font-size="12" fill="#c084fc" letter-spacing="4" font-weight="700">
+      04 // DEVELOPER CHRONICLES · CINEMATIC MISSIONS
+    </text>
+    <text y="28" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="900" fill="#ffffff" letter-spacing="2">
+      CHAPTERS OF THE SIX PATHS ARSENAL
     </text>
   </g>
-  <g transform="translate(1150, 44)" text-anchor="end">
-    <text font-family="monospace" font-size="12" fill="#c084fc">CLICK EACH CARD IN README TO EXPLORE REPO ↗</text>
+
+  <!-- Central Continuous Luminescent Chakra Spine -->
+  <g filter="url(#spineGlow)">
+    <line x1="600" y1="100" x2="600" y2="600" stroke="url(#spineFlow)" stroke-width="3" class="flow-spine"/>
   </g>
 
-  <!-- ==================== 5 PROJECT CARDS ==================== -->
-
-  <!-- PROJECT 1: VisionMate AI (Row 1, Left -> x: 50, y: 95) -->
-  <g transform="translate(50, 95)">
-    <rect width="530" height="135" rx="14" fill="url(#cardGrad)" stroke="#06b6d4" stroke-width="1.5"/>
-    <rect width="6" height="135" rx="3" fill="url(#pGlow1)"/>
-    <g transform="translate(26, 28)" font-family="'Segoe UI', sans-serif">
-      <g>
-        <rect width="90" height="20" rx="6" fill="#083344" stroke="#0891b2" stroke-width="1"/>
-        <text x="45" y="14" font-family="monospace" font-size="9" fill="#22d3ee" text-anchor="middle" font-weight="700">S-RANK // AI</text>
-      </g>
-      <text x="104" y="16" font-size="18" font-weight="900" fill="#ffffff">VisionMate AI</text>
-      <text y="44" font-size="13" fill="#cbd5e1">
-        Assistive AI vision platform empowering blind users with real-time audio perception.
-      </text>
-      <g transform="translate(0, 68)" font-family="monospace" font-size="11">
-        <text fill="#67e8f9">STACK: Python · Computer Vision · PyTorch · Voice Synthesis</text>
-      </g>
+  <!-- ==================== CHAPTER 01: VisionMate AI (x: Left 540) ==================== -->
+  <g transform="translate(600, 130)">
+    <!-- Spine Node -->
+    <circle cx="0" cy="0" r="14" fill="#083344" stroke="#06b6d4" stroke-width="2.5" class="chapter-node"/>
+    <circle cx="0" cy="0" r="5" fill="#67e8f9"/>
+    <!-- Connecting Filament to Left Story -->
+    <path d="M 0 0 L -60 0 L -80 -15 L -100 -15" fill="none" stroke="#06b6d4" stroke-width="1.5" opacity="0.7"/>
+    <!-- Content (Left aligned to node) -->
+    <g transform="translate(-115, -28)" text-anchor="end" font-family="'Segoe UI', sans-serif">
+      <text font-family="monospace" font-size="11" font-weight="800" fill="#22d3ee" letter-spacing="2">CHAPTER I · S-RANK // AI &amp; PERCEPTION</text>
+      <text y="22" font-size="20" font-weight="900" fill="#ffffff">VisionMate AI</text>
+      <text y="42" font-size="13" fill="#cbd5e1">Assistive computer-vision suite empowering visually impaired individuals</text>
+      <text y="58" font-size="13" fill="#94a3b8">with real-time auditory scene descriptions and object perception.</text>
+      <text y="76" font-family="monospace" font-size="11" fill="#67e8f9">STACK: Python · Computer Vision · PyTorch · Speech Synthesis</text>
     </g>
   </g>
 
-  <!-- PROJECT 2: SafeMeds AI (Row 1, Right -> x: 620, y: 95) -->
-  <g transform="translate(620, 95)">
-    <rect width="530" height="135" rx="14" fill="url(#cardGrad)" stroke="#10b981" stroke-width="1.5"/>
-    <rect width="6" height="135" rx="3" fill="url(#pGlow2)"/>
-    <g transform="translate(26, 28)" font-family="'Segoe UI', sans-serif">
-      <g>
-        <rect width="105" height="20" rx="6" fill="#064e3b" stroke="#059669" stroke-width="1"/>
-        <text x="52" y="14" font-family="monospace" font-size="9" fill="#34d399" text-anchor="middle" font-weight="700">A-RANK // HEALTH</text>
-      </g>
-      <text x="118" y="16" font-size="18" font-weight="900" fill="#ffffff">SafeMeds AI</text>
-      <text y="44" font-size="13" fill="#cbd5e1">
-        Intelligent medicine safety suite: interaction detection, dosage warnings &amp; verification.
-      </text>
-      <g transform="translate(0, 68)" font-family="monospace" font-size="11">
-        <text fill="#6ee7b7">STACK: React · Node.js · Medical APIs · AI Safety Engine</text>
-      </g>
+  <!-- ==================== CHAPTER 02: SafeMeds AI (x: Right 660) ==================== -->
+  <g transform="translate(600, 240)">
+    <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" stroke-width="2.5" class="chapter-node"/>
+    <circle cx="0" cy="0" r="5" fill="#34d399"/>
+    <path d="M 0 0 L 60 0 L 80 -15 L 100 -15" fill="none" stroke="#10b981" stroke-width="1.5" opacity="0.7"/>
+    <g transform="translate(115, -28)" text-anchor="start" font-family="'Segoe UI', sans-serif">
+      <text font-family="monospace" font-size="11" font-weight="800" fill="#34d399" letter-spacing="2">CHAPTER II · A-RANK // HEALTHCARE</text>
+      <text y="22" font-size="20" font-weight="900" fill="#ffffff">SafeMeds AI</text>
+      <text y="42" font-size="13" fill="#cbd5e1">Intelligent medicine verification and drug safety intelligence system</text>
+      <text y="58" font-size="13" fill="#94a3b8">detecting hazardous drug-drug interactions and incorrect dosage patterns.</text>
+      <text y="76" font-family="monospace" font-size="11" fill="#6ee7b7">STACK: React · Node.js · Medical APIs · AI Safety Engine</text>
     </g>
   </g>
 
-  <!-- PROJECT 3: ISL Healthcare Connect (Row 2, Left -> x: 50, y: 250) -->
-  <g transform="translate(50, 250)">
-    <rect width="530" height="135" rx="14" fill="url(#cardGrad)" stroke="#f97316" stroke-width="1.5"/>
-    <rect width="6" height="135" rx="3" fill="url(#pGlow3)"/>
-    <g transform="translate(26, 28)" font-family="'Segoe UI', sans-serif">
-      <g>
-        <rect width="115" height="20" rx="6" fill="#431407" stroke="#ea580c" stroke-width="1"/>
-        <text x="57" y="14" font-family="monospace" font-size="9" fill="#fb923c" text-anchor="middle" font-weight="700">S-RANK // INCLUSION</text>
-      </g>
-      <text x="128" y="16" font-size="18" font-weight="900" fill="#ffffff">ISL Healthcare Connect</text>
-      <text y="44" font-size="13" fill="#cbd5e1">
-        Indian Sign Language translation engine connecting deaf patients with doctors seamlessly.
-      </text>
-      <g transform="translate(0, 68)" font-family="monospace" font-size="11">
-        <text fill="#fdba74">STACK: Flutter · TensorFlow · Mobile UI · Real-Time Gesture</text>
-      </g>
+  <!-- ==================== CHAPTER 03: ISL Healthcare Connect (x: Left 540) ==================== -->
+  <g transform="translate(600, 350)">
+    <circle cx="0" cy="0" r="14" fill="#431407" stroke="#f97316" stroke-width="2.5" class="chapter-node"/>
+    <circle cx="0" cy="0" r="5" fill="#fb923c"/>
+    <path d="M 0 0 L -60 0 L -80 -15 L -100 -15" fill="none" stroke="#f97316" stroke-width="1.5" opacity="0.7"/>
+    <g transform="translate(-115, -28)" text-anchor="end" font-family="'Segoe UI', sans-serif">
+      <text font-family="monospace" font-size="11" font-weight="800" fill="#fb923c" letter-spacing="2">CHAPTER III · S-RANK // ACCESSIBILITY</text>
+      <text y="22" font-size="20" font-weight="900" fill="#ffffff">ISL Healthcare Connect</text>
+      <text y="42" font-size="13" fill="#cbd5e1">Indian Sign Language real-time gesture translation engine bridging</text>
+      <text y="58" font-size="13" fill="#94a3b8">critical communication gaps between deaf patients and healthcare workers.</text>
+      <text y="76" font-family="monospace" font-size="11" fill="#fdba74">STACK: Flutter · TensorFlow · Mobile UI · Gesture ML</text>
     </g>
   </g>
 
-  <!-- PROJECT 4: RYVEN (Row 2, Right -> x: 620, y: 250) -->
-  <g transform="translate(620, 250)">
-    <rect width="530" height="135" rx="14" fill="url(#cardGrad)" stroke="#a855f7" stroke-width="1.5"/>
-    <rect width="6" height="135" rx="3" fill="url(#pGlow4)"/>
-    <g transform="translate(26, 28)" font-family="'Segoe UI', sans-serif">
-      <g>
-        <rect width="105" height="20" rx="6" fill="#3b0764" stroke="#7e22ce" stroke-width="1"/>
-        <text x="52" y="14" font-family="monospace" font-size="9" fill="#c084fc" text-anchor="middle" font-weight="700">S-RANK // AGENT</text>
-      </g>
-      <text x="118" y="16" font-size="18" font-weight="900" fill="#ffffff">RYVEN</text>
-      <text y="44" font-size="13" fill="#cbd5e1">
-        Autonomous local AI assistant providing privacy-first desktop workflow orchestration.
-      </text>
-      <g transform="translate(0, 68)" font-family="monospace" font-size="11">
-        <text fill="#d8b4fe">STACK: Python · Local LLM Quantization · Autonomous Agents</text>
-      </g>
+  <!-- ==================== CHAPTER 04: RYVEN (x: Right 660) ==================== -->
+  <g transform="translate(600, 460)">
+    <circle cx="0" cy="0" r="14" fill="#2e1065" stroke="#a855f7" stroke-width="2.5" class="chapter-node"/>
+    <circle cx="0" cy="0" r="5" fill="#d8b4fe"/>
+    <path d="M 0 0 L 60 0 L 80 -15 L 100 -15" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.7"/>
+    <g transform="translate(115, -28)" text-anchor="start" font-family="'Segoe UI', sans-serif">
+      <text font-family="monospace" font-size="11" font-weight="800" fill="#c084fc" letter-spacing="2">CHAPTER IV · S-RANK // AUTONOMOUS AI</text>
+      <text y="22" font-size="20" font-weight="900" fill="#ffffff">RYVEN</text>
+      <text y="42" font-size="13" fill="#cbd5e1">Privacy-first autonomous desktop intelligence assistant running on</text>
+      <text y="58" font-size="13" fill="#94a3b8">quantized local neural weights without cloud dependencies.</text>
+      <text y="76" font-family="monospace" font-size="11" fill="#e9d5ff">STACK: Python · Local LLMs · Agentic Architecture · Desktop Runtime</text>
     </g>
   </g>
 
-  <!-- PROJECT 5: StudyGen AI (Row 3, Centered Wide -> x: 50, y: 405) -->
-  <g transform="translate(50, 405)">
-    <rect width="1100" height="135" rx="14" fill="url(#cardGrad)" stroke="#f59e0b" stroke-width="1.5"/>
-    <rect width="6" height="135" rx="3" fill="url(#pGlow5)"/>
-    <g transform="translate(26, 28)" font-family="'Segoe UI', sans-serif">
-      <g>
-        <rect width="105" height="20" rx="6" fill="#451a03" stroke="#d97706" stroke-width="1"/>
-        <text x="52" y="14" font-family="monospace" font-size="9" fill="#fbbf24" text-anchor="middle" font-weight="700">A-RANK // EDTECH</text>
-      </g>
-      <text x="118" y="16" font-size="18" font-weight="900" fill="#ffffff">StudyGen AI</text>
-      <text y="44" font-size="13" fill="#cbd5e1">
-        Generative AI academic copilot: synthesizes complex textbooks into structured roadmaps, flashcards &amp; quizzes.
-      </text>
-      <g transform="translate(0, 68)" font-family="monospace" font-size="11">
-        <text fill="#fde68a">STACK: JavaScript · React · Generative AI APIs · Adaptive Learning Algorithms</text>
-      </g>
+  <!-- ==================== CHAPTER 05: StudyGen AI (x: Left 540) ==================== -->
+  <g transform="translate(600, 570)">
+    <circle cx="0" cy="0" r="14" fill="#451a03" stroke="#f59e0b" stroke-width="2.5" class="chapter-node"/>
+    <circle cx="0" cy="0" r="5" fill="#fde68a"/>
+    <path d="M 0 0 L -60 0 L -80 -15 L -100 -15" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.7"/>
+    <g transform="translate(-115, -28)" text-anchor="end" font-family="'Segoe UI', sans-serif">
+      <text font-family="monospace" font-size="11" font-weight="800" fill="#fbbf24" letter-spacing="2">CHAPTER V · A-RANK // COGNITIVE EDTECH</text>
+      <text y="22" font-size="20" font-weight="900" fill="#ffffff">StudyGen AI</text>
+      <text y="42" font-size="13" fill="#cbd5e1">Generative AI academic copilot synthesizing complex textbooks into</text>
+      <text y="58" font-size="13" fill="#94a3b8">structured learning roadmaps, interactive flashcards, and retention quizzes.</text>
+      <text y="76" font-family="monospace" font-size="11" fill="#fef08a">STACK: JavaScript · React · Generative AI APIs · Adaptive Learning</text>
     </g>
   </g>
 </svg>
-

@@ -1,215 +1,203 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="charTitle charDesc">
-  <title id="charTitle">Shinobi Archive — Naruto Character Universe</title>
-  <desc id="charDesc">A curated Naruto character universe archive displaying Team 7, Hokage, Uchiha Clan, Akatsuki, Legendary Sannin, and the Allied Shinobi Forces.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="rivTitle rivDesc">
+  <title id="rivTitle">Continuous Naruto Character Universe — Chakra River</title>
+  <desc id="rivDesc">Seamless flowing anime character journey without card boundaries, featuring Team 7, Uchiha Clan, Akatsuki, Sannin &amp; Hokage, and Allied Shinobi along a continuous chakra river.</desc>
   <defs>
-    <!-- Background Gradient -->
-    <radialGradient id="archiveBg" cx="50%" cy="30%" r="70%">
-      <stop offset="0%" stop-color="#180b33" stop-opacity="0.95"/>
-      <stop offset="60%" stop-color="#0d051c" stop-opacity="0.98"/>
-      <stop offset="100%" stop-color="#04010a" stop-opacity="1"/>
+    <!-- Background Atmosphere -->
+    <radialGradient id="spaceAtmosphere" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#16082e" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="#0a0317" stop-opacity="0.98"/>
+      <stop offset="100%" stop-color="#030008" stop-opacity="1"/>
     </radialGradient>
 
-    <!-- Faction Auras -->
-    <linearGradient id="team7Glow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f97316"/>
-      <stop offset="50%" stop-color="#38bdf8"/>
-      <stop offset="100%" stop-color="#ec4899"/>
+    <!-- Continuous River Gradients -->
+    <linearGradient id="chakraRiver1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f97316" stop-opacity="0.8"/>
+      <stop offset="25%" stop-color="#a855f7" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#ef4444" stop-opacity="0.8"/>
+      <stop offset="75%" stop-color="#10b981" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.8"/>
     </linearGradient>
-    <linearGradient id="hokageGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#eab308"/>
-      <stop offset="50%" stop-color="#ef4444"/>
-      <stop offset="100%" stop-color="#f59e0b"/>
-    </linearGradient>
-    <linearGradient id="uchihaGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ef4444"/>
-      <stop offset="50%" stop-color="#a855f7"/>
-      <stop offset="100%" stop-color="#7c3aed"/>
-    </linearGradient>
-    <linearGradient id="akatsukiGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#dc2626"/>
-      <stop offset="50%" stop-color="#7f1d1d"/>
-      <stop offset="100%" stop-color="#450a0a"/>
-    </linearGradient>
-    <linearGradient id="sanninGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#10b981"/>
-      <stop offset="50%" stop-color="#06b6d4"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
-    </linearGradient>
-    <linearGradient id="alliedGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b82f6"/>
-      <stop offset="50%" stop-color="#eab308"/>
-      <stop offset="100%" stop-color="#06b6d4"/>
-    </linearGradient>
-    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#190e2e" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#0d061a" stop-opacity="0.95"/>
+    <linearGradient id="chakraRiver2" x1="100%" y1="0%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.6"/>
+      <stop offset="35%" stop-color="#c084fc" stop-opacity="0.7"/>
+      <stop offset="70%" stop-color="#fbbf24" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#f43f5e" stop-opacity="0.6"/>
     </linearGradient>
 
-    <!-- Filters -->
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="5" result="blur"/>
+    <!-- Node Glow Filters -->
+    <filter id="auraGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur1"/>
       <feMerge>
-        <feMergeNode in="blur"/>
+        <feMergeNode in="blur1"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
 
     <style>
-      @keyframes borderSweep {
-        0% { stroke-dashoffset: 400; }
-        100% { stroke-dashoffset: 0; }
+      @keyframes waveFlow1 {
+        0% { transform: translateX(0); }
+        50% { transform: translateX(-50px) translateY(8px); }
+        100% { transform: translateX(0); }
       }
-      @keyframes badgePulse {
-        0%, 100% { opacity: 0.85; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.05); }
+      @keyframes waveFlow2 {
+        0% { transform: translateX(0); }
+        50% { transform: translateX(50px) translateY(-8px); }
+        100% { transform: translateX(0); }
       }
-      .sweep-line {
-        stroke-dasharray: 200 200;
-        animation: borderSweep 8s linear infinite;
+      @keyframes starPulse {
+        0%, 100% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 12px #67e8f9); }
       }
-      .pulse-crest {
-        animation: badgePulse 3.5s ease-in-out infinite;
-        transform-origin: center;
+      .river-wave-1 {
+        animation: waveFlow1 12s ease-in-out infinite;
+      }
+      .river-wave-2 {
+        animation: waveFlow2 14s ease-in-out infinite;
+      }
+      .pulsing-node {
+        animation: starPulse 4s ease-in-out infinite;
       }
     </style>
   </defs>
 
-  <!-- Background -->
-  <rect width="1200" height="620" rx="24" fill="url(#archiveBg)"/>
-  <rect width="1196" height="616" x="2" y="2" rx="23" fill="none" stroke="#6b21a8" stroke-width="1.5" opacity="0.6"/>
+  <!-- Canvas (Seamless, no card container) -->
+  <rect width="1200" height="520" fill="url(#spaceAtmosphere)"/>
 
-  <!-- Top Header Strip -->
-  <g transform="translate(50, 48)">
-    <text font-family="monospace" font-size="13" fill="#a78bfa" letter-spacing="3" font-weight="700">03 / SHINOBI DOSSIER</text>
-    <text y="28" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="800" fill="#ffffff" letter-spacing="1">
-      NARUTO CHARACTER UNIVERSE &amp; FACTIONS
+  <!-- Top Narrative Horizon -->
+  <g transform="translate(600, 48)" text-anchor="middle">
+    <text font-family="monospace" font-size="12" fill="#c084fc" letter-spacing="4" font-weight="700">
+      02 // CONTINUOUS SHINOBI JOURNEY · THE LIVING UNIVERSE
+    </text>
+    <text y="28" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="900" fill="#ffffff" letter-spacing="2">
+      THE CHAKRA CONTINUUM — LEGENDS OF THE FIVE NATIONS
     </text>
   </g>
-  <g transform="translate(1150, 48)" text-anchor="end">
-    <rect x="-240" y="-14" width="240" height="28" rx="14" fill="#1b0a33" stroke="#9333ea" stroke-width="1"/>
-    <text x="-12" y="5" font-family="monospace" font-size="11" fill="#c084fc">CURATED MAJOR ROSTER</text>
-    <circle cx="-220" cy="0" r="4" fill="#a855f7"/>
+
+  <!-- ==================== FLOWING CHAKRA RIVER HIGHWAYS ==================== -->
+  <g class="river-wave-1" opacity="0.75" filter="url(#auraGlow)">
+    <path d="M -50 250 C 150 180, 350 320, 600 240 C 850 160, 1050 300, 1250 240" fill="none" stroke="url(#chakraRiver1)" stroke-width="4.5"/>
+  </g>
+  <g class="river-wave-2" opacity="0.5" filter="url(#auraGlow)">
+    <path d="M -50 270 C 200 340, 450 190, 600 260 C 750 330, 1000 180, 1250 260" fill="none" stroke="url(#chakraRiver2)" stroke-width="2.5" stroke-dasharray="14 10"/>
   </g>
 
-  <!-- ==================== 6 FACTION CARDS (2 ROWS × 3 COLUMNS) ==================== -->
+  <!-- Background Ambient Kanji Emblems along the River -->
+  <text x="120" y="270" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="110" fill="#f97316" opacity="0.05" text-anchor="middle">火</text>
+  <text x="360" y="270" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="110" fill="#a855f7" opacity="0.05" text-anchor="middle">団</text>
+  <text x="600" y="270" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="110" fill="#ef4444" opacity="0.05" text-anchor="middle">暁</text>
+  <text x="840" y="270" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="110" fill="#10b981" opacity="0.05" text-anchor="middle">仙</text>
+  <text x="1080" y="270" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="110" fill="#06b6d4" opacity="0.05" text-anchor="middle">連</text>
 
-  <!-- CARD 1: TEAM 7 & SENSEI (Row 1, Col 1 -> x: 50, y: 100) -->
-  <g transform="translate(50, 100)">
-    <rect width="350" height="230" rx="16" fill="url(#cardBg)" stroke="#f97316" stroke-width="1.5"/>
-    <rect width="346" height="226" x="2" y="2" rx="14" fill="none" stroke="url(#team7Glow)" stroke-width="1.5" class="sweep-line" opacity="0.7"/>
-    <!-- Faction Header -->
-    <circle cx="36" cy="36" r="18" fill="#3b1d11" stroke="#f97316" stroke-width="1.5"/>
-    <text x="36" y="42" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="15" fill="#f97316" text-anchor="middle">七</text>
-    <text x="66" y="32" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="16" fill="#ffffff">TEAM 7 &amp; MENTORS</text>
-    <text x="66" y="48" font-family="monospace" font-size="10" fill="#fdba74" letter-spacing="1.5">LEAF VILLAGE CELL</text>
-    <line x1="20" y1="68" x2="330" y2="68" stroke="#431407" stroke-width="1"/>
-    <!-- Characters List -->
-    <g transform="translate(20, 94)" font-family="'Segoe UI', sans-serif">
-      <text font-weight="700" font-size="14" fill="#fb923c">Naruto Uzumaki <tspan font-weight="400" font-size="12" fill="#94a3b8">· Nine-Tails Jinchuriki</tspan></text>
-      <text y="26" font-weight="700" font-size="14" fill="#38bdf8">Sasuke Uchiha <tspan font-weight="400" font-size="12" fill="#94a3b8">· Rinnegan &amp; Sharingan</tspan></text>
-      <text y="52" font-weight="700" font-size="14" fill="#f472b6">Sakura Haruno <tspan font-weight="400" font-size="12" fill="#94a3b8">· Byakugou Medical Master</tspan></text>
-      <text y="78" font-weight="700" font-size="14" fill="#cbd5e1">Kakashi Hatake <tspan font-weight="400" font-size="12" fill="#94a3b8">· Copy Ninja &amp; 6th Hokage</tspan></text>
-      <text y="104" font-weight="700" font-size="14" fill="#a78bfa">Sai &amp; Yamato <tspan font-weight="400" font-size="12" fill="#94a3b8">· Root Ink &amp; Wood Style</tspan></text>
+  <!-- ==================== 5 SEAMLESS CHARACTER CONSTELLATIONS ==================== -->
+
+  <!-- CONSTELLATION 1: WILL OF FIRE (Team 7 & Kakashi) -> x: 120 -->
+  <g transform="translate(120, 240)">
+    <!-- Central Energy Pivot -->
+    <circle cx="0" cy="0" r="16" fill="#3b1506" stroke="#f97316" stroke-width="2.5" class="pulsing-node"/>
+    <circle cx="0" cy="0" r="6" fill="#fb923c"/>
+    <!-- Connecting Filament Lines -->
+    <line x1="0" y1="0" x2="-35" y2="-90" stroke="#f97316" stroke-width="1.2" opacity="0.5"/>
+    <line x1="0" y1="0" x2="35" y2="-90" stroke="#f97316" stroke-width="1.2" opacity="0.5"/>
+    <line x1="0" y1="0" x2="-30" y2="85" stroke="#f97316" stroke-width="1.2" opacity="0.5"/>
+    <line x1="0" y1="0" x2="30" y2="85" stroke="#f97316" stroke-width="1.2" opacity="0.5"/>
+    <!-- Upper Stream Text -->
+    <g transform="translate(0, -105)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+      <text font-size="15" font-weight="900" fill="#fb923c" letter-spacing="1">TEAM 7 · WILL OF FIRE</text>
+      <text y="20" font-size="12" font-weight="700" fill="#ffffff">Naruto Uzumaki</text>
+      <text y="36" font-size="11" fill="#94a3b8">Nine-Tails Jinchuriki</text>
+    </g>
+    <!-- Lower Stream Text -->
+    <g transform="translate(0, 85)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+      <text y="18" font-size="12" font-weight="700" fill="#38bdf8">Sasuke Uchiha</text>
+      <text y="34" font-size="11" fill="#94a3b8">Rinnegan &amp; Chidori</text>
+      <text y="52" font-size="11" fill="#f472b6">Sakura Haruno · Kakashi</text>
     </g>
   </g>
 
-  <!-- CARD 2: THE HOKAGE DYNASTY (Row 1, Col 2 -> x: 425, y: 100) -->
-  <g transform="translate(425, 100)">
-    <rect width="350" height="230" rx="16" fill="url(#cardBg)" stroke="#eab308" stroke-width="1.5"/>
-    <rect width="346" height="226" x="2" y="2" rx="14" fill="none" stroke="url(#hokageGlow)" stroke-width="1.5" class="sweep-line" opacity="0.7"/>
-    <!-- Faction Header -->
-    <circle cx="36" cy="36" r="18" fill="#332408" stroke="#eab308" stroke-width="1.5"/>
-    <text x="36" y="42" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="14" fill="#eab308" text-anchor="middle">火</text>
-    <text x="66" y="32" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="16" fill="#ffffff">HOKAGE DYNASTY</text>
-    <text x="66" y="48" font-family="monospace" font-size="10" fill="#fde047" letter-spacing="1.5">WILL OF FIRE SUPREME</text>
-    <line x1="20" y1="68" x2="330" y2="68" stroke="#422006" stroke-width="1"/>
-    <!-- Characters List -->
-    <g transform="translate(20, 94)" font-family="'Segoe UI', sans-serif">
-      <text font-weight="700" font-size="14" fill="#facc15">Hashirama Senju <tspan font-weight="400" font-size="12" fill="#94a3b8">· 1st (God of Shinobi)</tspan></text>
-      <text y="26" font-weight="700" font-size="14" fill="#93c5fd">Tobirama Senju <tspan font-weight="400" font-size="12" fill="#94a3b8">· 2nd (Space-Time/Jutsu Creator)</tspan></text>
-      <text y="52" font-weight="700" font-size="14" fill="#fdba74">Hiruzen Sarutobi <tspan font-weight="400" font-size="12" fill="#94a3b8">· 3rd (The Professor)</tspan></text>
-      <text y="78" font-weight="700" font-size="14" fill="#fef08a">Minato Namikaze <tspan font-weight="400" font-size="12" fill="#94a3b8">· 4th (Yellow Flash)</tspan></text>
-      <text y="104" font-weight="700" font-size="14" fill="#86efac">Tsunade Senju <tspan font-weight="400" font-size="12" fill="#94a3b8">· 5th (Slug Princess Sannin)</tspan></text>
+  <!-- CONSTELLATION 2: UCHIHA BLOODLINE (Madara, Itachi, Obito, Shisui) -> x: 360 -->
+  <g transform="translate(360, 240)">
+    <circle cx="0" cy="0" r="16" fill="#240a45" stroke="#c084fc" stroke-width="2.5" class="pulsing-node"/>
+    <circle cx="0" cy="0" r="6" fill="#e9d5ff"/>
+    <line x1="0" y1="0" x2="0" y2="-85" stroke="#a855f7" stroke-width="1.2" opacity="0.5"/>
+    <line x1="0" y1="0" x2="0" y2="85" stroke="#a855f7" stroke-width="1.2" opacity="0.5"/>
+    <!-- Upper Stream Text -->
+    <g transform="translate(0, -105)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+      <text font-size="15" font-weight="900" fill="#c084fc" letter-spacing="1">UCHIHA · DOUJUTSU</text>
+      <text y="20" font-size="12" font-weight="700" fill="#ffffff">Madara Uchiha</text>
+      <text y="36" font-size="11" fill="#94a3b8">Perfect Susanoo &amp; Rebirth</text>
+    </g>
+    <!-- Lower Stream Text -->
+    <g transform="translate(0, 85)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+      <text y="18" font-size="12" font-weight="700" fill="#f87171">Itachi Uchiha</text>
+      <text y="34" font-size="11" fill="#94a3b8">Tsukuyomi &amp; Totsuka</text>
+      <text y="52" font-size="11" fill="#d8b4fe">Obito (Kamui) · Shisui</text>
     </g>
   </g>
 
-  <!-- CARD 3: UCHIHA CLAN & DOUJUTSU (Row 1, Col 3 -> x: 800, y: 100) -->
-  <g transform="translate(800, 100)">
-    <rect width="350" height="230" rx="16" fill="url(#cardBg)" stroke="#a855f7" stroke-width="1.5"/>
-    <rect width="346" height="226" x="2" y="2" rx="14" fill="none" stroke="url(#uchihaGlow)" stroke-width="1.5" class="sweep-line" opacity="0.7"/>
-    <!-- Faction Header -->
-    <circle cx="36" cy="36" r="18" fill="#2e1065" stroke="#c084fc" stroke-width="1.5"/>
-    <text x="36" y="42" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="14" fill="#c084fc" text-anchor="middle">団</text>
-    <text x="66" y="32" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="16" fill="#ffffff">UCHIHA CLAN</text>
-    <text x="66" y="48" font-family="monospace" font-size="10" fill="#d8b4fe" letter-spacing="1.5">MANGEKYO &amp; SUSANOO</text>
-    <line x1="20" y1="68" x2="330" y2="68" stroke="#3b0764" stroke-width="1"/>
-    <!-- Characters List -->
-    <g transform="translate(20, 94)" font-family="'Segoe UI', sans-serif">
-      <text font-weight="700" font-size="14" fill="#c084fc">Madara Uchiha <tspan font-weight="400" font-size="12" fill="#94a3b8">· Perfect Susanoo &amp; Rinnegan</tspan></text>
-      <text y="26" font-weight="700" font-size="14" fill="#f87171">Itachi Uchiha <tspan font-weight="400" font-size="12" fill="#94a3b8">· Tsukuyomi, Amaterasu &amp; Totsuka</tspan></text>
-      <text y="52" font-weight="700" font-size="14" fill="#fb923c">Obito Uchiha <tspan font-weight="400" font-size="12" fill="#94a3b8">· Kamui Space-Time Shinobi</tspan></text>
-      <text y="78" font-weight="700" font-size="14" fill="#38bdf8">Shisui Uchiha <tspan font-weight="400" font-size="12" fill="#94a3b8">· Kotoamatsukami Mind Mastery</tspan></text>
-      <text y="104" font-weight="700" font-size="14" fill="#cbd5e1">Fugaku &amp; Izuna <tspan font-weight="400" font-size="12" fill="#94a3b8">· Ancestral Clan Leaders</tspan></text>
+  <!-- CONSTELLATION 3: AKATSUKI ORDER (Pain, Konan, Kisame, Deidara) -> x: 600 -->
+  <g transform="translate(600, 240)">
+    <circle cx="0" cy="0" r="16" fill="#3b0606" stroke="#ef4444" stroke-width="2.5" class="pulsing-node"/>
+    <circle cx="0" cy="0" r="6" fill="#fca5a5"/>
+    <line x1="0" y1="0" x2="0" y2="-85" stroke="#ef4444" stroke-width="1.2" opacity="0.5"/>
+    <line x1="0" y1="0" x2="0" y2="85" stroke="#ef4444" stroke-width="1.2" opacity="0.5"/>
+    <!-- Upper Stream Text -->
+    <g transform="translate(0, -105)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+      <text font-size="15" font-weight="900" fill="#f87171" letter-spacing="1">AKATSUKI ORDER</text>
+      <text y="20" font-size="12" font-weight="700" fill="#ffffff">Pain / Nagato</text>
+      <text y="36" font-size="11" fill="#94a3b8">Six Paths of Pain &amp; Shinra</text>
+    </g>
+    <!-- Lower Stream Text -->
+    <g transform="translate(0, 85)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+      <text y="18" font-size="12" font-weight="700" fill="#c084fc">Konan (Paper Deity)</text>
+      <text y="34" font-size="11" fill="#94a3b8">Kisame (Samehada)</text>
+      <text y="52" font-size="11" fill="#facc15">Deidara · Sasori · Itachi</text>
     </g>
   </g>
 
-  <!-- CARD 4: AKATSUKI ORDER (Row 2, Col 1 -> x: 50, y: 350) -->
-  <g transform="translate(50, 350)">
-    <rect width="350" height="230" rx="16" fill="url(#cardBg)" stroke="#dc2626" stroke-width="1.5"/>
-    <rect width="346" height="226" x="2" y="2" rx="14" fill="none" stroke="url(#akatsukiGlow)" stroke-width="1.5" class="sweep-line" opacity="0.7"/>
-    <!-- Faction Header -->
-    <circle cx="36" cy="36" r="18" fill="#450a0a" stroke="#ef4444" stroke-width="1.5"/>
-    <text x="36" y="42" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="14" fill="#ef4444" text-anchor="middle">暁</text>
-    <text x="66" y="32" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="16" fill="#ffffff">AKATSUKI ORDER</text>
-    <text x="66" y="48" font-family="monospace" font-size="10" fill="#f87171" letter-spacing="1.5">CRIMSON CLOUD REBELS</text>
-    <line x1="20" y1="68" x2="330" y2="68" stroke="#450a0a" stroke-width="1"/>
-    <!-- Characters List -->
-    <g transform="translate(20, 94)" font-family="'Segoe UI', sans-serif">
-      <text font-weight="700" font-size="14" fill="#f87171">Pain / Nagato <tspan font-weight="400" font-size="12" fill="#94a3b8">· Six Paths of Pain &amp; Shinra Tensei</tspan></text>
-      <text y="26" font-weight="700" font-size="14" fill="#a78bfa">Konan <tspan font-weight="400" font-size="12" fill="#94a3b8">· Angel of God &amp; Sacred Origami</tspan></text>
-      <text y="52" font-weight="700" font-size="14" fill="#38bdf8">Kisame Hoshigaki <tspan font-weight="400" font-size="12" fill="#94a3b8">· Tailless Tailed Beast (Samehada)</tspan></text>
-      <text y="78" font-weight="700" font-size="14" fill="#facc15">Deidara &amp; Sasori <tspan font-weight="400" font-size="12" fill="#94a3b8">· Explosive Clay &amp; Human Puppets</tspan></text>
-      <text y="104" font-weight="700" font-size="14" fill="#e2e8f0">Hidan &amp; Kakuzu <tspan font-weight="400" font-size="12" fill="#94a3b8">· Immortal Zombie Duo</tspan></text>
+  <!-- CONSTELLATION 4: HOKAGE & SANNIN (Hashirama, Minato, Tsunade, Jiraiya) -> x: 840 -->
+  <g transform="translate(840, 240)">
+    <circle cx="0" cy="0" r="16" fill="#043324" stroke="#10b981" stroke-width="2.5" class="pulsing-node"/>
+    <circle cx="0" cy="0" r="6" fill="#86efac"/>
+    <line x1="0" y1="0" x2="0" y2="-85" stroke="#10b981" stroke-width="1.2" opacity="0.5"/>
+    <line x1="0" y1="0" x2="0" y2="85" stroke="#10b981" stroke-width="1.2" opacity="0.5"/>
+    <!-- Upper Stream Text -->
+    <g transform="translate(0, -105)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+      <text font-size="15" font-weight="900" fill="#6ee7b7" letter-spacing="1">HOKAGE &amp; SANNIN</text>
+      <text y="20" font-size="12" font-weight="700" fill="#ffffff">Hashirama Senju</text>
+      <text y="36" font-size="11" fill="#94a3b8">God of Shinobi · Wood Style</text>
+    </g>
+    <!-- Lower Stream Text -->
+    <g transform="translate(0, 85)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+      <text y="18" font-size="12" font-weight="700" fill="#fde047">Minato Namikaze (4th)</text>
+      <text y="34" font-size="11" fill="#94a3b8">Jiraiya &amp; Tsunade</text>
+      <text y="52" font-size="11" fill="#a78bfa">Orochimaru (Ryuchi Sage)</text>
     </g>
   </g>
 
-  <!-- CARD 5: LEGENDARY SANNIN (Row 2, Col 2 -> x: 425, y: 350) -->
-  <g transform="translate(425, 350)">
-    <rect width="350" height="230" rx="16" fill="url(#cardBg)" stroke="#10b981" stroke-width="1.5"/>
-    <rect width="346" height="226" x="2" y="2" rx="14" fill="none" stroke="url(#sanninGlow)" stroke-width="1.5" class="sweep-line" opacity="0.7"/>
-    <!-- Faction Header -->
-    <circle cx="36" cy="36" r="18" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
-    <text x="36" y="42" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="14" fill="#34d399" text-anchor="middle">忍</text>
-    <text x="66" y="32" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="16" fill="#ffffff">LEGENDARY SANNIN</text>
-    <text x="66" y="48" font-family="monospace" font-size="10" fill="#6ee7b7" letter-spacing="1.5">TRIAD OF THREE SUMMONS</text>
-    <line x1="20" y1="68" x2="330" y2="68" stroke="#064e3b" stroke-width="1"/>
-    <!-- Characters List -->
-    <g transform="translate(20, 94)" font-family="'Segoe UI', sans-serif">
-      <text font-weight="700" font-size="14" fill="#fdba74">Jiraiya (Toad Sage) <tspan font-weight="400" font-size="12" fill="#94a3b8">· Mount Myoboku Senjutsu</tspan></text>
-      <text y="26" font-weight="700" font-size="14" fill="#6ee7b7">Tsunade Senju <tspan font-weight="400" font-size="12" fill="#94a3b8">· Katsuyu Summon &amp; Super Strength</tspan></text>
-      <text y="52" font-weight="700" font-size="14" fill="#a78bfa">Orochimaru <tspan font-weight="400" font-size="12" fill="#94a3b8">· Ryuchi Cave &amp; Reanimation Jutsu</tspan></text>
-      <text y="78" font-weight="700" font-size="14" fill="#38bdf8">Kabuto Yakushi <tspan font-weight="400" font-size="12" fill="#94a3b8">· Dragon Sage Mode Practitioner</tspan></text>
-      <text y="104" font-weight="700" font-size="14" fill="#94a3b8">Legacy Pupils <tspan font-weight="400" font-size="12" fill="#64748b">· Naruto, Sakura, Sasuke</tspan></text>
+  <!-- CONSTELLATION 5: ALLIED SHINOBI (Gaara, Killer B, Guy, Lee) -> x: 1080 -->
+  <g transform="translate(1080, 240)">
+    <circle cx="0" cy="0" r="16" fill="#063245" stroke="#06b6d4" stroke-width="2.5" class="pulsing-node"/>
+    <circle cx="0" cy="0" r="6" fill="#67e8f9"/>
+    <line x1="0" y1="0" x2="0" y2="-85" stroke="#06b6d4" stroke-width="1.2" opacity="0.5"/>
+    <line x1="0" y1="0" x2="0" y2="85" stroke="#06b6d4" stroke-width="1.2" opacity="0.5"/>
+    <!-- Upper Stream Text -->
+    <g transform="translate(0, -105)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+      <text font-size="15" font-weight="900" fill="#67e8f9" letter-spacing="1">ALLIED FORCES</text>
+      <text y="20" font-size="12" font-weight="700" fill="#ffffff">Gaara (Kazekage)</text>
+      <text y="36" font-size="11" fill="#94a3b8">Supreme Commander</text>
+    </g>
+    <!-- Lower Stream Text -->
+    <g transform="translate(0, 85)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+      <text y="18" font-size="12" font-weight="700" fill="#facc15">Killer B (Eight-Tails)</text>
+      <text y="34" font-size="11" fill="#94a3b8">Might Guy (Eight Gates)</text>
+      <text y="52" font-size="11" fill="#86efac">Rock Lee · Shikamaru · Neji</text>
     </g>
   </g>
 
-  <!-- CARD 6: ALLIED SHINOBI FORCES & LEGENDS (Row 2, Col 3 -> x: 800, y: 350) -->
-  <g transform="translate(800, 350)">
-    <rect width="350" height="230" rx="16" fill="url(#cardBg)" stroke="#38bdf8" stroke-width="1.5"/>
-    <rect width="346" height="226" x="2" y="2" rx="14" fill="none" stroke="url(#alliedGlow)" stroke-width="1.5" class="sweep-line" opacity="0.7"/>
-    <!-- Faction Header -->
-    <circle cx="36" cy="36" r="18" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1.5"/>
-    <text x="36" y="42" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="14" fill="#38bdf8" text-anchor="middle">連</text>
-    <text x="66" y="32" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="16" fill="#ffffff">ALLIED SHINOBI FORCES</text>
-    <text x="66" y="48" font-family="monospace" font-size="10" fill="#7dd3fc" letter-spacing="1.5">FIVE GREAT NATIONS</text>
-    <line x1="20" y1="68" x2="330" y2="68" stroke="#082f49" stroke-width="1"/>
-    <!-- Characters List -->
-    <g transform="translate(20, 94)" font-family="'Segoe UI', sans-serif">
-      <text font-weight="700" font-size="14" fill="#facc15">Gaara <tspan font-weight="400" font-size="12" fill="#94a3b8">· Supreme Commander (Kazekage)</tspan></text>
-      <text y="26" font-weight="700" font-size="14" fill="#38bdf8">Killer B <tspan font-weight="400" font-size="12" fill="#94a3b8">· Eight-Tails Gyuki Perfect Host</tspan></text>
-      <text y="52" font-weight="700" font-size="14" fill="#4ade80">Might Guy &amp; Rock Lee <tspan font-weight="400" font-size="12" fill="#94a3b8">· Eight Inner Gates of Taijutsu</tspan></text>
-      <text y="78" font-weight="700" font-size="14" fill="#a78bfa">Shikamaru &amp; Neji <tspan font-weight="400" font-size="12" fill="#94a3b8">· Shadow Strategy &amp; Byakugan</tspan></text>
-      <text y="104" font-weight="700" font-size="14" fill="#fdba74">Five Kage Alliance <tspan font-weight="400" font-size="12" fill="#94a3b8">· A, Mei Terumi, Onoki</tspan></text>
-    </g>
+  <!-- Bottom Continuity Streamline -->
+  <g transform="translate(600, 490)" text-anchor="middle">
+    <text font-family="'Segoe UI', sans-serif" font-size="13" fill="#64748b" letter-spacing="2">
+      FIVE GREAT NATIONS · 80,000 SHINOBI UNITED UNDER ONE NATIVE WILL
+    </text>
   </g>
 </svg>
