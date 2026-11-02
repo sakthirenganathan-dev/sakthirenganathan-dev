@@ -36,12 +36,12 @@
       <stop offset="100%" stop-color="#c084fc" stop-opacity="0.75"/>
     </linearGradient>
 
-    <!-- Glowing Typography Gradient (Brilliant High-Contrast) -->
+    <!-- Glowing Typography Gradient (Brilliant High-Contrast Pure Luster) -->
     <linearGradient id="nameGradient" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="40%" stop-color="#ffffff"/>
-      <stop offset="75%" stop-color="#f5f3ff"/>
-      <stop offset="100%" stop-color="#c084fc"/>
+      <stop offset="65%" stop-color="#ffffff"/>
+      <stop offset="88%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e0e7ff"/>
     </linearGradient>
 
     <!-- Rinnegan Aura Gradients -->
@@ -74,9 +74,14 @@
       </feMerge>
     </filter>
 
+    <filter id="nameGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#c084fc" flood-opacity="0.7"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#7c3aed" flood-opacity="0.3"/>
+    </filter>
+
     <filter id="electricGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="5" result="blur1"/>
-      <feGaussianBlur stdDeviation="1.5" result="blur2"/>
+      <feGaussianBlur stdDeviation="3" result="blur1"/>
+      <feGaussianBlur stdDeviation="1" result="blur2"/>
       <feMerge>
         <feMergeNode in="blur1"/>
         <feMergeNode in="blur2"/>
@@ -140,65 +145,67 @@
     <circle cx="66" cy="23" r="5.5" fill="#22c55e" fill-opacity="0.85"/>
 
     <!-- Terminal Prompt Pill (Clean, Non-colliding Capsule) -->
-    <rect x="88" y="10" width="276" height="26" rx="13" fill="#1e093b" stroke="#7c3aed" stroke-opacity="0.5" stroke-width="1"/>
-    <text x="102" y="27" class="f-mono" font-size="11.5" font-weight="700" fill="#67e8f9" letter-spacing="1.1">&gt;_ six-paths.shinobi/sakthi | dev</text>
-    <rect class="cursor-blink" x="338" y="16" width="6.5" height="14" rx="1.5" fill="#22c55e"/>
+    <rect x="88" y="10" width="252" height="26" rx="13" fill="#1e093b" stroke="#7c3aed" stroke-opacity="0.5" stroke-width="1"/>
+    <text x="102" y="27" class="f-mono" font-size="11" font-weight="700" fill="#67e8f9">&gt;_ six-paths.shinobi/sakthi</text>
+    <text x="272" y="27" class="f-mono" font-size="11" font-weight="700" fill="#c084fc">| dev</text>
+    <rect class="cursor-blink" x="314" y="16" width="6" height="14" rx="1" fill="#22c55e"/>
 
-    <!-- Top Right Shinobi Village Badge (Generously Spaced: Starts at x ~ 494, > 130px from capsule) -->
-    <text x="624" y="27" class="f-mono" font-size="11" font-weight="800" fill="#c084fc" letter-spacing="1.4" text-anchor="end">木ノ葉 // KONOHA.SYS</text>
+    <!-- Top Right Shinobi Village Badge (Spaced: Starts at x ~ 485, > 140px from capsule) -->
+    <text x="616" y="27" class="f-mono" font-size="11" font-weight="800" fill="#c084fc" letter-spacing="1.2" text-anchor="end">木ノ葉 // KONOHA.SYS</text>
 
     <!-- Terminal Body Content -->
-    <!-- Greeting -->
-    <text x="32" y="96" class="f-sans" font-size="18" font-weight="600" fill="#94a3b8" letter-spacing="1">Hi, I'm</text>
+    <!-- Greeting (Uniform Alignment at x=36) -->
+    <text x="36" y="100" class="f-sans" font-size="16" font-weight="600" fill="#94a3b8" letter-spacing="1">Hi, I'm</text>
 
-    <!-- Main Identity Name (55px font size: >= 14 CSS px at 360px viewport; textLength guarantees fit inside panel with 36px right margin) -->
-    <text x="32" y="156" class="f-sans" font-size="55" font-weight="900" fill="url(#nameGradient)" filter="url(#electricGlow)" textLength="584" lengthAdjust="spacingAndGlyphs">SAKTHI RENGANATHAN</text>
+    <!-- Main Identity Name (Commanding 44px, Ultra-Crisp Sharpness & Pure High Contrast, > 170px Right Margin) -->
+    <text x="36" y="154" class="f-sans" font-size="44" font-weight="900" fill="url(#nameGradient)" letter-spacing="0.5" filter="url(#nameGlow)">SAKTHI RENGANATHAN</text>
 
-    <!-- Dynamic Cycling Animated Roles (40px font size: >= 10 CSS px at 360px viewport) -->
-    <g class="f-sans" font-size="40" font-weight="800">
+    <!-- Dynamic Cycling Animated Roles (Balanced 28px Typography, > 200px Right Margin, No Overlap) -->
+    <g class="f-sans" font-size="28" font-weight="800">
       <!-- Role 1: Full-Stack Developer (Static Fallback Default = Visible) -->
-      <text x="32" y="214" fill="#38bdf8" opacity="1">
+      <text x="36" y="210" fill="#38bdf8" opacity="1">
         ⚡ Full-Stack Developer
         <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;1" keyTimes="0;0.21;0.25;0.50;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
-        <animate attributeName="y" values="214;214;206;222;222;222;222;222;214" keyTimes="0;0.21;0.25;0.50;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
+        <animate attributeName="y" values="210;210;202;218;218;218;218;218;210" keyTimes="0;0.21;0.25;0.50;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
       </text>
 
       <!-- Role 2: AI Systems Developer -->
-      <text x="32" y="214" fill="#c084fc" opacity="0">
+      <text x="36" y="210" fill="#c084fc" opacity="0">
         🤖 AI Systems Developer
         <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0" keyTimes="0;0.245;0.27;0.46;0.50;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
-        <animate attributeName="y" values="222;222;214;214;206;222;222;222;222" keyTimes="0;0.245;0.27;0.46;0.50;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
+        <animate attributeName="y" values="218;218;210;210;202;218;218;218;218" keyTimes="0;0.245;0.27;0.46;0.50;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
       </text>
 
-      <!-- Role 3: Computer Vision Developer (textLength guarantees >= 60px right margin) -->
-      <text x="32" y="214" fill="#34d399" opacity="0" textLength="560" lengthAdjust="spacingAndGlyphs">
+      <!-- Role 3: Computer Vision Developer -->
+      <text x="36" y="210" fill="#34d399" opacity="0">
         👁️ Computer Vision Developer
         <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0" keyTimes="0;0.25;0.495;0.52;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
-        <animate attributeName="y" values="222;222;222;222;214;214;206;222;222" keyTimes="0;0.25;0.495;0.52;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
+        <animate attributeName="y" values="218;218;218;218;210;210;202;218;218" keyTimes="0;0.25;0.495;0.52;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
       </text>
 
-      <!-- Role 4: Creative Shinobi Developer (textLength guarantees >= 60px right margin) -->
-      <text x="32" y="214" fill="#f43f5e" opacity="0" textLength="560" lengthAdjust="spacingAndGlyphs">
+      <!-- Role 4: Creative Shinobi Developer -->
+      <text x="36" y="210" fill="#f43f5e" opacity="0">
         🌀 Creative Shinobi Developer
         <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0" keyTimes="0;0.25;0.50;0.745;0.77;0.96;0.99;1;1" dur="12s" repeatCount="indefinite" />
-        <animate attributeName="y" values="222;222;222;222;222;222;214;214;206" keyTimes="0;0.25;0.50;0.745;0.77;0.96;0.99;1;1" dur="12s" repeatCount="indefinite" />
+        <animate attributeName="y" values="218;218;218;218;218;218;210;210;202" keyTimes="0;0.25;0.50;0.745;0.77;0.96;0.99;1;1" dur="12s" repeatCount="indefinite" />
       </text>
     </g>
 
     <!-- Professional Philosophy Sub-tagline -->
-    <text x="32" y="262" class="f-sans" font-size="14.5" font-weight="500" fill="#cbd5e1" letter-spacing="0.2">
+    <text x="36" y="260" class="f-sans" font-size="14" font-weight="500" fill="#cbd5e1" letter-spacing="0.2">
       Channeling shinobi discipline and precision into modern intelligent software.
     </text>
 
     <!-- Core Specialization Line -->
-    <text x="32" y="288" class="f-sans" font-size="13" font-weight="500" fill="#94a3b8" letter-spacing="0.2">
+    <text x="36" y="286" class="f-sans" font-size="13" font-weight="500" fill="#94a3b8" letter-spacing="0.2">
       Modular clean architecture · Edge computer vision · Resilient AI workflows.
     </text>
 
-    <!-- Terminal Status Tag -->
-    <g transform="translate(32, 350)">
+    <!-- Terminal Status Tag (Uniform Alignment at x=36) -->
+    <g transform="translate(36, 350)">
       <circle cx="4" cy="0" r="4" fill="#22c55e"/>
-      <text x="16" y="4" class="f-mono" font-size="11" font-weight="700" fill="#64748b" letter-spacing="1.2">
+      <circle cx="4" cy="0" r="7" fill="none" stroke="#22c55e" stroke-width="1.2" opacity="0.5"/>
+      <text x="18" y="4" class="f-mono" font-size="11" font-weight="700" fill="#64748b" letter-spacing="1.2">
         STATUS: MISSION READY // REPOS: 30 PUBLIC // BRANCH: MAIN
       </text>
     </g>

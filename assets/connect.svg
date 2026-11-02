@@ -16,29 +16,73 @@
 
     <!-- Filters -->
     <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
 
+    <filter id="kanjiAura" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#c084fc" flood-opacity="0.7"/>
+    </filter>
+
     <style>
-      @keyframes spinSeal {
+      @keyframes spinCW {
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
       }
-      @keyframes pulseAura {
-        0%, 100% { opacity: 0.7; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.08); filter: drop-shadow(0 0 25px #a855f7); }
+      @keyframes spinCCW {
+        from { transform: rotate(360deg); }
+        to { transform: rotate(0deg); }
       }
-      .rotate-runes {
-        animation: spinSeal 55s linear infinite;
-        transform-origin: 600px 160px;
+      @keyframes pulseAura {
+        0%, 100% { opacity: 0.65; transform: scale(1); }
+        50% { opacity: 0.95; transform: scale(1.06); filter: drop-shadow(0 0 20px #a855f7); }
+      }
+      @keyframes kanjiPulse {
+        0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 3px #e9d5ff); }
+        50% { opacity: 1; filter: drop-shadow(0 0 12px #67e8f9); }
+      }
+      @keyframes particleFloat {
+        0%, 100% { opacity: 0.3; transform: scale(0.9); }
+        50% { opacity: 0.9; transform: scale(1.2); }
+      }
+      @keyframes portalBreathe {
+        0%, 100% { opacity: 0.9; }
+        50% { opacity: 1; filter: drop-shadow(0 0 6px rgba(103, 232, 249, 0.4)); }
+      }
+
+      .outer-seal {
+        animation: spinCW 60s linear infinite;
+        transform-origin: 600px 175px;
+      }
+      .inner-rings {
+        animation: spinCCW 42s linear infinite;
+        transform-origin: 600px 175px;
+      }
+      .particle-orbit {
+        animation: spinCW 28s linear infinite;
+        transform-origin: 600px 175px;
       }
       .pulse-core {
         animation: pulseAura 4.5s ease-in-out infinite;
-        transform-origin: 600px 160px;
+        transform-origin: 600px 175px;
+      }
+      .contract-kanji {
+        animation: kanjiPulse 3.5s ease-in-out infinite;
+      }
+      .portal-channel {
+        animation: portalBreathe 4s ease-in-out infinite;
+      }
+      .mote {
+        animation: particleFloat 3s ease-in-out infinite;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .outer-seal, .inner-rings, .particle-orbit, .pulse-core, .contract-kanji, .portal-channel, .mote {
+          animation: none !important;
+        }
       }
     </style>
   </defs>
@@ -57,34 +101,66 @@
   </g>
 
   <!-- ==================== ROTATING SUMMONING SEAL ==================== -->
+  <!-- Pulsing Central Chakra Aura -->
   <g class="pulse-core">
-    <circle cx="600" cy="175" r="115" fill="url(#sealAura)"/>
+    <circle cx="600" cy="175" r="118" fill="url(#sealAura)"/>
   </g>
 
-  <g class="rotate-runes" fill="none" stroke="#a855f7" stroke-width="1.6" opacity="0.8" filter="url(#softGlow)">
-    <circle cx="600" cy="175" r="110" stroke-dasharray="12 8"/>
-    <circle cx="600" cy="175" r="90"/>
-    <circle cx="600" cy="175" r="70" stroke-dasharray="6 8"/>
-    <circle cx="600" cy="175" r="45"/>
-    <line x1="600" y1="65" x2="600" y2="285" stroke="#c084fc" stroke-width="1.2"/>
-    <line x1="490" y1="175" x2="710" y2="175" stroke="#c084fc" stroke-width="1.2"/>
-    <polygon points="600,105 660,210 540,210" stroke="#06b6d4" stroke-width="1.5"/>
-    <polygon points="600,245 660,140 540,140" stroke="#06b6d4" stroke-width="1.5"/>
+  <!-- 1. Slow Clockwise Rotation: Outer Summoning Seal & Cardinal Runes -->
+  <g class="outer-seal" fill="none" stroke="#a855f7" opacity="0.85" filter="url(#softGlow)">
+    <circle cx="600" cy="175" r="110" stroke-width="1.8" stroke-dasharray="14 9"/>
+    <circle cx="600" cy="175" r="102" stroke-width="0.8" opacity="0.5"/>
+
+    <!-- Axis Guideline Cross -->
+    <line x1="600" y1="65" x2="600" y2="285" stroke="#c084fc" stroke-width="1.2" opacity="0.7"/>
+    <line x1="490" y1="175" x2="710" y2="175" stroke="#c084fc" stroke-width="1.2" opacity="0.7"/>
+
+    <!-- Cardinal Shinobi Runes along Outer Seal -->
+    <text x="600" y="73" font-family="'Segoe UI', sans-serif" font-size="9" fill="#c084fc" text-anchor="middle" font-weight="900">風</text>
+    <text x="600" y="283" font-family="'Segoe UI', sans-serif" font-size="9" fill="#c084fc" text-anchor="middle" font-weight="900">火</text>
+    <text x="495" y="178" font-family="'Segoe UI', sans-serif" font-size="9" fill="#06b6d4" text-anchor="middle" font-weight="900">水</text>
+    <text x="705" y="178" font-family="'Segoe UI', sans-serif" font-size="9" fill="#06b6d4" text-anchor="middle" font-weight="900">雷</text>
   </g>
 
-  <!-- Center Contract Kanji: 契約 (Pact / Alliance) -->
-  <circle cx="600" cy="175" r="28" fill="#15062c" stroke="#e9d5ff" stroke-width="2.2"/>
-  <text x="600" y="182" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="16" fill="#e9d5ff" text-anchor="middle">契約</text>
+  <!-- 2. Opposite Counter-Clockwise Rotation: Inner Chakra Rings & Dual Hexagram Triangles -->
+  <g class="inner-rings" fill="none" opacity="0.85" filter="url(#softGlow)">
+    <circle cx="600" cy="175" r="90" stroke="#a855f7" stroke-width="1.5"/>
+    <circle cx="600" cy="175" r="70" stroke="#06b6d4" stroke-width="1.4" stroke-dasharray="8 6"/>
+    <circle cx="600" cy="175" r="45" stroke="#c084fc" stroke-width="1.2"/>
+
+    <!-- Interlocking Hexagram Chakra Triangles -->
+    <polygon points="600,105 660,210 540,210" stroke="#06b6d4" stroke-width="1.6"/>
+    <polygon points="600,245 660,140 540,140" stroke="#a855f7" stroke-width="1.6"/>
+  </g>
+
+  <!-- 3. Orbiting Chakra Particles (Chakra Sparks around the Summoning Seal) -->
+  <g class="particle-orbit">
+    <circle cx="600" cy="52" r="2.2" fill="#67e8f9" class="mote"/>
+    <circle cx="723" cy="175" r="2" fill="#c084fc" class="mote"/>
+    <circle cx="600" cy="298" r="2.2" fill="#67e8f9" class="mote"/>
+    <circle cx="477" cy="175" r="2" fill="#c084fc" class="mote"/>
+    <circle cx="687" cy="88" r="1.6" fill="#a855f7" class="mote"/>
+    <circle cx="513" cy="262" r="1.6" fill="#a855f7" class="mote"/>
+    <circle cx="687" cy="262" r="1.6" fill="#22c55e" class="mote"/>
+    <circle cx="513" cy="88" r="1.6" fill="#22c55e" class="mote"/>
+  </g>
+
+  <!-- 4. Center Contract Kanji: 契約 (Pact / Alliance) with Sequential Glowing Effect -->
+  <g class="contract-kanji" transform="translate(600, 175)">
+    <circle cx="0" cy="0" r="28" fill="#15062c" stroke="#e9d5ff" stroke-width="2.2" filter="url(#kanjiAura)"/>
+    <circle cx="0" cy="0" r="24" fill="none" stroke="#67e8f9" stroke-width="0.8" opacity="0.6"/>
+    <text x="0" y="6" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="16" fill="#ffffff" text-anchor="middle" letter-spacing="1">契約</text>
+  </g>
 
   <!-- Left Channel: GitHub Portal -->
-  <g transform="translate(240, 160)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+  <g class="portal-channel" transform="translate(240, 160)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
     <text font-family="monospace" font-size="11" fill="#c084fc" letter-spacing="2">CODE REPOSITORY</text>
     <text y="24" font-size="18" font-weight="900" fill="#ffffff">GITHUB ↗</text>
     <text y="44" font-family="monospace" font-size="12" fill="#a78bfa">@sakthirenganathan-dev</text>
   </g>
 
   <!-- Right Channel: LinkedIn Portal -->
-  <g transform="translate(960, 160)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+  <g class="portal-channel" transform="translate(960, 160)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
     <text font-family="monospace" font-size="11" fill="#38bdf8" letter-spacing="2">PROFESSIONAL NETWORK</text>
     <text y="24" font-size="18" font-weight="900" fill="#ffffff">LINKEDIN ↗</text>
     <text y="44" font-family="monospace" font-size="12" fill="#7dd3fc">sakthi-renganathan-k</text>

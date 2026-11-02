@@ -132,19 +132,62 @@ function generateTelemetrySvg(data) {
       <stop offset="50%" stop-color="#a855f7" stop-opacity="1"/>
       <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
     </linearGradient>
+    <linearGradient id="scanBeamGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#67e8f9" stop-opacity="0.35"/>
+      <stop offset="70%" stop-color="#a855f7" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="chakraPlateGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.6"/>
+      <stop offset="50%" stop-color="#c084fc" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#22c55e" stop-opacity="0.6"/>
+    </linearGradient>
     <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feGaussianBlur stdDeviation="4" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="plateAura" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <style>
       @keyframes sweepLaser { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-      @keyframes blinkBeacon { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; filter: drop-shadow(0 0 8px #22c55e); } }
+      @keyframes blinkBeacon { 0%, 100% { opacity: 0.35; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px #22c55e); } }
+      @keyframes scanSweep {
+        0% { transform: translateX(60px); opacity: 0; }
+        15% { opacity: 0.45; }
+        85% { opacity: 0.45; }
+        100% { transform: translateX(1100px); opacity: 0; }
+      }
+      @keyframes chakraBreathe {
+        0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 3px #a855f7); }
+        50% { opacity: 0.9; filter: drop-shadow(0 0 10px #06b6d4); }
+      }
+      @keyframes pipPulse1 { 0%, 100% { opacity: 0.3; } 33% { opacity: 1; } }
+      @keyframes pipPulse2 { 0%, 100% { opacity: 0.3; } 66% { opacity: 1; } }
+      @keyframes pipPulse3 { 0%, 100% { opacity: 0.3; } 99% { opacity: 1; } }
+
       .laser { animation: sweepLaser 5s linear infinite; }
-      .beacon { animation: blinkBeacon 2s infinite; }
+      .beacon { animation: blinkBeacon 2.2s ease-in-out infinite; transform-origin: 920px 109px; }
+      .scan-line { animation: scanSweep 6s ease-in-out infinite; }
+      .chakra-plate { animation: chakraBreathe 4s ease-in-out infinite; }
+      .pip-1 { animation: pipPulse1 2s infinite; }
+      .pip-2 { animation: pipPulse2 2s infinite; }
+      .pip-3 { animation: pipPulse3 2s infinite; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .laser, .beacon, .scan-line, .chakra-plate, .pip-1, .pip-2, .pip-3 {
+          animation: none !important;
+        }
+      }
     </style>
   </defs>
 
   <rect width="1200" height="260" fill="url(#teleBg)"/>
+
+  <!-- Subtle Cyan Scanning Line (Radar Sweep) -->
+  <rect x="0" y="20" width="3" height="220" fill="url(#scanBeamGrad)" class="scan-line" opacity="0.4"/>
 
   <!-- Top Floating Header -->
   <g transform="translate(600, 36)" text-anchor="middle">
@@ -157,8 +200,11 @@ function generateTelemetrySvg(data) {
   <line x1="60" y1="130" x2="1140" y2="130" stroke="#3b0764" stroke-width="1.5"/>
   <line x1="60" y1="130" x2="400" y2="130" stroke="url(#laserLine)" stroke-width="2.5" class="laser" filter="url(#glow)"/>
 
-  <!-- Center Leaf Village Headband Plate -->
+  <!-- Center Leaf Village Headband Plate with Subtle Chakra Pulse -->
   <g transform="translate(600, 130)">
+    <!-- Breathing Chakra Aura behind Headband -->
+    <rect x="-143" y="-27" width="286" height="54" rx="10" fill="none" stroke="url(#chakraPlateGlow)" stroke-width="1.5" class="chakra-plate"/>
+
     <g transform="translate(-140, -24)">
       <rect width="280" height="48" rx="8" fill="url(#headbandPlate)" stroke="#1e293b" stroke-width="2"/>
       <circle cx="10" cy="14" r="2.2" fill="#1e293b"/>
@@ -177,6 +223,12 @@ function generateTelemetrySvg(data) {
 
   <!-- Left Live Telemetry: Repositories & Stars & Followers -->
   <g transform="translate(200, 115)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
+    <!-- Subtle Chakra Activity Indicators -->
+    <g transform="translate(-80, -14)">
+      <circle cx="0" cy="0" r="2" fill="#06b6d4" class="pip-1"/>
+      <circle cx="6" cy="0" r="2" fill="#a855f7" class="pip-2"/>
+      <circle cx="12" cy="0" r="2" fill="#22c55e" class="pip-3"/>
+    </g>
     <text font-family="monospace" font-size="11" fill="#a78bfa" letter-spacing="2">PUBLIC REPOSITORIES</text>
     <text y="28" font-size="28" font-weight="900" fill="#ffffff">${data.publicRepos}</text>
     <text y="48" font-family="monospace" font-size="11" fill="#38bdf8">EARNED STARS: ${data.totalStars} · FOLLOWERS: ${data.followers}</text>
@@ -184,7 +236,7 @@ function generateTelemetrySvg(data) {
 
   <!-- Right Live Telemetry: Latest Commit & Sync Time -->
   <g transform="translate(1000, 115)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
-    <circle cx="-80" cy="-6" r="4" fill="#22c55e" class="beacon"/>
+    <circle cx="-80" cy="-6" r="4.5" fill="#22c55e" class="beacon"/>
     <text font-family="monospace" font-size="11" fill="#86efac" letter-spacing="2">LATEST ACTIVE SCROLL</text>
     <text y="24" font-size="17" font-weight="900" fill="#ffffff">${data.latestRepoName}</text>
     <text y="44" font-family="monospace" font-size="11" fill="#cbd5e1">PUSHED: ${data.latestRepoTime}</text>
