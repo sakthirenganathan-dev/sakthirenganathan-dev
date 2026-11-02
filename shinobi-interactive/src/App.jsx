@@ -1,53 +1,40 @@
 import React, { useState, useEffect, useRef } from 'react';
+import AwakeningSequence from './components/AwakeningSequence.jsx';
 import ShinobiWorld from './world/ShinobiWorld.jsx';
 import ShinobiHUD from './components/ShinobiHUD.jsx';
-import { Volume2, VolumeX } from 'lucide-react';
+import { chakraAudio } from './audio/ChakraSynth.js';
+import { Volume2, VolumeX, RotateCcw } from 'lucide-react';
 
 export default function App() {
+  const [introCompleted, setIntroCompleted] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('shinobi_intro_seen') === 'true';
+    }
+    return false;
+  });
+
   const [stage, setStage] = useState(0);
   const [hoveredNode, setHoveredNode] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [audioActive, setAudioActive] = useState(false);
   const [shockwaveActive, setShockwaveActive] = useState(false);
 
-  const audioCtxRef = useRef(null);
-  const oscRef = useRef(null);
+  // Toggle audio engine
+  const handleToggleAudio = () => {
+    const isNowActive = chakraAudio.toggle();
+    setAudioActive(isNowActive);
+  };
 
-  // Subtle 108Hz ambient meditative chakra drone via Web Audio API
-  const toggleAudio = () => {
-    if (!audioActive) {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioCtx();
-        audioCtxRef.current = ctx;
-
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(108, ctx.currentTime);
-        gain.gain.setValueAtTime(0.015, ctx.currentTime);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-
-        oscRef.current = osc;
-        setAudioActive(true);
-      } catch (e) {
-        console.warn('Audio notice:', e);
-      }
-    } else {
-      if (oscRef.current) {
-        oscRef.current.stop();
-        oscRef.current.disconnect();
-      }
-      setAudioActive(false);
-    }
+  // Replay intro sequence on demand
+  const handleReplayIntro = () => {
+    sessionStorage.removeItem('shinobi_intro_seen');
+    setIntroCompleted(false);
   };
 
   // Wheel listener to glide camera smoothly between 3D realms
   useEffect(() => {
+    if (!introCompleted) return; // Do not intercept scroll while intro is playing
+
     let timeout = false;
     const handleWheel = (e) => {
       if (timeout) return;
@@ -65,7 +52,7 @@ export default function App() {
     };
     window.addEventListener('wheel', handleWheel, { passive: true });
     return () => window.removeEventListener('wheel', handleWheel);
-  }, []);
+  }, [introCompleted]);
 
   const handleSelectProject = (project) => {
     setSelectedProject(project);
@@ -76,12 +63,18 @@ export default function App() {
 
   const handleShockwave = () => {
     setShockwaveActive(true);
+    chakraAudio.playJutsuChime(324);
     setTimeout(() => setShockwaveActive(false), 2000);
   };
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-[#05020c] text-white">
-      {/* 3D WebGL Shinobi World */}
+      {/* PHASE 1: THE AWAKENING CINEMATIC INTRO */}
+      {!introCompleted && (
+        <AwakeningSequence onComplete={() => setIntroCompleted(true)} />
+      )}
+
+      {/* PHASE 2: LIVING 3D SHINOBI WORLD */}
       <ShinobiWorld
         currentStage={stage}
         setStage={setStage}
@@ -91,24 +84,38 @@ export default function App() {
         triggerShockwave={handleShockwave}
       />
 
-      {/* Floating Audio Controller */}
-      <button
-        onClick={toggleAudio}
-        className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-black/60 border border-purple-700/60 hover:border-cyan-400 text-purple-200 transition-all duration-300 backdrop-blur-md"
-        title="Toggle Chakra Ambiance"
-      >
-        {audioActive ? <Volume2 className="w-4 h-4 text-cyan-400" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
-      </button>
+      {/* Floating Global Utility Controls (Bottom Right) */}
+      <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2">
+        {introCompleted && (
+          <button
+            onClick={handleReplayIntro}
+            className="p-3 rounded-full bg-black/60 border border-purple-700/60 hover:border-cyan-400 text-purple-200 transition-all duration-300 backdrop-blur-md"
+            title="Replay Cinematic Awakening"
+          >
+            <RotateCcw className="w-4 h-4 text-purple-300" />
+          </button>
+        )}
+
+        <button
+          onClick={handleToggleAudio}
+          className="p-3 rounded-full bg-black/60 border border-purple-700/60 hover:border-cyan-400 text-purple-200 transition-all duration-300 backdrop-blur-md"
+          title="Toggle Chakra Ambiance (Muted by default)"
+        >
+          {audioActive ? <Volume2 className="w-4 h-4 text-cyan-400" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
+        </button>
+      </div>
 
       {/* Futuristic Cinematic Anime HUD */}
-      <ShinobiHUD
-        currentStage={stage}
-        setStage={setStage}
-        hoveredNode={hoveredNode}
-        selectedProject={selectedProject}
-        setSelectedProject={setSelectedProject}
-        shockwaveActive={shockwaveActive}
-      />
+      {introCompleted && (
+        <ShinobiHUD
+          currentStage={stage}
+          setStage={setStage}
+          hoveredNode={hoveredNode}
+          selectedProject={selectedProject}
+          setSelectedProject={setSelectedProject}
+          shockwaveActive={shockwaveActive}
+        />
+      )}
     </div>
   );
 }
