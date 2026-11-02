@@ -56,11 +56,11 @@
     </text>
   </g>
 
-  <!-- Left Live Telemetry: Repositories & Stars -->
+  <!-- Left Live Telemetry: Repositories & Stars & Followers -->
   <g transform="translate(200, 115)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
     <text font-family="monospace" font-size="11" fill="#a78bfa" letter-spacing="2">PUBLIC REPOSITORIES</text>
     <text y="28" font-size="28" font-weight="900" fill="#ffffff">26</text>
-    <text y="48" font-family="monospace" font-size="11" fill="#38bdf8">EARNED STARS: 1</text>
+    <text y="48" font-family="monospace" font-size="11" fill="#38bdf8">EARNED STARS: 1 · FOLLOWERS: 0</text>
   </g>
 
   <!-- Right Live Telemetry: Latest Commit & Sync Time -->
@@ -74,7 +74,7 @@
   <!-- Bottom Live Broadcast Telemetry Timestamp -->
   <g transform="translate(600, 235)" text-anchor="middle">
     <text font-family="monospace" font-size="11" fill="#64748b" letter-spacing="2">
-      LAST TELEMETRY SYNC: <tspan fill="#a855f7">2026-11-02 10:52 UTC</tspan> // LIVE GITHUB ACTION DISPATCH
+      LAST TELEMETRY SYNC: <tspan fill="#a855f7">2026-11-02 11:10 UTC</tspan> // LIVE GITHUB ACTION DISPATCH
     </text>
   </g>
 </svg>

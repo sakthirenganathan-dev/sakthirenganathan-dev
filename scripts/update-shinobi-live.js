@@ -2,24 +2,40 @@ import fs from 'fs';
 import path from 'path';
 
 const USERNAME = 'sakthirenganathan-dev';
+const CACHE_FILE = path.resolve('assets', 'telemetry-cache.json');
+const OUTPUT_SVG = path.resolve('assets', 'id-dashboard.svg');
 
 async function fetchGitHubData() {
   console.log(`Fetching live GitHub data for ${USERNAME}...`);
   
   const headers = {
     'User-Agent': 'Shinobi-Profile-Updater',
+    'Accept': 'application/vnd.github.v3+json',
   };
   if (process.env.GITHUB_TOKEN) {
     headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
   }
 
-  const [userRes, reposRes] = await Promise.all([
-    fetch(`https://api.github.com/users/${USERNAME}`, { headers }),
-    fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed`, { headers }),
-  ]);
+  let userRes;
+  let reposRes;
+  try {
+    [userRes, reposRes] = await Promise.all([
+      fetch(`https://api.github.com/users/${USERNAME}`, { headers }),
+      fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=pushed`, { headers }),
+    ]);
+  } catch (netErr) {
+    console.warn(`[WARN] Network error fetching GitHub data: ${netErr.message}`);
+    return getCachedOrFallbackData('NETWORK_OFFLINE');
+  }
+
+  if (userRes.status === 403 || reposRes.status === 403) {
+    console.warn('[WARN] GitHub API rate limit reached (HTTP 403). Using cached telemetry data.');
+    return getCachedOrFallbackData('RATE_LIMITED');
+  }
 
   if (!userRes.ok) {
-    throw new Error(`Failed to fetch user data: ${userRes.status} ${userRes.statusText}`);
+    console.warn(`[WARN] Failed to fetch user data: ${userRes.status} ${userRes.statusText}`);
+    return getCachedOrFallbackData(`HTTP_${userRes.status}`);
   }
 
   const user = await userRes.json();
@@ -30,8 +46,8 @@ async function fetchGitHubData() {
   const langMap = {};
 
   repos.forEach((r) => {
-    totalStars += r.stargazers_count || 0;
-    totalForks += r.forks_count || 0;
+    totalStars += (r.stargazers_count ?? 0);
+    totalForks += (r.forks_count ?? 0);
     if (r.language) {
       langMap[r.language] = (langMap[r.language] || 0) + 1;
     }
@@ -43,25 +59,63 @@ async function fetchGitHubData() {
     .map(([l]) => l);
 
   const latestRepo = repos.length > 0 ? repos[0] : null;
-  const latestRepoName = latestRepo ? latestRepo.name : 'SHINOBI';
+  const latestRepoName = latestRepo ? latestRepo.name : 'VisionMate-AI';
   const latestRepoTime = latestRepo ? new Date(latestRepo.pushed_at).toISOString().split('T')[0] : 'Today';
 
   const now = new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC';
 
-  return {
-    publicRepos: user.public_repos || repos.length || 12,
-    followers: user.followers || 4,
+  const freshData = {
+    publicRepos: typeof user.public_repos === 'number' ? user.public_repos : (repos.length || 26),
+    followers: typeof user.followers === 'number' ? user.followers : 0,
     totalStars,
     totalForks,
-    topLangs: sortedLangs.length > 0 ? sortedLangs : ['JavaScript', 'Python', 'Java', 'HTML'],
+    topLangs: sortedLangs.length > 0 ? sortedLangs : ['TypeScript', 'JavaScript', 'Python', 'Dart'],
     latestRepoName,
     latestRepoTime,
     lastSynced: now,
+    status: 'LIVE_OK',
+  };
+
+  // Cache last successful data
+  try {
+    fs.writeFileSync(CACHE_FILE, JSON.stringify(freshData, null, 2), 'utf8');
+  } catch (err) {
+    console.warn('Could not write cache file:', err.message);
+  }
+
+  return freshData;
+}
+
+function getCachedOrFallbackData(reason) {
+  if (fs.existsSync(CACHE_FILE)) {
+    try {
+      const cached = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+      console.log(`[INFO] Restored telemetry from local cache (${reason})`);
+      cached.status = reason;
+      return cached;
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  return {
+    publicRepos: 26,
+    followers: 0,
+    totalStars: 1,
+    totalForks: 0,
+    topLangs: ['TypeScript', 'JavaScript', 'Python', 'Dart'],
+    latestRepoName: 'sakthirenganathan-dev',
+    latestRepoTime: '2026-11-02',
+    lastSynced: new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC',
+    status: reason,
   };
 }
 
 function generateTelemetrySvg(data) {
   const langsStr = data.topLangs.join(' · ');
+  const statusLabel = data.status === 'LIVE_OK' 
+    ? 'AUTOMATICALLY SYNCHRONIZED' 
+    : `CACHED (${data.status})`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-label="Shinobi Live Holographic Telemetry">
   <defs>
@@ -95,7 +149,7 @@ function generateTelemetrySvg(data) {
   <!-- Top Floating Header -->
   <g transform="translate(600, 36)" text-anchor="middle">
     <text font-family="monospace" font-size="12" fill="#c084fc" letter-spacing="4" font-weight="700">
-      01 // LIVE SHINOBI INTELLIGENCE TELEMETRY · AUTOMATICALLY SYNCHRONIZED
+      01 // LIVE SHINOBI INTELLIGENCE TELEMETRY · ${statusLabel}
     </text>
   </g>
 
@@ -121,11 +175,11 @@ function generateTelemetrySvg(data) {
     </text>
   </g>
 
-  <!-- Left Live Telemetry: Repositories & Stars -->
+  <!-- Left Live Telemetry: Repositories & Stars & Followers -->
   <g transform="translate(200, 115)" text-anchor="middle" font-family="'Segoe UI', sans-serif">
     <text font-family="monospace" font-size="11" fill="#a78bfa" letter-spacing="2">PUBLIC REPOSITORIES</text>
     <text y="28" font-size="28" font-weight="900" fill="#ffffff">${data.publicRepos}</text>
-    <text y="48" font-family="monospace" font-size="11" fill="#38bdf8">EARNED STARS: ${data.totalStars}</text>
+    <text y="48" font-family="monospace" font-size="11" fill="#38bdf8">EARNED STARS: ${data.totalStars} · FOLLOWERS: ${data.followers}</text>
   </g>
 
   <!-- Right Live Telemetry: Latest Commit & Sync Time -->
@@ -150,9 +204,8 @@ async function run() {
     const data = await fetchGitHubData();
     console.log('GitHub Data:', data);
     const svg = generateTelemetrySvg(data);
-    const outputPath = path.resolve('assets', 'id-dashboard.svg');
-    fs.writeFileSync(outputPath, svg, 'utf8');
-    console.log(`Successfully generated and updated ${outputPath}`);
+    fs.writeFileSync(OUTPUT_SVG, svg, 'utf8');
+    console.log(`Successfully generated and updated ${OUTPUT_SVG}`);
   } catch (err) {
     console.error('Error updating live telemetry:', err);
     process.exit(1);
@@ -160,4 +213,3 @@ async function run() {
 }
 
 run();
-
