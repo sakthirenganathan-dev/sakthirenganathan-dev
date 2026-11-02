@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="390" viewBox="0 0 1200 390" role="img">
+<defs><linearGradient id="b" x2="1"><stop stop-color="#100d20"/><stop offset="1" stop-color="#21143a"/></linearGradient><linearGradient id="p"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#c4b5fd"/></linearGradient></defs>
+<rect width="1200" height="390" rx="24" fill="url(#b)" stroke="#8b5cf6" stroke-width="2"/>
+<text x="42" y="58" fill="#c4b5fd" font-family="monospace" font-size="17" letter-spacing="3">02 / SHINOBI DOSSIER</text>
+<text x="42" y="112" fill="#fff" font-family="Arial" font-size="31" font-weight="700">A developer with a shinobi mindset.</text>
+<text x="42" y="151" fill="#cbd5e1" font-family="Arial" font-size="18">Learn continuously. Build carefully. Protect the user experience.</text>
+<g transform="translate(55 205)">
+ <rect width="330" height="135" rx="16" fill="#17132a" stroke="#6d28d9"/>
+ <text x="22" y="35" fill="#c4b5fd" font-family="monospace" font-size="14">CURRENT ROLE</text>
+ <text x="22" y="72" fill="#fff" font-family="Arial" font-size="23" font-weight="700">AI / Full-Stack Builder</text>
+ <text x="22" y="105" fill="#94a3b8" font-family="Arial" font-size="15">Turning concepts into working products.</text>
+</g>
+<g transform="translate(415 205)">
+ <rect width="740" height="135" rx="16" fill="#17132a" stroke="#6d28d9"/>
+ <text x="24" y="34" fill="#c4b5fd" font-family="monospace" font-size="14">THE SHINOBI ALLIANCE · CHARACTER UNIVERSE</text>
+ <g font-family="Arial" font-weight="700" font-size="15" text-anchor="middle">
+  <g fill="#ddd6fe"><circle cx="65" cy="82" r="28" fill="#31205b"/><text x="65" y="87">N</text><circle cx="175" cy="82" r="28" fill="#31205b"/><text x="175" y="87">S</text><circle cx="285" cy="82" r="28" fill="#31205b"/><text x="285" y="87">K</text><circle cx="395" cy="82" r="28" fill="#31205b"/><text x="395" y="87">I</text><circle cx="505" cy="82" r="28" fill="#31205b"/><text x="505" y="87">P</text><circle cx="615" cy="82" r="28" fill="#31205b"/><text x="615" y="87">M</text></g>
+  <g fill="#c4b5fd" font-size="12" font-weight="400"><text x="65" y="126">TEAM 7</text><text x="175" y="126">UCHIHA</text><text x="285" y="126">KONOHA</text><text x="395" y="126">SANNIN</text><text x="505" y="126">AKATSUKI</text><text x="615" y="126">ALLIANCE</text></g>
+ </g>
+</g>
+</svg>

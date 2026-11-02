@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430" role="img" aria-labelledby="t d">
+<title id="t">SHINOBI — The Developer Chronicles</title><desc id="d">A Rinnegan-inspired violet anime developer profile banner.</desc>
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#080812"/><stop offset=".55" stop-color="#15102b"/><stop offset="1" stop-color="#080812"/></linearGradient>
+ <linearGradient id="violet"><stop stop-color="#7c3aed"/><stop offset=".5" stop-color="#c4b5fd"/><stop offset="1" stop-color="#6d28d9"/></linearGradient>
+ <radialGradient id="orb"><stop stop-color="#ddd6fe" stop-opacity=".8"/><stop offset=".35" stop-color="#8b5cf6" stop-opacity=".28"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0"/></radialGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1200" height="430" rx="28" fill="url(#bg)"/>
+<g opacity=".25" stroke="#a78bfa"><path d="M0 80H1200M0 160H1200M0 240H1200M0 320H1200M150 0V430M300 0V430M450 0V430M600 0V430M750 0V430M900 0V430M1050 0V430" stroke-width="1"/></g>
+<circle cx="940" cy="210" r="205" fill="url(#orb)"/>
+<g transform="translate(940 210)" fill="none" stroke="url(#violet)" filter="url(#glow)">
+ <circle r="150" stroke-width="3" opacity=".9"/><circle r="118" stroke-width="2" opacity=".8"/><circle r="86" stroke-width="2"/>
+ <path d="M0-150V150M-150 0H150M-106-106L106 106M106-106L-106 106" opacity=".45"/>
+ <g fill="#c4b5fd" stroke="none"><circle r="8"/><circle cy="-118" r="5"/><circle cy="118" r="5"/><circle cx="-118" r="5"/><circle cx="118" r="5"/></g>
+</g>
+<g fill="#f5f3ff" font-family="Segoe UI,Arial,sans-serif">
+ <text x="76" y="82" fill="#c4b5fd" font-size="17" letter-spacing="5">忍 · THE DEVELOPER CHRONICLES</text>
+ <text x="72" y="178" font-size="66" font-weight="800" letter-spacing="2">SAKTHI</text>
+ <text x="76" y="222" fill="#c4b5fd" font-size="24" letter-spacing="6">SHINOBI DEVELOPER</text>
+ <text x="76" y="280" fill="#ddd6fe" font-size="19">Building ideas with code, curiosity &amp; chakra.</text>
+ <text x="76" y="330" fill="#a78bfa" font-size="15" letter-spacing="3">AI · FULL STACK · CREATIVE ENGINEERING</text>
+</g>
+<g fill="none" stroke="#a78bfa" stroke-width="2" opacity=".7"><path d="M45 40h34M45 40v34M1155 390h-34M1155 390v-34"/></g>
+<circle cx="1085" cy="70" r="4" fill="#c4b5fd"><animate attributeName="opacity" values=".2;1;.2" dur="2s" repeatCount="indefinite"/></circle>
+<text x="1035" y="380" fill="#c4b5fd" font-family="monospace" font-size="12" letter-spacing="2">RINNEGAN / 01</text>
+</svg>

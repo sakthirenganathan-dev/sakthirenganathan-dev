@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="240" viewBox="0 0 1200 240">
+<defs><linearGradient id="g"><stop stop-color="#21143a"/><stop offset="1" stop-color="#0b0816"/></linearGradient></defs>
+<rect width="1200" height="240" rx="24" fill="url(#g)" stroke="#8b5cf6" stroke-width="2"/>
+<text x="48" y="62" fill="#c4b5fd" font-family="monospace" font-size="17" letter-spacing="3">06 / CONNECT · FORM A TEAM</text>
+<text x="48" y="116" fill="#fff" font-family="Arial" font-size="31" font-weight="700">Every great mission starts with a connection.</text>
+<text x="48" y="159" fill="#cbd5e1" font-family="Arial" font-size="17">Open to collaboration, ideas and meaningful builds.</text>
+<g transform="translate(800 90)" font-family="Arial" font-size="16" font-weight="700" text-anchor="middle">
+ <a href="https://github.com/sakthirenganathan-dev"><rect width="145" height="58" rx="14" fill="#302052" stroke="#a78bfa"/><text x="72" y="36" fill="#fff">GITHUB ↗</text></a>
+ <a href="https://linkedin.com/in/sakthi-renganathan-k"><rect x="165" width="145" height="58" rx="14" fill="#302052" stroke="#a78bfa"/><text x="237" y="36" fill="#fff">LINKEDIN ↗</text></a>
+</g></svg>
