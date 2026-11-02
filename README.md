@@ -1,9 +1,14 @@
 <div align="center">
 
-<!-- ==================== SCENE 1: UNIFIED CINEMATIC OPENING (AVATAR + RINNEGAN + HUD) ==================== -->
-<img src="assets/hero.svg" alt="SHINOBI: The Six Paths — Sakthi Renganathan" width="100%">
+<!-- ==================== CINEMATIC GATEWAY TO THE LIVING SHINOBI UNIVERSE ==================== -->
+<img src="assets/hero.svg" alt="SHINOBI: The Six Paths — Unified Hero Gateway" width="100%">
 
 <br><br>
+
+### 影 · SAKTHI RENGANATHAN · 六道 SHINOBI ARCHITECT
+**Full-Stack Developer · AI Systems Builder · Creative Motion Engineer**
+
+<br>
 
 [![GitHub](https://img.shields.io/badge/GitHub-sakthirenganathan--dev-1e0838?style=for-the-badge&logo=github&logoColor=c084fc)](https://github.com/sakthirenganathan-dev)
 [![Portfolio](https://img.shields.io/badge/Portfolio-sakthirenganathan.vercel.app-1e0838?style=for-the-badge&logo=vercel&logoColor=06b6d4)](https://sakthirenganathan.vercel.app)
@@ -11,49 +16,30 @@
 
 <br><br>
 
-> ### 🌀 **[ENTER THE LIVING 3D SHINOBI INTERACTIVE UNIVERSE ↗](https://sakthirenganathan.vercel.app)**
-> *Experience full-screen Three.js chakra particle cosmos, live GitHub telemetry, interactive orbital jutsu, and GSAP motion storytelling.*
+# 🌀 **[LAUNCH THE LIVING 3D SHINOBI UNIVERSE ↗](https://sakthirenganathan.vercel.app)**
+### *Enter the full-screen 3D Three.js chakra cosmos, realtime orbital jutsu, and GSAP motion journey.*
 
 <br><br>
 
-<!-- ==================== SCENE 2: LIVE HOLOGRAPHIC TELEMETRY ==================== -->
-<img src="assets/id-dashboard.svg" alt="Live Holographic Shinobi Telemetry Stream" width="100%">
+<!-- ==================== PERIODICALLY SYNCHRONIZED GITHUB INTELLIGENCE ==================== -->
+<img src="assets/id-dashboard.svg" alt="Shinobi Intelligence Telemetry (Synchronized Periodically via GitHub Actions)" width="100%">
 
 <br><br>
 
-<!-- DYNAMIC REAL-TIME COMMIT STREAK STATS (RINNEGAN DARK PURPLE THEME) -->
+<!-- REAL-TIME DYNAMIC COMMIT STREAK -->
 <a href="https://github.com/sakthirenganathan-dev">
   <img src="https://streak-stats.demolab.com/?user=sakthirenganathan-dev&theme=tokyonight&background=070212&ring=a855f7&fire=06b6d4&currStreakNum=ffffff&sideNums=c084fc&sideLabels=94a3b8&dates=64748b&border=6b21a8&border_radius=16" alt="Sakthi's Live GitHub Streak" width="85%">
 </a>
 
 <br><br>
 
-<!-- ==================== SCENE 3: LIVING CHAKRA TECH ORBIT ==================== -->
-<img src="assets/stack.svg" alt="Living Chakra Tech Orbit — Planetary Arsenal" width="100%">
+<!-- ==================== 3D HIDDEN LEAF SKYLINE (AUTO-GENERATED CONTRIBUTIONS) ==================== -->
+<img src="profile-3d-contrib/profile-night-view.svg" alt="Hidden Leaf 3D Contribution City Skyline" width="100%">
 
 <br><br>
 
-<!-- ==================== SCENE 4: CONTINUOUS CHARACTER CONTINUUM ==================== -->
-<img src="assets/about-life.svg" alt="Continuous Naruto Character Universe — Chakra River" width="100%">
-
-<br><br>
-
-<!-- ==================== SCENE 5: CINEMATIC PROJECT CHRONICLES ==================== -->
-<img src="assets/project-scrolls.svg" alt="Project Chronicles — Cinematic Developer Journey" width="100%">
-
-<br>
-
-[**VisionMate AI ↗**](https://github.com/sakthirenganathan-dev/VisionMate-AI) &nbsp;·&nbsp; [**SafeMeds AI ↗**](https://github.com/sakthirenganathan-dev/safeMedesAi) &nbsp;·&nbsp; [**ISL Healthcare Connect ↗**](https://github.com/sakthirenganathan-dev/isl-healthcare) &nbsp;·&nbsp; [**RYVEN ↗**](https://github.com/sakthirenganathan-dev/RYVEN) &nbsp;·&nbsp; [**StudyGen AI ↗**](https://github.com/sakthirenganathan-dev/StudyGenAi)
-
-<br><br>
-
-<!-- ==================== SCENE 6: HIDDEN LEAF 3D CONTRIBUTION SKYLINE ==================== -->
-<img src="profile-3d-contrib/profile-night-view.svg" alt="Hidden Leaf 3D Contribution City (Night View)" width="100%">
-
-<br><br>
-
-<!-- ==================== SCENE 7: SUMMONING PORTAL (ALLIANCE) ==================== -->
-<img src="assets/connect.svg" alt="Kuchiyose no Jutsu Summoning Portal" width="100%">
+<!-- ==================== SUMMONING ALLIANCE ==================== -->
+<img src="assets/connect.svg" alt="Kuchiyose no Jutsu Summoning Seal" width="100%">
 
 <br><br>
 
@@ -61,6 +47,6 @@
 
 <br>
 
-<sub>SHINOBI: THE SIX PATHS · Designed with unified cinematic SVG compositions, live GitHub Action telemetry synchronization, dynamic commit streaks, and Three.js interactive web universe. Unofficial non-commercial anime fan presentation.</sub>
+<sub>SHINOBI: THE SIX PATHS · Continuous 60fps SVG motion · Periodic GitHub Actions telemetry sync · Full 3D interactive web universe in Three.js &amp; React.</sub>
 
 </div>
