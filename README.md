@@ -5,7 +5,7 @@
 
 <br><br>
 
-# 🌀 **[LAUNCH THE LIVING 3D SHINOBI UNIVERSE ↗](https://sakthirenganathan.vercel.app)**
+# 🌀 **[LAUNCH THE LIVING 3D SHINOBI UNIVERSE ↗](https://sakthirenganathan-dev.github.io/sakthirenganathan-dev/)**
 ### *Enter the full-screen 3D Three.js cosmos, realtime orbital jutsu, and GSAP motion journey.*
 
 <br>
