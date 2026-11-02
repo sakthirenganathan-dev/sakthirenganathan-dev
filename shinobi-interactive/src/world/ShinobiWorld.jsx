@@ -1,164 +1,202 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { getDeviceProfile, setupVisibilityObserver } from '../utils/deviceProfiler.js';
+import { CameraDirector } from './CameraDirector.js';
+import {
+  createDistantMountains,
+  createToriiGate,
+  createPagodaShrine,
+  createFloatingMonoliths,
+  createChakraStreams,
+  createMistSheets,
+  createAdaptiveEmbers,
+  createAtmosphericLighting,
+} from './EnvironmentArchitect.js';
 
-export default function ShinobiWorld({ 
-  currentStage, 
-  setStage, 
-  hoveredNode, 
-  setHoveredNode, 
+export default function ShinobiWorld({
+  currentStage = 0,
+  setStage,
+  hoveredNode,
+  setHoveredNode,
   onSelectProject,
-  triggerShockwave
+  triggerShockwave,
 }) {
   const mountRef = useRef(null);
+  const [webglSupported, setWebglSupported] = useState(true);
+
+  // Keep latest props in refs to avoid re-mounting Three.js scene
+  const stageRef = useRef(currentStage);
+  stageRef.current = currentStage;
+
+  const onSelectProjectRef = useRef(onSelectProject);
+  onSelectProjectRef.current = onSelectProject;
+
+  const triggerShockwaveRef = useRef(triggerShockwave);
+  triggerShockwaveRef.current = triggerShockwave;
+
+  const setHoveredNodeRef = useRef(setHoveredNode);
+  setHoveredNodeRef.current = setHoveredNode;
 
   useEffect(() => {
     if (!mountRef.current) return;
 
-    // ==================== SCENE, CAMERA, RENDERER ====================
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x05020c, 0.006);
+    // ==================== 0. HARDWARE PROFILER & ACCESSIBILITY ====================
+    const device = getDeviceProfile();
 
+    // ==================== 1. WEBGL DETECTION & INITIALIZATION ====================
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: device.tier !== 'mobile',
+        alpha: true,
+        powerPreference: 'high-performance',
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(device.maxPixelRatio);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      mountRef.current.appendChild(renderer.domElement);
+    } catch (e) {
+      console.warn('WebGL is not available:', e);
+      setWebglSupported(false);
+      return;
+    }
+
+    // ==================== 2. SCENE & ATMOSPHERIC FOG ====================
+    const scene = new THREE.Scene();
+    // Midnight purple void exponential fog
+    scene.fog = new THREE.FogExp2(0x04010a, 0.0055);
+
+    // ==================== 3. CAMERA & CINEMATIC DIRECTOR ====================
     const camera = new THREE.PerspectiveCamera(
-      60,
+      58,
       window.innerWidth / window.innerHeight,
       0.1,
-      1200
+      1400
     );
     camera.position.set(0, 0, 75);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
-    mountRef.current.appendChild(renderer.domElement);
+    const cameraDirector = new CameraDirector(camera, {
+      reducedMotion: device.reducedMotion,
+      isMobile: device.isMobile,
+    });
+    cameraDirector.attachListeners();
 
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    const interactableObjects = [];
-
-    // ==================== 1. CHAKRA PARTICLE VORTEX (3000 Particles) ====================
-    const particleCount = 3000;
-    const particleGeo = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    const colors = new Float32Array(particleCount * 3);
-    const velocities = new Float32Array(particleCount * 3);
-
-    const chakraPalette = [
-      new THREE.Color('#9333ea'), // Purple
-      new THREE.Color('#c084fc'), // Violet
-      new THREE.Color('#06b6d4'), // Cyan
-      new THREE.Color('#38bdf8'), // Electric blue
-      new THREE.Color('#f43f5e'), // Crimson
-      new THREE.Color('#ffffff'), // White Spark
+    // Define 6-Stage Spatial Waypoints across the continuous universe
+    const stageWaypoints = [
+      { pos: new THREE.Vector3(0, 0, 75), look: new THREE.Vector3(0, 0, 0) },          // 0: Awakening
+      { pos: new THREE.Vector3(20, 5, -25), look: new THREE.Vector3(20, 5, -60) },     // 1: Tech Orbit
+      { pos: new THREE.Vector3(-25, -5, -95), look: new THREE.Vector3(-25, -5, -130) },// 2: Characters
+      { pos: new THREE.Vector3(15, -8, -165), look: new THREE.Vector3(15, -8, -200) }, // 3: Missions
+      { pos: new THREE.Vector3(0, 8, -235), look: new THREE.Vector3(0, 8, -270) },     // 4: Telemetry
+      { pos: new THREE.Vector3(0, 0, -305), look: new THREE.Vector3(0, 0, -340) },     // 5: Summoning
     ];
 
-    for (let i = 0; i < particleCount; i++) {
-      const radius = 10 + Math.random() * 160;
-      const angle = Math.random() * Math.PI * 2;
-      const depth = (Math.random() - 0.5) * 450;
+    cameraDirector.setBaseTarget(stageWaypoints[0].pos, stageWaypoints[0].look);
 
-      positions[i * 3] = Math.cos(angle) * radius;
-      positions[i * 3 + 1] = Math.sin(angle) * radius;
-      positions[i * 3 + 2] = depth;
+    // Raycasting & Interaction
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    const interactableObjects = [];
 
-      velocities[i * 3] = (Math.random() - 0.5) * 0.05;
-      velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.05;
-      velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
+    // ==================== 4. PROCEDURAL SHINOBI REALM ARCHITECTURE ====================
+    // A. Distant Mountain Silhouette Ranges
+    createDistantMountains(scene);
 
-      const col = chakraPalette[Math.floor(Math.random() * chakraPalette.length)];
-      colors[i * 3] = col.r;
-      colors[i * 3 + 1] = col.g;
-      colors[i * 3 + 2] = col.b;
-    }
+    // B. Atmospheric Lighting
+    const { beaconLight } = createAtmosphericLighting(scene);
 
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    // C. Japanese-Inspired Torii Gates
+    const toriiGate1 = createToriiGate(0, -6, -35, 1.15, 0x240742, 0xc084fc);
+    scene.add(toriiGate1);
 
-    const particleMat = new THREE.PointsMaterial({
-      size: 2.2,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.85,
-      blending: THREE.AdditiveBlending,
-    });
+    const toriiGate2 = createToriiGate(0, -4, -185, 1.35, 0x1d0536, 0x06b6d4);
+    scene.add(toriiGate2);
 
-    const particleVortex = new THREE.Points(particleGeo, particleMat);
-    scene.add(particleVortex);
+    // D. Pagoda Shrine Silhouettes on distant shelves
+    const pagoda1 = createPagodaShrine(-55, -2, -230, 0.9);
+    scene.add(pagoda1);
 
-    // ==================== 2. REALM 0: GIANT 3D RINNEGAN & AVATAR (Z: 0) ====================
-    const rinneganOrigin = new THREE.Group();
-    rinneganOrigin.position.set(0, 0, 0);
+    const pagoda2 = createPagodaShrine(52, 6, -310, 0.85);
+    scene.add(pagoda2);
 
-    // Avatar Texture onto a Circular 3D Portal Disc
+    // E. Chibaku Tensei Floating Monoliths with glowing purple chakra fractures
+    const { monolithData = [] } = createFloatingMonoliths(scene, device.tier === 'mobile' ? 6 : 12) || {};
+
+    // F. Curved Chakra Energy Streams
+    const { streams = [] } = createChakraStreams(scene) || {};
+
+    // G. Drifting Mist & Fog Sheets
+    const { sheets: mistSheets = [] } = createMistSheets(scene) || {};
+
+    // H. Adaptive Chakra Embers (BufferGeometry with device profile particle cap)
+    const embers = createAdaptiveEmbers(scene, device.particleCount);
+
+    // ==================== 5. PRESERVED INTERACTIVE ARTIFACTS ====================
+    // Realm 0: Central Rinnegan Avatar & Concentric Rings
+    const rinneganGroup = new THREE.Group();
+    rinneganGroup.position.set(0, 0, 0);
+
     const textureLoader = new THREE.TextureLoader();
     const avatarTexture = textureLoader.load('./avatar.png');
     avatarTexture.generateMipmaps = true;
 
-    const avatarGeo = new THREE.CircleGeometry(9, 64);
-    const avatarMat = new THREE.MeshBasicMaterial({
-      map: avatarTexture,
-      side: THREE.DoubleSide,
-    });
-    const avatarMesh = new THREE.Mesh(avatarGeo, avatarMat);
+    const avatarMesh = new THREE.Mesh(
+      new THREE.CircleGeometry(9, 64),
+      new THREE.MeshBasicMaterial({ map: avatarTexture, side: THREE.DoubleSide })
+    );
     avatarMesh.position.z = 0.5;
-    rinneganOrigin.add(avatarMesh);
+    rinneganGroup.add(avatarMesh);
 
-    // Glowing Avatar Rim Frame
-    const avatarRimGeo = new THREE.RingGeometry(9, 9.6, 64);
-    const avatarRimMat = new THREE.MeshBasicMaterial({
-      color: 0x06b6d4,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.9,
-    });
-    const avatarRim = new THREE.Mesh(avatarRimGeo, avatarRimMat);
+    const avatarRim = new THREE.Mesh(
+      new THREE.RingGeometry(9, 9.6, 64),
+      new THREE.MeshBasicMaterial({ color: 0x06b6d4, side: THREE.DoubleSide, transparent: true, opacity: 0.9 })
+    );
     avatarRim.position.z = 0.6;
-    rinneganOrigin.add(avatarRim);
+    rinneganGroup.add(avatarRim);
 
-    // 6 Concentric 3D Rinnegan Wireframe Ripple Rings
-    const ringRadii = [13, 21, 30, 40, 52, 65];
     const rinneganRings = [];
-    ringRadii.forEach((r, idx) => {
-      const ringGeo = new THREE.TorusGeometry(r, 0.28, 8, 64);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: idx % 2 === 0 ? 0xc084fc : 0x9333ea,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.65 - idx * 0.08,
-      });
-      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-      ringMesh.position.z = -idx * 1.5;
-      rinneganOrigin.add(ringMesh);
-      rinneganRings.push(ringMesh);
+    [13, 21, 30, 40, 52, 65].forEach((r, idx) => {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(r, 0.28, 8, 64),
+        new THREE.MeshBasicMaterial({
+          color: idx % 2 === 0 ? 0xc084fc : 0x9333ea,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.65 - idx * 0.08,
+        })
+      );
+      ring.position.z = -idx * 1.5;
+      rinneganGroup.add(ring);
+      rinneganRings.push(ring);
     });
 
-    // 6 Rotating 3D Tomoe Spheres around Avatar
     const tomoeGroup = new THREE.Group();
     for (let i = 0; i < 6; i++) {
-      const tomoeAngle = (i / 6) * Math.PI * 2;
-      const tGeo = new THREE.SphereGeometry(1.2, 16, 16);
-      const tMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-      const tMesh = new THREE.Mesh(tGeo, tMat);
-      tMesh.position.set(Math.cos(tomoeAngle) * 30, Math.sin(tomoeAngle) * 30, 0);
-      tomoeGroup.add(tMesh);
+      const angle = (i / 6) * Math.PI * 2;
+      const tomoe = new THREE.Mesh(
+        new THREE.SphereGeometry(1.2, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0xffffff })
+      );
+      tomoe.position.set(Math.cos(angle) * 30, Math.sin(angle) * 30, 0);
+      tomoeGroup.add(tomoe);
     }
-    rinneganOrigin.add(tomoeGroup);
-    scene.add(rinneganOrigin);
+    rinneganGroup.add(tomoeGroup);
+    scene.add(rinneganGroup);
 
-    // ==================== 3. REALM 1: 3D PLANETARY TECH ORBIT (Z: -60) ====================
+    // Realm 1: Planetary Tech Orbit (Z: -60)
     const techOrbitGroup = new THREE.Group();
     techOrbitGroup.position.set(20, 5, -60);
 
     const techCatalog = [
-      { id: 'react', name: 'React', color: 0x06b6d4, icon: '⚛️', category: 'Frontend Architecture' },
-      { id: 'js', name: 'JavaScript', color: 0xfacc15, icon: 'JS', category: 'ES6+ & Async Core' },
-      { id: 'three', name: 'Three.js', color: 0xc084fc, icon: '▲', category: 'WebGL & 3D Shaders' },
-      { id: 'gsap', name: 'GSAP', color: 0x22c55e, icon: '⚡', category: 'Cinematic Motion Engine' },
-      { id: 'java', name: 'Java', color: 0xf97316, icon: '☕', category: 'Enterprise OOP' },
-      { id: 'flutter', name: 'Flutter', color: 0x38bdf8, icon: '📱', category: 'Cross-Platform Native' },
-      { id: 'ai', name: 'AI Engineering', color: 0xec4899, icon: '🧠', category: 'Local LLMs & Agents' },
-      { id: 'git', name: 'Git & GitHub', color: 0xf43f5e, icon: '🐙', category: 'DevOps & CI/CD Actions' },
+      { id: 'react', name: 'React', color: 0x06b6d4, category: 'Frontend Architecture' },
+      { id: 'js', name: 'JavaScript', color: 0xfacc15, category: 'ES6+ & Async Core' },
+      { id: 'three', name: 'Three.js', color: 0xc084fc, category: 'WebGL & 3D Shaders' },
+      { id: 'gsap', name: 'GSAP', color: 0x22c55e, category: 'Cinematic Motion Engine' },
+      { id: 'java', name: 'Java', color: 0xf97316, category: 'Enterprise OOP' },
+      { id: 'flutter', name: 'Flutter', color: 0x38bdf8, category: 'Cross-Platform Native' },
+      { id: 'ai', name: 'AI Engineering', color: 0xec4899, category: 'Local LLMs & Agents' },
+      { id: 'git', name: 'Git & GitHub', color: 0xf43f5e, category: 'DevOps & CI/CD Actions' },
     ];
 
     const techNodes = [];
@@ -166,31 +204,31 @@ export default function ShinobiWorld({
       const radius = 22 + (i % 3) * 6;
       const angle = (i / techCatalog.length) * Math.PI * 2;
 
-      const sphereGeo = new THREE.SphereGeometry(2.5, 24, 24);
-      const sphereMat = new THREE.MeshStandardMaterial({
-        color: t.color,
-        emissive: t.color,
-        emissiveIntensity: 0.6,
-        wireframe: true,
-      });
-      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+      const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(2.5, 24, 24),
+        new THREE.MeshStandardMaterial({
+          color: t.color,
+          emissive: t.color,
+          emissiveIntensity: 0.6,
+          wireframe: true,
+        })
+      );
       sphere.userData = { type: 'tech', ...t };
-
       sphere.position.set(Math.cos(angle) * radius, Math.sin(angle) * radius, (i - 4) * 4);
       techOrbitGroup.add(sphere);
       interactableObjects.push(sphere);
 
-      // Orbital trajectory ring
-      const orbitRingGeo = new THREE.TorusGeometry(radius, 0.1, 4, 64);
-      const orbitRingMat = new THREE.MeshBasicMaterial({ color: 0x581c87, transparent: true, opacity: 0.35 });
-      const orbitRing = new THREE.Mesh(orbitRingGeo, orbitRingMat);
+      const orbitRing = new THREE.Mesh(
+        new THREE.TorusGeometry(radius, 0.1, 4, 64),
+        new THREE.MeshBasicMaterial({ color: 0x581c87, transparent: true, opacity: 0.35 })
+      );
       techOrbitGroup.add(orbitRing);
 
       techNodes.push({ mesh: sphere, radius, angle, speed: 0.006 + i * 0.002 });
     });
     scene.add(techOrbitGroup);
 
-    // ==================== 4. REALM 2: 3D CHARACTER CONSTELLATION (Z: -130) ====================
+    // Realm 2: Character Factions (Z: -130)
     const characterGroup = new THREE.Group();
     characterGroup.position.set(-25, -5, -130);
 
@@ -203,38 +241,37 @@ export default function ShinobiWorld({
     ];
 
     factions.forEach((f) => {
-      const starGeo = new THREE.OctahedronGeometry(3.2, 0);
-      const starMat = new THREE.MeshStandardMaterial({
-        color: f.color,
-        emissive: f.color,
-        emissiveIntensity: 0.8,
-        wireframe: true,
-      });
-      const star = new THREE.Mesh(starGeo, starMat);
+      const star = new THREE.Mesh(
+        new THREE.OctahedronGeometry(3.2, 0),
+        new THREE.MeshStandardMaterial({
+          color: f.color,
+          emissive: f.color,
+          emissiveIntensity: 0.8,
+          wireframe: true,
+        })
+      );
       star.position.set(f.x, f.y, 0);
       star.userData = { type: 'faction', ...f };
-
       characterGroup.add(star);
       interactableObjects.push(star);
     });
 
-    // Constellation connecting lines
-    const lineMat = new THREE.LineBasicMaterial({ color: 0x7c3aed, transparent: true, opacity: 0.45 });
-    const lineGeo = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(-18, 12, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(18, 12, 0),
-      new THREE.Vector3(16, -14, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(-16, -14, 0),
-      new THREE.Vector3(-18, 12, 0),
-    ]);
-    const constellationLines = new THREE.Line(lineGeo, lineMat);
+    const constellationLines = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(-18, 12, 0),
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(18, 12, 0),
+        new THREE.Vector3(16, -14, 0),
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(-16, -14, 0),
+        new THREE.Vector3(-18, 12, 0),
+      ]),
+      new THREE.LineBasicMaterial({ color: 0x7c3aed, transparent: true, opacity: 0.45 })
+    );
     characterGroup.add(constellationLines);
-
     scene.add(characterGroup);
 
-    // ==================== 5. REALM 3: 3D PROJECT SCROLLS (Z: -200) ====================
+    // Realm 3: Project Scrolls (Z: -200)
     const projectGroup = new THREE.Group();
     projectGroup.position.set(15, -8, -200);
 
@@ -247,169 +284,220 @@ export default function ShinobiWorld({
     ];
 
     projectList.forEach((p, idx) => {
-      const scrollGeo = new THREE.CylinderGeometry(1.6, 1.6, 9, 16);
-      const scrollMat = new THREE.MeshStandardMaterial({
-        color: p.color,
-        emissive: p.color,
-        emissiveIntensity: 0.7,
-        wireframe: true,
-      });
-      const scrollMesh = new THREE.Mesh(scrollGeo, scrollMat);
-      scrollMesh.rotation.z = Math.PI / 4;
-      scrollMesh.position.set((idx - 2) * 11, ((idx % 2) - 0.5) * 6, (idx - 2) * 4);
-      scrollMesh.userData = { type: 'project', ...p };
-
-      projectGroup.add(scrollMesh);
-      interactableObjects.push(scrollMesh);
+      const scroll = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.6, 1.6, 9, 16),
+        new THREE.MeshStandardMaterial({
+          color: p.color,
+          emissive: p.color,
+          emissiveIntensity: 0.7,
+          wireframe: true,
+        })
+      );
+      scroll.rotation.z = Math.PI / 4;
+      scroll.position.set((idx - 2) * 11, ((idx % 2) - 0.5) * 6, (idx - 2) * 4);
+      scroll.userData = { type: 'project', ...p };
+      projectGroup.add(scroll);
+      interactableObjects.push(scroll);
     });
-
     scene.add(projectGroup);
 
-    // ==================== 6. REALM 4: HOLOGRAPHIC INTELLIGENCE TERMINAL (Z: -270) ====================
+    // Realm 4: Telemetry Holographic Frame (Z: -270)
     const terminalGroup = new THREE.Group();
     terminalGroup.position.set(0, 8, -270);
-
-    // Floating Holographic Frame
-    const frameGeo = new THREE.BoxGeometry(42, 24, 1.5);
-    const frameMat = new THREE.MeshBasicMaterial({
-      color: 0x6b21a8,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.5,
-    });
-    const frameMesh = new THREE.Mesh(frameGeo, frameMat);
+    const frameMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(42, 24, 1.5),
+      new THREE.MeshBasicMaterial({ color: 0x6b21a8, wireframe: true, transparent: true, opacity: 0.5 })
+    );
     terminalGroup.add(frameMesh);
-
     scene.add(terminalGroup);
 
-    // ==================== 7. REALM 5: SUMMONING SEAL ARRAY (Z: -340) ====================
+    // Realm 5: Summoning Seal Array (Z: -340)
     const sealGroup = new THREE.Group();
     sealGroup.position.set(0, 0, -340);
 
-    const sealRings = [14, 24, 35, 48];
-    sealRings.forEach((r, i) => {
-      const sRingGeo = new THREE.RingGeometry(r, r + 0.35, 64);
-      const sRingMat = new THREE.MeshBasicMaterial({
-        color: i % 2 === 0 ? 0x9333ea : 0x06b6d4,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.75 - i * 0.1,
-      });
-      const sRing = new THREE.Mesh(sRingGeo, sRingMat);
-      sRing.rotation.x = Math.PI / 2.5; // Tilted cosmic floor array
+    [14, 24, 35, 48].forEach((r, i) => {
+      const sRing = new THREE.Mesh(
+        new THREE.RingGeometry(r, r + 0.35, 64),
+        new THREE.MeshBasicMaterial({
+          color: i % 2 === 0 ? 0x9333ea : 0x06b6d4,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.75 - i * 0.1,
+        })
+      );
+      sRing.rotation.x = Math.PI / 2.5;
       sealGroup.add(sRing);
     });
 
-    // Central Summoning Stone / Button
-    const sealCoreGeo = new THREE.CylinderGeometry(5.5, 5.5, 1.5, 32);
-    const sealCoreMat = new THREE.MeshStandardMaterial({
-      color: 0x2e1065,
-      emissive: 0xa855f7,
-      emissiveIntensity: 0.9,
-    });
-    const sealCore = new THREE.Mesh(sealCoreGeo, sealCoreMat);
+    const sealCore = new THREE.Mesh(
+      new THREE.CylinderGeometry(5.5, 5.5, 1.5, 32),
+      new THREE.MeshStandardMaterial({
+        color: 0x2e1065,
+        emissive: 0xa855f7,
+        emissiveIntensity: 0.9,
+      })
+    );
     sealCore.rotation.x = Math.PI / 2.5;
     sealCore.userData = { type: 'summoning', action: 'summon' };
     sealGroup.add(sealCore);
     interactableObjects.push(sealCore);
-
     scene.add(sealGroup);
 
-    // ==================== CAMERA STAGE TARGETS ====================
-    const stageTargets = [
-      { x: 0, y: 0, z: 65, lookZ: 0 },       // Stage 0: Awakening
-      { x: 20, y: 5, z: -25, lookZ: -60 },    // Stage 1: Tech Orbit
-      { x: -25, y: -5, z: -95, lookZ: -130 }, // Stage 2: Character Realm
-      { x: 15, y: -8, z: -165, lookZ: -200 }, // Stage 3: Missions
-      { x: 0, y: 8, z: -235, lookZ: -270 },   // Stage 4: Telemetry
-      { x: 0, y: 0, z: -305, lookZ: -340 },   // Stage 5: Summoning Seal
-    ];
+    // ==================== 6. POINTER & CLICK HANDLERS ====================
+    const onPointerMove = (e) => {
+      pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+      pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-    // ==================== MOUSE & PARALLAX TRACKING ====================
-    let mouseX = 0;
-    let mouseY = 0;
-
-    const onMouseMove = (e) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 14;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 14;
-
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-      // Raycast detection
-      raycaster.setFromCamera(mouse, camera);
+      raycaster.setFromCamera(pointer, camera);
       const intersects = raycaster.intersectObjects(interactableObjects);
 
       if (intersects.length > 0) {
-        const hit = intersects[0].object;
-        setHoveredNode(hit.userData);
+        setHoveredNodeRef.current(intersects[0].object.userData);
         document.body.style.cursor = 'pointer';
       } else {
-        setHoveredNode(null);
+        setHoveredNodeRef.current(null);
         document.body.style.cursor = 'default';
       }
     };
-    window.addEventListener('mousemove', onMouseMove);
 
-    // Click handler for 3D objects
-    const onClick = (e) => {
-      raycaster.setFromCamera(mouse, camera);
+    const onClick = () => {
+      raycaster.setFromCamera(pointer, camera);
       const intersects = raycaster.intersectObjects(interactableObjects);
       if (intersects.length > 0) {
         const hit = intersects[0].object;
-        if (hit.userData.type === 'project' && onSelectProject) {
-          onSelectProject(hit.userData);
+        if (hit.userData.type === 'project' && onSelectProjectRef.current) {
+          onSelectProjectRef.current(hit.userData);
         }
-        if (hit.userData.type === 'summoning' && triggerShockwave) {
-          triggerShockwave();
+        if (hit.userData.type === 'summoning' && triggerShockwaveRef.current) {
+          triggerShockwaveRef.current();
         }
       }
     };
-    window.addEventListener('click', onClick);
 
-    // ==================== ANIMATION LOOP ====================
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('click', onClick, { passive: true });
+
+    // ==================== 7. ANIMATION LOOP & POWER EFFICIENCY ====================
     let animId;
+    let isTabVisible = !document.hidden;
     const clock = new THREE.Clock();
+
+    const cleanupVisibility = setupVisibilityObserver(
+      () => {
+        isTabVisible = false; // Suspend heavy rendering when tab is hidden
+      },
+      () => {
+        isTabVisible = true;
+        clock.getDelta(); // Clear time accumulator on tab resume to prevent sudden jumps
+      }
+    );
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
+
+      if (!isTabVisible) return; // Battery saving pause
+
       const elapsed = clock.getElapsedTime();
+      const delta = Math.min(clock.getDelta(), 0.1);
+      const motionFactor = device.reducedMotion ? 0.15 : 1.0;
 
-      // Swirl Particle Vortex
-      particleVortex.rotation.z = elapsed * 0.035;
+      // 1. Environmental Light Pulsing (Breathing ambient chakra beacon)
+      if (beaconLight) {
+        beaconLight.intensity = 1.6 + Math.sin(elapsed * 1.8) * 0.4 * motionFactor;
+      }
 
-      // Rotate Rinnegan concentric rings
+      // 2. Chibaku Tensei Floating Monolith Harmonic Levitation
+      if (monolithData && Array.isArray(monolithData)) {
+        monolithData.forEach((m) => {
+          if (!device.reducedMotion) {
+            m.group.position.y = m.baseY + Math.sin(elapsed * m.speed + m.phase) * m.amplitude;
+            m.group.rotation.x += m.rotX;
+            m.group.rotation.y += m.rotY;
+
+            // Orbit satellite debris shards
+            if (m.shards && Array.isArray(m.shards)) {
+              m.shards.forEach((s) => {
+                s.angle += s.speed;
+                s.mesh.position.x = Math.cos(s.angle) * s.dist;
+                s.mesh.position.z = Math.sin(s.angle) * s.dist;
+              });
+            }
+          }
+        });
+      }
+
+      // 3. Curved Chakra Energy Streams Pulsing
+      if (streams && Array.isArray(streams)) {
+        streams.forEach((st) => {
+          st.mesh.material.opacity =
+            st.baseOpacity + Math.sin(elapsed * 2.2 + st.idx) * 0.15 * motionFactor;
+        });
+      }
+
+      // 4. Drifting Fog & Mist Sheets
+      if (mistSheets && Array.isArray(mistSheets)) {
+        mistSheets.forEach((s) => {
+          if (!device.reducedMotion) {
+            s.mesh.position.x += s.speedX * motionFactor;
+            s.mesh.position.z += s.speedZ * motionFactor;
+
+            // Seamless boundary wrapping
+            if (s.mesh.position.x > s.size * 0.4) s.mesh.position.x = -s.size * 0.4;
+            if (s.mesh.position.x < -s.size * 0.4) s.mesh.position.x = s.size * 0.4;
+          }
+        });
+      }
+
+      // 5. Floating Chakra Embers Upward Drift & Wrap
+      if (embers && embers.points && !device.reducedMotion) {
+        const posAttr = embers.points.geometry.attributes.position;
+        const pArray = posAttr.array;
+        const vArray = embers.velocities;
+        const b = embers.bounds;
+
+        for (let i = 0; i < embers.count; i++) {
+          pArray[i * 3] += vArray[i * 3] * motionFactor;
+          pArray[i * 3 + 1] += vArray[i * 3 + 1] * motionFactor;
+          pArray[i * 3 + 2] += vArray[i * 3 + 2] * motionFactor;
+
+          // Vertical & Horizontal bounds wrapping
+          if (pArray[i * 3 + 1] > b.y) {
+            pArray[i * 3 + 1] = -b.y;
+            pArray[i * 3] = (Math.random() - 0.5) * b.x * 2;
+          }
+        }
+        posAttr.needsUpdate = true;
+      }
+
+      // 6. Rinnegan Rings & Tomoe Rotation
       rinneganRings.forEach((ring, idx) => {
-        ring.rotation.z = elapsed * (idx % 2 === 0 ? 0.05 : -0.05);
+        ring.rotation.z = elapsed * (idx % 2 === 0 ? 0.04 : -0.04) * motionFactor;
       });
-      tomoeGroup.rotation.z = elapsed * 0.2;
+      tomoeGroup.rotation.z = elapsed * 0.15 * motionFactor;
 
-      // Orbit tech planets
+      // 7. Tech Orbit Rotation
       techNodes.forEach((t) => {
-        t.angle += t.speed;
+        t.angle += t.speed * motionFactor;
         t.mesh.position.x = Math.cos(t.angle) * t.radius;
         t.mesh.position.y = Math.sin(t.angle) * t.radius;
-        t.mesh.rotation.y = elapsed;
+        t.mesh.rotation.y = elapsed * motionFactor;
       });
 
-      // Rotate Character Stars & Projects
-      characterGroup.rotation.y = Math.sin(elapsed * 0.5) * 0.2;
-      projectGroup.rotation.y = Math.cos(elapsed * 0.4) * 0.2;
-      sealGroup.rotation.z = -elapsed * 0.08;
+      // 8. Character Stars & Summoning Seal
+      characterGroup.rotation.y = Math.sin(elapsed * 0.4) * 0.18 * motionFactor;
+      projectGroup.rotation.y = Math.cos(elapsed * 0.35) * 0.18 * motionFactor;
+      sealGroup.rotation.z = -elapsed * 0.06 * motionFactor;
 
-      // Smooth Camera Glide Lerp
-      const target = stageTargets[currentStage] || stageTargets[0];
-      camera.position.x += (target.x + mouseX - camera.position.x) * 0.045;
-      camera.position.y += (target.y - mouseY - camera.position.y) * 0.045;
-      camera.position.z += (target.z - camera.position.z) * 0.045;
-
-      camera.lookAt(target.x, target.y, target.lookZ);
+      // 9. Camera Director Spring-Damper Glide
+      const targetWaypoint = stageWaypoints[stageRef.current] || stageWaypoints[0];
+      cameraDirector.setBaseTarget(targetWaypoint.pos, targetWaypoint.look);
+      cameraDirector.update(delta);
 
       renderer.render(scene, camera);
     };
     animate();
 
-    // Resize
+    // ==================== 8. RESIZE HANDLING ====================
     const onResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
@@ -417,23 +505,58 @@ export default function ShinobiWorld({
     };
     window.addEventListener('resize', onResize);
 
+    // ==================== 9. CLEANUP & MEMORY DISPOSAL ====================
     return () => {
-      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('click', onClick);
       window.removeEventListener('resize', onResize);
+      cameraDirector.detachListeners();
+      cleanupVisibility();
       cancelAnimationFrame(animId);
+
+      // Deep WebGL Resource Disposal
+      scene.traverse((obj) => {
+        if (obj.geometry) {
+          obj.geometry.dispose();
+        }
+        if (obj.material) {
+          if (Array.isArray(obj.material)) {
+            obj.material.forEach((mat) => {
+              if (mat.map) mat.map.dispose();
+              mat.dispose();
+            });
+          } else {
+            if (obj.material.map) obj.material.map.dispose();
+            obj.material.dispose();
+          }
+        }
+      });
+
       if (mountRef.current && renderer.domElement) {
         mountRef.current.removeChild(renderer.domElement);
       }
       renderer.dispose();
     };
-  }, [currentStage]);
+  }, []); // Mounts once: stage changes glide smoothly via refs
+
+  // WebGL Fallback Screen
+  if (!webglSupported) {
+    return (
+      <div className="fixed inset-0 z-0 flex items-center justify-center bg-[#030008] text-purple-300 p-8 text-center">
+        <div className="max-w-md p-6 rounded-2xl border border-purple-800 bg-purple-950/40 backdrop-blur-md">
+          <h2 className="text-xl font-bold font-cinzel text-white mb-2">SHINOBI WORLD</h2>
+          <p className="text-sm font-mono text-purple-200/80 mb-4">
+            WebGL acceleration is unavailable in your browser. Please enable hardware acceleration to experience the 3D chakra cosmos.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div 
-      ref={mountRef} 
-      className="fixed inset-0 z-0 overflow-hidden select-none bg-[#05020c]"
+    <div
+      ref={mountRef}
+      className="fixed inset-0 z-0 overflow-hidden select-none bg-[#030008]"
     />
   );
 }
-

@@ -8,6 +8,8 @@ import { Volume2, VolumeX, RotateCcw } from 'lucide-react';
 export default function App() {
   const [introCompleted, setIntroCompleted] = useState(() => {
     if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('skipIntro') === 'true' || window.location.hash === '#world') return true;
       return sessionStorage.getItem('shinobi_intro_seen') === 'true';
     }
     return false;
