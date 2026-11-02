@@ -22,9 +22,10 @@ export function isConsecutiveDay(prevDateStr, currDateStr) {
  * Calculates accurate streak and contribution totals from GitHub contribution calendar days.
  * @param {object} calendar - GitHub GraphQL contributionCalendar object
  * @param {string} timezone - Timezone identifier (e.g. 'Asia/Kolkata' or 'UTC')
+ * @param {Date|string|null} referenceDate - Optional reference date for deterministic testing
  * @returns {object|null} Computed contribution metrics
  */
-export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZONE) {
+export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZONE, referenceDate = null) {
   if (!calendar || !Array.isArray(calendar.weeks)) {
     return null;
   }
@@ -88,7 +89,7 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
   }
 
   // 2. Current Streak calculation with explicit timezone awareness
-  const now = new Date();
+  const now = referenceDate ? new Date(referenceDate) : new Date();
   const localDateFormatter = new Intl.DateTimeFormat('en-CA', {
     timeZone: timezone,
     year: 'numeric',
@@ -256,7 +257,7 @@ export async function fetchGraphQLTelemetry(token, username = USERNAME, customDa
         following: userData.following?.totalCount ?? 0,
         totalStars,
         totalForks,
-        topLangs: topLangs.length > 0 ? topLangs : ['TypeScript', 'JavaScript', 'HTML', 'CSS'],
+        topLangs: topLangs.length > 0 ? topLangs : [],
         latestRepoName,
         latestRepoTime,
         totalContributions: streakMetrics?.totalContributions ?? null,
@@ -334,7 +335,7 @@ export async function fetchRestTelemetry(token, username = USERNAME) {
         following: typeof user.following === 'number' ? user.following : 0,
         totalStars,
         totalForks,
-        topLangs: topLangs.length > 0 ? topLangs : ['TypeScript', 'JavaScript', 'HTML', 'CSS'],
+        topLangs: topLangs.length > 0 ? topLangs : [],
         latestRepoName: latestRepo ? latestRepo.name : 'sakthirenganathan-dev',
         latestRepoTime: latestRepo ? latestRepo.pushed_at.split('T')[0] : 'Today',
       },
@@ -389,9 +390,12 @@ export function validateAndMergeTelemetry(repoResult, contribResult, existingCac
     ? repoData.totalForks
     : (cache.totalForks ?? 0);
 
-  const topLangs = (repoOk && Array.isArray(repoData?.topLangs) && repoData.topLangs.length > 0)
-    ? repoData.topLangs
-    : (cache.topLangs ?? ['TypeScript', 'JavaScript', 'HTML', 'CSS']);
+  const detectedTopLangs = (repoOk && Array.isArray(repoData?.topLangs)) ? repoData.topLangs : [];
+  const topLangs = detectedTopLangs.length > 0
+    ? detectedTopLangs
+    : (Array.isArray(cache?.topLangs) && cache.topLangs.length > 0
+        ? cache.topLangs
+        : []);
 
   const latestRepoName = (repoOk && typeof repoData?.latestRepoName === 'string' && repoData.latestRepoName.length > 0)
     ? repoData.latestRepoName
@@ -528,10 +532,11 @@ export function formatMonthYearRange(startDateStr, endDateStr) {
  * Reflects independent repository and contribution freshness statuses.
  */
 export function generateTelemetrySvg(data) {
-  const lang0 = data.topLangs[0] || 'TypeScript';
-  const lang1 = data.topLangs[1] || 'JavaScript';
-  const lang2 = data.topLangs[2] || 'HTML';
-  const lang3 = data.topLangs[3] || 'CSS';
+  const langList = Array.isArray(data.topLangs) ? data.topLangs : [];
+  const lang0 = langList[0] || 'N/A';
+  const lang1 = langList[1] || 'N/A';
+  const lang2 = langList[2] || 'N/A';
+  const lang3 = langList[3] || 'N/A';
 
   const totalContributions = data.totalContributions;
   const currentStreak = data.currentStreak;
@@ -854,14 +859,14 @@ export function generateTelemetrySvg(data) {
     <g transform="translate(162, 172)">
       <rect x="0" y="0" width="224" height="44" rx="10" fill="#1f093d" stroke="#f43f5e" stroke-opacity="0.6" stroke-width="1.2"/>
       <text x="16" y="26" class="f-mono" font-size="10" font-weight="800" fill="#fb923c" letter-spacing="1">CURRENT STREAK</text>
-      <text x="208" y="28" class="f-sans" font-size="20" font-weight="900" fill="#ffffff" text-anchor="end" filter="url(#flameGlow)">${currentStreak} <tspan font-size="12" fill="#67e8f9">DAYS</tspan></text>
+      <text x="208" y="28" class="f-sans" font-size="20" font-weight="900" fill="#ffffff" text-anchor="end" filter="url(#flameGlow)">${currentStreak} <tspan font-size="12" fill="#67e8f9">${currentStreak === 1 ? 'DAY' : 'DAYS'}</tspan></text>
     </g>
 
     <!-- Streak Metric 3: Longest Streak -->
     <g transform="translate(402, 56)">
       <rect x="0" y="0" width="118" height="136" rx="12" fill="#17072e" stroke="#06b6d4" stroke-opacity="0.4" stroke-width="1"/>
-      <text x="59" y="24" class="f-mono" font-size="9" font-weight="800" fill="#38bdf8" letter-spacing="1.2" text-anchor="middle">LONGEST</text>
-      <text x="59" y="38" class="f-mono" font-size="8.5" font-weight="700" fill="#64748b" letter-spacing="0.8" text-anchor="middle">RECORD</text>
+      <text x="59" y="24" class="f-mono" font-size="9" font-weight="800" fill="#38bdf8" letter-spacing="1.2" text-anchor="middle">ANNUAL</text>
+      <text x="59" y="38" class="f-mono" font-size="8.5" font-weight="700" fill="#64748b" letter-spacing="0.8" text-anchor="middle">LONGEST</text>
       <text x="59" y="82" class="f-sans" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle" filter="url(#textGlow)">${longestStreak}</text>
       <text x="59" y="106" class="f-sans" font-size="9" font-weight="600" fill="#f43f5e" text-anchor="middle">Peak Discipline</text>
       <text x="59" y="122" class="f-mono" font-size="7.5" font-weight="600" fill="#94a3b8" text-anchor="middle">${longestRecordDates}</text>

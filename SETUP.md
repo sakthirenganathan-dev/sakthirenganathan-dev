@@ -23,3 +23,15 @@ The current package uses a custom Rinnegan-inspired vector identity, not a liken
 
 ## Rendering notes
 GitHub README sanitizes HTML and SVG. This package uses inline SVG artwork and SMIL animation; browser/GitHub rendering can differ. Test the uploaded version on GitHub desktop and mobile. Avoid scripts, external CSS and JavaScript: they do not run in a README.
+
+## 7. Safe Git synchronization and recovery
+When automated GitHub Actions synchronize profile assets in the background, a divergence between `origin/main` and your local working branch can occur. Never blindly use `git rebase -X ours` or `-X theirs`. Follow this safe manual recovery procedure:
+
+1. **Inspect status and branch:** Run `git status` and `git branch` to understand current uncommitted or unmerged state.
+2. **Preserve local work:** Safely stage and commit your local changes (`git add . && git commit -m "feat: ..."`), or create a temporary safety branch.
+3. **Fetch remote state:** Fetch latest commits without merging: `git fetch origin`.
+4. **Inspect divergence:** Review differing commits with `git log --oneline HEAD..origin/main` and `git log --oneline origin/main..HEAD`.
+5. **Resolve conflicts thoughtfully:** If integrating via rebase or merge, inspect both sides of every conflicting file (`git diff`). Compare changes manually rather than blindly choosing `ours` or `theirs`.
+6. **Execute validation suite:** Run `node scripts/verify-readme.js`, `git diff --check`, and project integrity tests.
+7. **Complete resolution:** Conclude the merge (`git commit`) or rebase (`git rebase --continue`) only after all checks pass.
+8. **Push with explicit authorization:** Verify clean state with `git status` and publish commits (`git push origin main`) only after explicit user approval.

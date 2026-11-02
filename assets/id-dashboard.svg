@@ -289,14 +289,14 @@
     <g transform="translate(162, 172)">
       <rect x="0" y="0" width="224" height="44" rx="10" fill="#1f093d" stroke="#f43f5e" stroke-opacity="0.6" stroke-width="1.2"/>
       <text x="16" y="26" class="f-mono" font-size="10" font-weight="800" fill="#fb923c" letter-spacing="1">CURRENT STREAK</text>
-      <text x="208" y="28" class="f-sans" font-size="20" font-weight="900" fill="#ffffff" text-anchor="end" filter="url(#flameGlow)">1 <tspan font-size="12" fill="#67e8f9">DAYS</tspan></text>
+      <text x="208" y="28" class="f-sans" font-size="20" font-weight="900" fill="#ffffff" text-anchor="end" filter="url(#flameGlow)">1 <tspan font-size="12" fill="#67e8f9">DAY</tspan></text>
     </g>
 
     <!-- Streak Metric 3: Longest Streak -->
     <g transform="translate(402, 56)">
       <rect x="0" y="0" width="118" height="136" rx="12" fill="#17072e" stroke="#06b6d4" stroke-opacity="0.4" stroke-width="1"/>
-      <text x="59" y="24" class="f-mono" font-size="9" font-weight="800" fill="#38bdf8" letter-spacing="1.2" text-anchor="middle">LONGEST</text>
-      <text x="59" y="38" class="f-mono" font-size="8.5" font-weight="700" fill="#64748b" letter-spacing="0.8" text-anchor="middle">RECORD</text>
+      <text x="59" y="24" class="f-mono" font-size="9" font-weight="800" fill="#38bdf8" letter-spacing="1.2" text-anchor="middle">ANNUAL</text>
+      <text x="59" y="38" class="f-mono" font-size="8.5" font-weight="700" fill="#64748b" letter-spacing="0.8" text-anchor="middle">LONGEST</text>
       <text x="59" y="82" class="f-sans" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle" filter="url(#textGlow)">2</text>
       <text x="59" y="106" class="f-sans" font-size="9" font-weight="600" fill="#f43f5e" text-anchor="middle">Peak Discipline</text>
       <text x="59" y="122" class="f-mono" font-size="7.5" font-weight="600" fill="#94a3b8" text-anchor="middle">Nov 8 – 9</text>
