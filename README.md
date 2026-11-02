@@ -1,19 +1,9 @@
 <div align="center">
 
-<!-- ==================== SCENE 1: CINEMATIC OPENING ==================== -->
-<img src="assets/hero.svg" alt="SHINOBI: The Six Paths — Cinematic Opening" width="100%">
+<!-- ==================== SCENE 1: UNIFIED CINEMATIC OPENING (AVATAR + RINNEGAN + HUD) ==================== -->
+<img src="assets/hero.svg" alt="SHINOBI: The Six Paths — Sakthi Renganathan" width="100%">
 
 <br><br>
-
-<!-- CENTRAL SIX PATHS IDENTITY SEAL -->
-<img src="assets/sakthi-shinobi-avatar.png" alt="Sakthi Renganathan — Six Paths Shinobi" width="260" style="border-radius: 50%; box-shadow: 0 0 50px rgba(168, 85, 247, 0.7);">
-
-<br><br>
-
-### 影 · SAKTHI RENGANATHAN · 六道 SHINOBI ARCHITECT
-**Full-Stack Developer · AI Systems Builder · Creative Motion Engineer**
-
-<br>
 
 [![GitHub](https://img.shields.io/badge/GitHub-sakthirenganathan--dev-1e0838?style=for-the-badge&logo=github&logoColor=c084fc)](https://github.com/sakthirenganathan-dev)
 [![Portfolio](https://img.shields.io/badge/Portfolio-sakthirenganathan.vercel.app-1e0838?style=for-the-badge&logo=vercel&logoColor=06b6d4)](https://sakthirenganathan.vercel.app)
@@ -21,13 +11,20 @@
 
 <br><br>
 
-> ### 🌀 **[LAUNCH THE LIVING 3D SHINOBI UNIVERSE ↗](https://sakthirenganathan.vercel.app)**
-> *Full-screen Three.js chakra particle cosmos, real-time GitHub telemetry, interactive orbital jutsu, and GSAP motion storytelling.*
+> ### 🌀 **[ENTER THE LIVING 3D SHINOBI INTERACTIVE UNIVERSE ↗](https://sakthirenganathan.vercel.app)**
+> *Experience full-screen Three.js chakra particle cosmos, live GitHub telemetry, interactive orbital jutsu, and GSAP motion storytelling.*
 
 <br><br>
 
 <!-- ==================== SCENE 2: LIVE HOLOGRAPHIC TELEMETRY ==================== -->
 <img src="assets/id-dashboard.svg" alt="Live Holographic Shinobi Telemetry Stream" width="100%">
+
+<br><br>
+
+<!-- DYNAMIC REAL-TIME COMMIT STREAK STATS (RINNEGAN DARK PURPLE THEME) -->
+<a href="https://github.com/sakthirenganathan-dev">
+  <img src="https://streak-stats.demolab.com/?user=sakthirenganathan-dev&theme=tokyonight&background=070212&ring=a855f7&fire=06b6d4&currStreakNum=ffffff&sideNums=c084fc&sideLabels=94a3b8&dates=64748b&border=6b21a8&border_radius=16" alt="Sakthi's Live GitHub Streak" width="85%">
+</a>
 
 <br><br>
 
@@ -64,6 +61,6 @@
 
 <br>
 
-<sub>SHINOBI: THE SIX PATHS · Designed with continuous seamless SVG compositions, SMIL motion dynamics, automated daily GitHub Action telemetry synchronization, and Three.js interactive universe. Unofficial non-commercial anime fan presentation.</sub>
+<sub>SHINOBI: THE SIX PATHS · Designed with unified cinematic SVG compositions, live GitHub Action telemetry synchronization, dynamic commit streaks, and Three.js interactive web universe. Unofficial non-commercial anime fan presentation.</sub>
 
 </div>
