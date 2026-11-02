@@ -9,3 +9,4 @@ if (match) {
 } else {
   console.error('Avatar URI not found in hero.svg');
 }
+
