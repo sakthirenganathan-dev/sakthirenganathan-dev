@@ -5,18 +5,9 @@
 
 <br><br>
 
-<!-- ==================== SHINOBI STATUS HUD BAR ==================== -->
-<a href="https://github.com/sakthirenganathan-dev"><img src="https://img.shields.io/badge/VILLAGE-HIDDEN%20LEAF%20%E3%83%BB%20%E6%9C%A8%E3%83%8E%E8%91%89-180b33?style=for-the-badge&logo=target&logoColor=c084fc&labelColor=080214" alt="Hidden Leaf Village"/></a>
-<a href="https://github.com/sakthirenganathan-dev"><img src="https://img.shields.io/badge/CHAKRA-LIGHTNING%20%2F%20AI-180b33?style=for-the-badge&logo=lightning&logoColor=06b6d4&labelColor=080214" alt="Chakra Affinity"/></a>
-<a href="https://github.com/sakthirenganathan-dev"><img src="https://img.shields.io/badge/CLASS-SHINOBI%20ARCHITECT-180b33?style=for-the-badge&logo=codeforces&logoColor=a855f7&labelColor=080214" alt="Shinobi Classification"/></a>
-<a href="https://github.com/sakthirenganathan-dev"><img src="https://img.shields.io/badge/STATUS-ACTIVE%20BUILDER-180b33?style=for-the-badge&logo=statuspage&logoColor=22c55e&labelColor=080214" alt="Active Status"/></a>
-
-<br><br>
-
-<!-- ==================== IDENTITY MANIFESTO ==================== -->
-<h2>影 · SAKTHI RENGANATHAN · 六道 SHINOBI ARCHITECT</h2>
+<!-- ==================== IDENTITY MANIFESTO & PORTALS ==================== -->
 <p>
-  <b>Full-Stack Developer · AI Systems Builder · Creative Motion Engineer</b>
+  <b>影 · SAKTHI RENGANATHAN · 六道 SHINOBI ARCHITECT</b>
   <br>
   <i>“Channeling the relentless discipline, precision, and adaptability of a shinobi into modern software craftsmanship.”</i>
 </p>
