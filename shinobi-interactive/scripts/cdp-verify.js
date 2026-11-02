@@ -19,7 +19,6 @@ const mimeTypes = {
   '.svg': 'image/svg+xml',
 };
 
-// 1. Static Web Server
 const server = http.createServer((req, res) => {
   let reqPath = req.url.split('?')[0];
   if (reqPath === '/') reqPath = '/index.html';
@@ -46,14 +45,13 @@ const server = http.createServer((req, res) => {
   });
 });
 
-const PORT = 4173;
-const CDP_PORT = 9222;
+const PORT = 4178;
+const CDP_PORT = 9227;
 const edgePath = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe';
 
 server.listen(PORT, async () => {
-  console.log(`[HTTP] Server active on http://localhost:${PORT}`);
+  console.log(`[CDP CAPTURE] Server active on http://localhost:${PORT}`);
 
-  // Launch Edge in Headless mode with CDP
   const edgeProcess = spawn(edgePath, [
     '--headless=new',
     `--remote-debugging-port=${CDP_PORT}`,
@@ -61,21 +59,12 @@ server.listen(PORT, async () => {
     `http://localhost:${PORT}/?skipIntro=true`,
   ]);
 
-  // Wait 1.5s for CDP endpoint to become ready
   await new Promise((r) => setTimeout(r, 1500));
 
   try {
-    // Query CDP targets
     const targetsRes = await fetch(`http://localhost:${CDP_PORT}/json/list`);
     const targets = await targetsRes.json();
-    console.log(`[CDP] Found ${targets.length} targets`);
-
     const pageTarget = targets.find((t) => t.type === 'page') || targets[0];
-    if (!pageTarget || !pageTarget.webSocketDebuggerUrl) {
-      throw new Error('No valid CDP page target found');
-    }
-
-    console.log(`[CDP] Connecting to: ${pageTarget.webSocketDebuggerUrl}`);
     const ws = new WebSocket(pageTarget.webSocketDebuggerUrl);
 
     let msgId = 1;
@@ -83,13 +72,6 @@ server.listen(PORT, async () => {
 
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data);
-      if (msg.method === 'Runtime.consoleAPICalled') {
-        const text = msg.params.args.map((a) => a.value || a.description).join(' ');
-        console.log(`[BROWSER CONSOLE] ${msg.params.type}:`, text);
-      } else if (msg.method === 'Runtime.exceptionThrown') {
-        console.error('[BROWSER EXCEPTION]', msg.params.exceptionDetails);
-      }
-
       if (msg.id && pending.has(msg.id)) {
         pending.get(msg.id)(msg.result);
         pending.delete(msg.id);
@@ -104,18 +86,13 @@ server.listen(PORT, async () => {
       });
     }
 
-    await new Promise((resolve) => {
-      ws.onopen = resolve;
-    });
+    await new Promise((resolve) => { ws.onopen = resolve; });
 
-    console.log('[CDP] Connected. Enabling domains...');
     await send('Runtime.enable');
     await send('Page.enable');
-
-    console.log('[CDP] Navigating to target URL...');
     await send('Page.navigate', { url: `http://localhost:${PORT}/?skipIntro=true` });
 
-    // Wait for Page.loadEventFired
+    // Wait for load event
     await new Promise((resolve) => {
       const loadHandler = (event) => {
         const msg = JSON.parse(event.data);
@@ -125,81 +102,82 @@ server.listen(PORT, async () => {
         }
       };
       ws.addEventListener('message', loadHandler);
-      setTimeout(resolve, 3000); // Fallback timeout
+      setTimeout(resolve, 3000);
     });
 
-    // Wait 3.5s for Three.js scene, textures, particles, and animation to render frames
-    console.log('[CDP] Allowing WebGL world to render frames...');
-    await new Promise((r) => setTimeout(r, 3500));
+    console.log('[CDP] Waiting 3s for WebGL scene and GitHub API data...');
+    await new Promise((r) => setTimeout(r, 3000));
 
-    // Inspect Canvas & WebGL in browser context
-    const evalRes = await send('Runtime.evaluate', {
-      expression: `
-        (() => {
-          const canvas = document.querySelector('canvas');
-          const hud = document.querySelector('.font-cinzel');
-          return {
-            hasCanvas: !!canvas,
-            canvasWidth: canvas ? canvas.width : 0,
-            canvasHeight: canvas ? canvas.height : 0,
-            hudTitle: hud ? hud.textContent.trim() : null,
-            bodyText: document.body.innerText.substring(0, 100),
-          };
-        })()
-      `,
-      returnByValue: true,
-    });
-
-    console.log('[CDP] Browser DOM Inspection:', evalRes.result ? evalRes.result.value : evalRes);
-
-    // Capture Desktop Screenshot
-    console.log('[CDP] Capturing Desktop Screenshot...');
-    const desktopShot = await send('Page.captureScreenshot', { format: 'png' });
-    if (desktopShot && desktopShot.data) {
-      const desktopBuffer = Buffer.from(desktopShot.data, 'base64');
-      const desktopPath = path.join(artifactDir, 'm3_shinobi_world_desktop.png');
-      fs.writeFileSync(desktopPath, desktopBuffer);
-      console.log(`[CDP] Saved desktop screenshot to: ${desktopPath} (${desktopBuffer.length} bytes)`);
+    async function capture(filename) {
+      const shot = await send('Page.captureScreenshot', { format: 'png' });
+      if (shot && shot.data) {
+        const buffer = Buffer.from(shot.data, 'base64');
+        const outPath = path.join(artifactDir, filename);
+        fs.writeFileSync(outPath, buffer);
+        console.log(`[CDP] Saved ${filename} (${buffer.length} bytes)`);
+      }
     }
 
-    // Set mobile viewport and capture mobile screenshot
-    console.log('[CDP] Emulating mobile viewport (390x844)...');
+    // 1. Desktop Stage 0: Hero & Identity
+    console.log('[CDP] Capturing Desktop Stage 0 (Identity)...');
+    await capture('m3_refined_desktop_identity.png');
+
+    // 2. Desktop Stage 1: Developer Story (About)
+    console.log('[CDP] Switching to Stage 1 (Story)...');
+    await send('Runtime.evaluate', {
+      expression: `document.querySelectorAll('nav button')[1]?.click()`
+    });
+    await new Promise((r) => setTimeout(r, 800));
+    await capture('m3_refined_desktop_story.png');
+
+    // 3. Desktop Stage 2: Tech Arsenal
+    console.log('[CDP] Switching to Stage 2 (Arsenal)...');
+    await send('Runtime.evaluate', {
+      expression: `document.querySelectorAll('nav button')[2]?.click()`
+    });
+    await new Promise((r) => setTimeout(r, 800));
+    await capture('m3_refined_desktop_arsenal.png');
+
+    // 4. Desktop Stage 4: GitHub Intelligence
+    console.log('[CDP] Switching to Stage 4 (Telemetry)...');
+    await send('Runtime.evaluate', {
+      expression: `document.querySelectorAll('nav button')[4]?.click()`
+    });
+    await new Promise((r) => setTimeout(r, 800));
+    await capture('m3_refined_desktop_telemetry.png');
+
+    // 5. Mobile Emulation (390x844)
+    console.log('[CDP] Emulating Mobile Viewport (390x844)...');
     await send('Emulation.setDeviceMetricsOverride', {
       width: 390,
       height: 844,
       deviceScaleFactor: 2,
       mobile: true,
+      hasTouch: true,
     });
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 800));
 
-    const mobileShot = await send('Page.captureScreenshot', { format: 'png' });
-    if (mobileShot && mobileShot.data) {
-      const mobileBuffer = Buffer.from(mobileShot.data, 'base64');
-      const mobilePath = path.join(artifactDir, 'm3_shinobi_world_mobile.png');
-      fs.writeFileSync(mobilePath, mobileBuffer);
-      console.log(`[CDP] Saved mobile screenshot to: ${mobilePath} (${mobileBuffer.length} bytes)`);
-    }
+    // Reset to Stage 0 for mobile
+    await send('Runtime.evaluate', {
+      expression: `document.querySelectorAll('footer button')[1]?.click()`
+    });
+    await new Promise((r) => setTimeout(r, 600));
+    await capture('m3_refined_mobile_identity.png');
 
-    // Also capture Awakening Sequence (M2)
-    console.log('[CDP] Navigating to Awakening Sequence (M2)...');
-    await send('Page.navigate', { url: `http://localhost:${PORT}/` });
-    await new Promise((r) => setTimeout(r, 2200));
-
-    const introShot = await send('Page.captureScreenshot', { format: 'png' });
-    if (introShot && introShot.data) {
-      const introBuffer = Buffer.from(introShot.data, 'base64');
-      const introPath = path.join(artifactDir, 'm2_awakening_intro.png');
-      fs.writeFileSync(introPath, introBuffer);
-      console.log(`[CDP] Saved Awakening intro screenshot to: ${introPath} (${introBuffer.length} bytes)`);
-    }
+    // Mobile Stage 1: Developer Story
+    await send('Runtime.evaluate', {
+      expression: `document.querySelectorAll('footer button')[2]?.click()`
+    });
+    await new Promise((r) => setTimeout(r, 600));
+    await capture('m3_refined_mobile_story.png');
 
     ws.close();
-  } catch (err) {
-    console.error('[CDP] Error during verification:', err);
+  } catch (e) {
+    console.error('[CDP ERROR]:', e);
   } finally {
     edgeProcess.kill();
     server.close(() => {
-      console.log('[HTTP] Server stopped. CDP verification complete.');
+      console.log('[CDP CAPTURE] Server closed cleanly.');
       process.exit(0);
     });
   }
