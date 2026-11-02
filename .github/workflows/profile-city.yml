@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Sync Live Shinobi Telemetry & 3D City
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
