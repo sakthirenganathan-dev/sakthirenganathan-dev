@@ -1,7 +1,7 @@
 {
   "publicRepos": 26,
   "followers": 0,
-  "following": 3,
+  "following": 2,
   "totalStars": 1,
   "totalForks": 0,
   "topLangs": [
@@ -20,13 +20,13 @@
   "dataRangeStart": "2025-11-02",
   "dataRangeEnd": "2026-11-02",
   "timezone": "Asia/Kolkata",
-  "lastAttempt": "2026-11-02 16:38 UTC",
-  "repoLastSync": "2026-11-02 16:38 UTC",
+  "lastAttempt": "2026-11-02 16:55 UTC",
+  "repoLastSync": "2026-11-02 16:55 UTC",
   "repoStatus": "LIVE",
-  "repoDataSource": "GITHUB_REST",
-  "contribLastSync": "2026-11-02 16:29 UTC",
-  "contribStatus": "CACHED",
-  "contribDataSource": "CACHE_FALLBACK",
-  "lastSynced": "2026-11-02 16:29 UTC",
-  "status": "PARTIAL_LIVE"
+  "repoDataSource": "GITHUB_GRAPHQL",
+  "contribLastSync": "2026-11-02 16:55 UTC",
+  "contribStatus": "LIVE",
+  "contribDataSource": "GITHUB_GRAPHQL",
+  "lastSynced": "2026-11-02 16:55 UTC",
+  "status": "LIVE_OK"
 }
