@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import UniverseCanvas from './components/UniverseCanvas.jsx';
-import CinematicHUD from './components/CinematicHUD.jsx';
+import React, { useState, useEffect, useRef } from 'react';
+import ShinobiWorld from './world/ShinobiWorld.jsx';
+import ShinobiHUD from './components/ShinobiHUD.jsx';
 import { Volume2, VolumeX } from 'lucide-react';
 
 export default function App() {
   const [stage, setStage] = useState(0);
+  const [hoveredNode, setHoveredNode] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
   const [audioActive, setAudioActive] = useState(false);
-  const audioCtxRef = React.useRef(null);
-  const oscRef = React.useRef(null);
+  const [shockwaveActive, setShockwaveActive] = useState(false);
 
-  // Subtle 108Hz ambient meditative chakra frequency via Web Audio
+  const audioCtxRef = useRef(null);
+  const oscRef = useRef(null);
+
+  // Subtle 108Hz ambient meditative chakra drone via Web Audio API
   const toggleAudio = () => {
     if (!audioActive) {
       try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioContext();
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
         audioCtxRef.current = ctx;
 
         const osc = ctx.createOscillator();
@@ -42,7 +46,7 @@ export default function App() {
     }
   };
 
-  // Wheel listener to glide through stages
+  // Wheel listener to glide camera smoothly between 3D realms
   useEffect(() => {
     let timeout = false;
     const handleWheel = (e) => {
@@ -56,19 +60,38 @@ export default function App() {
         }
         setTimeout(() => {
           timeout = false;
-        }, 800);
+        }, 650);
       }
     };
     window.addEventListener('wheel', handleWheel, { passive: true });
     return () => window.removeEventListener('wheel', handleWheel);
   }, []);
 
+  const handleSelectProject = (project) => {
+    setSelectedProject(project);
+    if (project.url) {
+      window.open(project.url, '_blank');
+    }
+  };
+
+  const handleShockwave = () => {
+    setShockwaveActive(true);
+    setTimeout(() => setShockwaveActive(false), 2000);
+  };
+
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-[#05020c] text-white">
-      {/* 3D Three.js Unified Universe Canvas */}
-      <UniverseCanvas currentStage={stage} />
+      {/* 3D WebGL Shinobi World */}
+      <ShinobiWorld
+        currentStage={stage}
+        setStage={setStage}
+        hoveredNode={hoveredNode}
+        setHoveredNode={setHoveredNode}
+        onSelectProject={handleSelectProject}
+        triggerShockwave={handleShockwave}
+      />
 
-      {/* Floating Audio Toggle */}
+      {/* Floating Audio Controller */}
       <button
         onClick={toggleAudio}
         className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-black/60 border border-purple-700/60 hover:border-cyan-400 text-purple-200 transition-all duration-300 backdrop-blur-md"
@@ -77,8 +100,15 @@ export default function App() {
         {audioActive ? <Volume2 className="w-4 h-4 text-cyan-400" /> : <VolumeX className="w-4 h-4 text-slate-400" />}
       </button>
 
-      {/* Cinematic HUD Overlay */}
-      <CinematicHUD stage={stage} setStage={setStage} />
+      {/* Futuristic Cinematic Anime HUD */}
+      <ShinobiHUD
+        currentStage={stage}
+        setStage={setStage}
+        hoveredNode={hoveredNode}
+        selectedProject={selectedProject}
+        setSelectedProject={setSelectedProject}
+        shockwaveActive={shockwaveActive}
+      />
     </div>
   );
 }

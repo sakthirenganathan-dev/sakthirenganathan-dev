@@ -16,8 +16,8 @@
 
 <br><br>
 
-# 🌀 **[LAUNCH THE LIVING 3D SHINOBI UNIVERSE ↗](https://sakthirenganathan.vercel.app)**
-### *Enter the full-screen 3D Three.js chakra cosmos, realtime orbital jutsu, and GSAP motion journey.*
+# 🌀 **[LAUNCH THE LIVING 3D SHINOBI UNIVERSE ↗](https://sakthirenganathan-dev.github.io/sakthirenganathan-dev/)**
+### *Enter the full-screen 3D WebGL chakra cosmos, realtime orbital jutsu, and GSAP motion journey.*
 
 <br><br>
 
@@ -47,6 +47,6 @@
 
 <br>
 
-<sub>SHINOBI: THE SIX PATHS · Continuous 60fps SVG motion · Periodic GitHub Actions telemetry sync · Full 3D interactive web universe in Three.js &amp; React.</sub>
+<sub>SHINOBI: THE SIX PATHS · Continuous 60fps WebGL 3D cosmos · Periodic GitHub Actions telemetry sync · Unofficial non-commercial anime fan presentation.</sub>
 
 </div>
