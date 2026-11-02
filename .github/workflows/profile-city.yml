@@ -2,11 +2,19 @@ name: Shinobi Live Synchronization Engine
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "0 0 * * *"
   workflow_dispatch:
   push:
     branches:
       - main
+    paths-ignore:
+      - "assets/**"
+      - "profile-3d-contrib/**"
+      - "README.md"
+
+concurrency:
+  group: profile-telemetry-sync
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -16,7 +24,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Sync Live Shinobi Telemetry & 3D City
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -29,6 +40,18 @@ jobs:
         run: |
           node scripts/update-shinobi-live.js
 
+      - name: Validate Generated Telemetry SVG
+        run: |
+          node -e "
+            const fs = require('fs');
+            const svg = fs.readFileSync('assets/id-dashboard.svg', 'utf8');
+            if (!svg.includes('</svg>')) {
+              console.error('Invalid SVG generated');
+              process.exit(1);
+            }
+            console.log('Telemetry SVG: Valid');
+          "
+
       - name: Generate 3D Contribution City
         uses: yoshi389111/github-profile-3d-contrib@v0.9.3
         env:
@@ -40,6 +63,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/id-dashboard.svg assets/telemetry-cache.json profile-3d-contrib/
-          if git commit -m "chore: synchronize live shinobi telemetry and contribution city [skip ci]"; then
+          if git diff --staged --quiet; then
+            echo "No changes in synchronized telemetry assets. Skipping commit."
+          else
+            git commit -m "chore: synchronize live shinobi telemetry and contribution city [skip ci]"
             git push
           fi

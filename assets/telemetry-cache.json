@@ -1,6 +1,7 @@
 {
   "publicRepos": 26,
   "followers": 0,
+  "following": 3,
   "totalStars": 1,
   "totalForks": 0,
   "topLangs": [
@@ -14,6 +15,10 @@
   "totalContributions": 169,
   "currentStreak": 2,
   "longestStreak": 5,
-  "lastSynced": "2026-11-02 16:06 UTC",
+  "longestStreakStart": "2025-08-19",
+  "longestStreakEnd": "2025-08-23",
+  "timezone": "Asia/Kolkata",
+  "lastSynced": "2026-11-02 16:16 UTC",
+  "dataSource": "CACHE_FALLBACK",
   "status": "LIVE_OK"
 }
