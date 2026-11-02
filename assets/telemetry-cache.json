@@ -1,7 +1,7 @@
 {
   "publicRepos": 26,
   "followers": 0,
-  "following": 3,
+  "following": 2,
   "totalStars": 1,
   "totalForks": 0,
   "topLangs": [
@@ -12,13 +12,13 @@
   ],
   "latestRepoName": "sakthirenganathan-dev",
   "latestRepoTime": "2026-11-02",
-  "totalContributions": 169,
-  "currentStreak": 2,
-  "longestStreak": 5,
-  "longestStreakStart": "2025-08-19",
-  "longestStreakEnd": "2025-08-23",
+  "totalContributions": 38,
+  "currentStreak": 1,
+  "longestStreak": 2,
+  "longestStreakStart": "2025-11-08",
+  "longestStreakEnd": "2025-11-09",
   "timezone": "Asia/Kolkata",
-  "lastSynced": "2026-11-02 16:16 UTC",
-  "dataSource": "CACHE_FALLBACK",
+  "lastSynced": "2026-11-02 16:24 UTC",
+  "dataSource": "GITHUB_GRAPHQL",
   "status": "LIVE_OK"
 }
