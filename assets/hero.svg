@@ -74,9 +74,9 @@
       </feMerge>
     </filter>
 
-    <filter id="electricGlow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="6" result="blur1"/>
-      <feGaussianBlur stdDeviation="2" result="blur2"/>
+    <filter id="electricGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur1"/>
+      <feGaussianBlur stdDeviation="1.5" result="blur2"/>
       <feMerge>
         <feMergeNode in="blur1"/>
         <feMergeNode in="blur2"/>
@@ -149,56 +149,56 @@
 
     <!-- Terminal Body Content -->
     <!-- Greeting -->
-    <text x="36" y="104" class="f-sans" font-size="18" font-weight="600" fill="#94a3b8" letter-spacing="1">Hi, I'm</text>
+    <text x="32" y="96" class="f-sans" font-size="18" font-weight="600" fill="#94a3b8" letter-spacing="1">Hi, I'm</text>
 
-    <!-- Main Identity Name (Commanding, Perfectly Fitted with > 150px Right Margin) -->
-    <text x="36" y="158" class="f-sans" font-size="44" font-weight="900" fill="url(#nameGradient)" letter-spacing="0.5" filter="url(#electricGlow)">SAKTHI RENGANATHAN</text>
+    <!-- Main Identity Name (55px font size: >= 14 CSS px at 360px viewport; textLength guarantees fit inside panel with 36px right margin) -->
+    <text x="32" y="156" class="f-sans" font-size="55" font-weight="900" fill="url(#nameGradient)" filter="url(#electricGlow)" textLength="584" lengthAdjust="spacingAndGlyphs">SAKTHI RENGANATHAN</text>
 
-    <!-- Dynamic Cycling Animated Roles (Balanced Typography with > 200px Right Margin) -->
-    <g class="f-sans" font-size="28" font-weight="800">
+    <!-- Dynamic Cycling Animated Roles (40px font size: >= 10 CSS px at 360px viewport) -->
+    <g class="f-sans" font-size="40" font-weight="800">
       <!-- Role 1: Full-Stack Developer (Static Fallback Default = Visible) -->
-      <text x="36" y="210" fill="#38bdf8" opacity="1">
+      <text x="32" y="214" fill="#38bdf8" opacity="1">
         ⚡ Full-Stack Developer
         <animate attributeName="opacity" values="1;1;0;0;0;0;0;0;1" keyTimes="0;0.21;0.25;0.50;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
-        <animate attributeName="y" values="210;210;202;218;218;218;218;218;210" keyTimes="0;0.21;0.25;0.50;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
+        <animate attributeName="y" values="214;214;206;222;222;222;222;222;214" keyTimes="0;0.21;0.25;0.50;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
       </text>
 
       <!-- Role 2: AI Systems Developer -->
-      <text x="36" y="210" fill="#c084fc" opacity="0">
+      <text x="32" y="214" fill="#c084fc" opacity="0">
         🤖 AI Systems Developer
         <animate attributeName="opacity" values="0;0;1;1;0;0;0;0;0" keyTimes="0;0.245;0.27;0.46;0.50;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
-        <animate attributeName="y" values="218;218;210;210;202;218;218;218;218" keyTimes="0;0.245;0.27;0.46;0.50;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
+        <animate attributeName="y" values="222;222;214;214;206;222;222;222;222" keyTimes="0;0.245;0.27;0.46;0.50;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
       </text>
 
-      <!-- Role 3: Computer Vision Developer -->
-      <text x="36" y="210" fill="#34d399" opacity="0">
+      <!-- Role 3: Computer Vision Developer (textLength guarantees >= 60px right margin) -->
+      <text x="32" y="214" fill="#34d399" opacity="0" textLength="560" lengthAdjust="spacingAndGlyphs">
         👁️ Computer Vision Developer
         <animate attributeName="opacity" values="0;0;0;0;1;1;0;0;0" keyTimes="0;0.25;0.495;0.52;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
-        <animate attributeName="y" values="218;218;218;218;210;210;202;218;218" keyTimes="0;0.25;0.495;0.52;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
+        <animate attributeName="y" values="222;222;222;222;214;214;206;222;222" keyTimes="0;0.25;0.495;0.52;0.71;0.75;0.96;0.99;1" dur="12s" repeatCount="indefinite" />
       </text>
 
-      <!-- Role 4: Creative Shinobi Developer -->
-      <text x="36" y="210" fill="#f43f5e" opacity="0">
+      <!-- Role 4: Creative Shinobi Developer (textLength guarantees >= 60px right margin) -->
+      <text x="32" y="214" fill="#f43f5e" opacity="0" textLength="560" lengthAdjust="spacingAndGlyphs">
         🌀 Creative Shinobi Developer
         <animate attributeName="opacity" values="0;0;0;0;0;0;1;1;0" keyTimes="0;0.25;0.50;0.745;0.77;0.96;0.99;1;1" dur="12s" repeatCount="indefinite" />
-        <animate attributeName="y" values="218;218;218;218;218;218;210;210;202" keyTimes="0;0.25;0.50;0.745;0.77;0.96;0.99;1;1" dur="12s" repeatCount="indefinite" />
+        <animate attributeName="y" values="222;222;222;222;222;222;214;214;206" keyTimes="0;0.25;0.50;0.745;0.77;0.96;0.99;1;1" dur="12s" repeatCount="indefinite" />
       </text>
     </g>
 
     <!-- Professional Philosophy Sub-tagline -->
-    <text x="36" y="260" class="f-sans" font-size="15" font-weight="500" fill="#cbd5e1" letter-spacing="0.2">
+    <text x="32" y="262" class="f-sans" font-size="14.5" font-weight="500" fill="#cbd5e1" letter-spacing="0.2">
       Channeling shinobi discipline and precision into modern intelligent software.
     </text>
 
     <!-- Core Specialization Line -->
-    <text x="36" y="290" class="f-sans" font-size="13.5" font-weight="500" fill="#94a3b8" letter-spacing="0.2">
+    <text x="32" y="288" class="f-sans" font-size="13" font-weight="500" fill="#94a3b8" letter-spacing="0.2">
       Modular clean architecture · Edge computer vision · Resilient AI workflows.
     </text>
 
     <!-- Terminal Status Tag -->
-    <g transform="translate(36, 350)">
+    <g transform="translate(32, 350)">
       <circle cx="4" cy="0" r="4" fill="#22c55e"/>
-      <text x="16" y="4" class="f-mono" font-size="11.5" font-weight="700" fill="#64748b" letter-spacing="1.2">
+      <text x="16" y="4" class="f-mono" font-size="11" font-weight="700" fill="#64748b" letter-spacing="1.2">
         STATUS: MISSION READY // REPOS: 30 PUBLIC // BRANCH: MAIN
       </text>
     </g>
