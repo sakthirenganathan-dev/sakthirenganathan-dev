@@ -9,7 +9,7 @@ export const DEFAULT_TIMEZONE = 'Asia/Kolkata';
 /**
  * Checks if two YYYY-MM-DD date strings represent consecutive calendar days.
  */
-function isConsecutiveDay(prevDateStr, currDateStr) {
+export function isConsecutiveDay(prevDateStr, currDateStr) {
   if (!prevDateStr || !currDateStr) return false;
   const prev = new Date(prevDateStr + 'T00:00:00Z');
   const curr = new Date(currDateStr + 'T00:00:00Z');
@@ -88,7 +88,6 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
   }
 
   // 2. Current Streak calculation with explicit timezone awareness
-  // Determine local date string for the specified timezone
   const now = new Date();
   const localDateFormatter = new Intl.DateTimeFormat('en-CA', {
     timeZone: timezone,
@@ -100,7 +99,6 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
 
   let todayIndex = days.findIndex((d) => d.date === todayStr);
   if (todayIndex === -1) {
-    // If today is not in calendar (e.g. calendar ends yesterday in UTC), fallback to last day
     todayIndex = days.length - 1;
   }
 
@@ -108,7 +106,6 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
   let currentStreak = 0;
 
   if (todayEntry && todayEntry.count > 0) {
-    // Today has contributions: streak includes today
     currentStreak = 1;
     for (let i = todayIndex; i > 0; i--) {
       if (isConsecutiveDay(days[i - 1].date, days[i].date) && days[i - 1].count > 0) {
@@ -118,7 +115,7 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
       }
     }
   } else {
-    // Today has 0 contributions so far: check if yesterday was active to preserve streak
+    // Today has 0 contributions so far: check if yesterday was active
     const yesterdayIndex = todayIndex - 1;
     if (
       yesterdayIndex >= 0 &&
@@ -151,11 +148,11 @@ export function calculateContributionMetrics(calendar, timezone = DEFAULT_TIMEZO
 
 /**
  * Fetches profile telemetry and contribution calendar using GitHub GraphQL API.
- * Uses explicit from and to timestamps for the 1-year contribution collection.
+ * Uses explicit from and to timestamps covering the rolling 365-day interval.
  */
 export async function fetchGraphQLTelemetry(token, username = USERNAME, customDates = {}) {
   if (!token) {
-    return { ok: false, reason: 'NO_TOKEN', data: null };
+    return { ok: false, reason: 'NO_TOKEN', data: null, source: 'GRAPHQL' };
   }
 
   const now = new Date();
@@ -204,23 +201,23 @@ export async function fetchGraphQLTelemetry(token, username = USERNAME, customDa
     });
 
     if (res.status === 401) {
-      return { ok: false, reason: 'AUTH_FAILED', data: null };
+      return { ok: false, reason: 'AUTH_FAILED', data: null, source: 'GRAPHQL' };
     }
     if (res.status === 403) {
-      return { ok: false, reason: 'RATE_LIMITED', data: null };
+      return { ok: false, reason: 'RATE_LIMITED', data: null, source: 'GRAPHQL' };
     }
     if (!res.ok) {
-      return { ok: false, reason: `HTTP_${res.status}`, data: null };
+      return { ok: false, reason: `HTTP_${res.status}`, data: null, source: 'GRAPHQL' };
     }
 
     const json = await res.json();
     if (json.errors && json.errors.length > 0) {
-      return { ok: false, reason: 'GRAPHQL_ERROR', data: null, errors: json.errors };
+      return { ok: false, reason: 'GRAPHQL_ERROR', data: null, source: 'GRAPHQL', errors: json.errors };
     }
 
     const userData = json.data?.user;
     if (!userData) {
-      return { ok: false, reason: 'USER_NOT_FOUND', data: null };
+      return { ok: false, reason: 'USER_NOT_FOUND', data: null, source: 'GRAPHQL' };
     }
 
     // Aggregate repos
@@ -252,13 +249,14 @@ export async function fetchGraphQLTelemetry(token, username = USERNAME, customDa
     return {
       ok: true,
       reason: 'LIVE_OK',
+      source: 'GITHUB_GRAPHQL',
       data: {
         publicRepos: userData.repositories?.totalCount ?? repoNodes.length,
         followers: userData.followers?.totalCount ?? 0,
         following: userData.following?.totalCount ?? 0,
         totalStars,
         totalForks,
-        topLangs: topLangs.length > 0 ? topLangs : ['TypeScript', 'JavaScript', 'Python', 'Dart'],
+        topLangs: topLangs.length > 0 ? topLangs : ['TypeScript', 'JavaScript', 'HTML', 'CSS'],
         latestRepoName,
         latestRepoTime,
         totalContributions: streakMetrics?.totalContributions ?? null,
@@ -272,12 +270,12 @@ export async function fetchGraphQLTelemetry(token, username = USERNAME, customDa
       },
     };
   } catch (err) {
-    return { ok: false, reason: `NETWORK_ERROR: ${err.message}`, data: null };
+    return { ok: false, reason: `NETWORK_ERROR: ${err.message}`, data: null, source: 'GRAPHQL' };
   }
 }
 
 /**
- * Fallback: Fetches profile telemetry using GitHub REST API.
+ * Fetches repository operational telemetry using GitHub REST API.
  */
 export async function fetchRestTelemetry(token, username = USERNAME) {
   const headers = {
@@ -295,13 +293,13 @@ export async function fetchRestTelemetry(token, username = USERNAME) {
     ]);
 
     if (userRes.status === 401 || reposRes.status === 401) {
-      return { ok: false, reason: 'AUTH_FAILED', data: null };
+      return { ok: false, reason: 'AUTH_FAILED', data: null, source: 'REST' };
     }
     if (userRes.status === 403 || reposRes.status === 403) {
-      return { ok: false, reason: 'RATE_LIMITED', data: null };
+      return { ok: false, reason: 'RATE_LIMITED', data: null, source: 'REST' };
     }
     if (!userRes.ok) {
-      return { ok: false, reason: `HTTP_${userRes.status}`, data: null };
+      return { ok: false, reason: `HTTP_${userRes.status}`, data: null, source: 'REST' };
     }
 
     const user = await userRes.json();
@@ -329,103 +327,110 @@ export async function fetchRestTelemetry(token, username = USERNAME) {
     return {
       ok: true,
       reason: 'REST_OK',
+      source: 'GITHUB_REST',
       data: {
         publicRepos: typeof user.public_repos === 'number' ? user.public_repos : repos.length,
         followers: typeof user.followers === 'number' ? user.followers : 0,
         following: typeof user.following === 'number' ? user.following : 0,
         totalStars,
         totalForks,
-        topLangs: topLangs.length > 0 ? topLangs : ['TypeScript', 'JavaScript', 'Python', 'Dart'],
+        topLangs: topLangs.length > 0 ? topLangs : ['TypeScript', 'JavaScript', 'HTML', 'CSS'],
         latestRepoName: latestRepo ? latestRepo.name : 'sakthirenganathan-dev',
         latestRepoTime: latestRepo ? latestRepo.pushed_at.split('T')[0] : 'Today',
-        totalContributions: null,
-        currentStreak: null,
-        longestStreak: null,
-        longestStreakStart: null,
-        longestStreakEnd: null,
-        dataRangeStart: null,
-        dataRangeEnd: null,
-        timezone: DEFAULT_TIMEZONE,
       },
     };
   } catch (err) {
-    return { ok: false, reason: `NETWORK_ERROR: ${err.message}`, data: null };
+    return { ok: false, reason: `NETWORK_ERROR: ${err.message}`, data: null, source: 'REST' };
   }
 }
 
 /**
  * Validates and merges freshly fetched data with previous cached snapshot.
- * Guarantees zero partial corruption and maintains distinct execution timestamps:
- * - lastAttempt: recorded on every execution
- * - lastSuccessfulSync: preserved if current API attempt fails
- * - dataRangeStart / dataRangeEnd: bounds of verified contribution calendar
+ * Maintains independent provenance and freshness for:
+ * 1. Repository metrics (repoStatus, repoLastSync, repoDataSource)
+ * 2. Contribution metrics (contribStatus, contribLastSync, contribDataSource)
  */
-export function validateAndMergeTelemetry(freshData, existingCache, isLiveSuccess = false) {
+export function validateAndMergeTelemetry(repoResult, contribResult, existingCache) {
   const cache = existingCache || {};
   const nowUTC = new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC';
 
-  // Validations
-  const publicRepos = (typeof freshData?.publicRepos === 'number' && freshData.publicRepos >= 0)
-    ? freshData.publicRepos
+  // 1. Repository Data Freshness
+  const repoOk = !!repoResult?.ok && repoResult?.data !== null;
+  const repoData = repoResult?.data;
+  const repoStatus = repoOk ? 'LIVE' : 'CACHED';
+  const repoDataSource = repoOk ? (repoResult.source || 'GITHUB_REST') : (cache.repoDataSource || 'CACHE_FALLBACK');
+  const repoLastSync = repoOk ? nowUTC : (cache.repoLastSync || cache.lastSynced || nowUTC);
+
+  // 2. Contribution Data Freshness
+  const contribOk = !!contribResult?.ok && contribResult?.data?.totalContributions !== null;
+  const contribData = contribResult?.data;
+  const contribStatus = contribOk ? 'LIVE' : 'CACHED';
+  const contribDataSource = contribOk ? (contribResult.source || 'GITHUB_GRAPHQL') : 'CACHE_FALLBACK';
+  const contribLastSync = contribOk ? nowUTC : (cache.contribLastSync || cache.lastSynced || nowUTC);
+
+  // Validate repo metrics
+  const publicRepos = (repoOk && typeof repoData?.publicRepos === 'number' && repoData.publicRepos >= 0)
+    ? repoData.publicRepos
     : (cache.publicRepos ?? 26);
 
-  const followers = (typeof freshData?.followers === 'number' && freshData.followers >= 0)
-    ? freshData.followers
+  const followers = (repoOk && typeof repoData?.followers === 'number' && repoData.followers >= 0)
+    ? repoData.followers
     : (cache.followers ?? 0);
 
-  const following = (typeof freshData?.following === 'number' && freshData.following >= 0)
-    ? freshData.following
+  const following = (repoOk && typeof repoData?.following === 'number' && repoData.following >= 0)
+    ? repoData.following
     : (cache.following ?? 3);
 
-  const totalStars = (typeof freshData?.totalStars === 'number' && freshData.totalStars >= 0)
-    ? freshData.totalStars
+  const totalStars = (repoOk && typeof repoData?.totalStars === 'number' && repoData.totalStars >= 0)
+    ? repoData.totalStars
     : (cache.totalStars ?? 1);
 
-  const totalForks = (typeof freshData?.totalForks === 'number' && freshData.totalForks >= 0)
-    ? freshData.totalForks
+  const totalForks = (repoOk && typeof repoData?.totalForks === 'number' && repoData.totalForks >= 0)
+    ? repoData.totalForks
     : (cache.totalForks ?? 0);
 
-  const topLangs = (Array.isArray(freshData?.topLangs) && freshData.topLangs.length > 0)
-    ? freshData.topLangs
-    : (cache.topLangs ?? ['TypeScript', 'JavaScript', 'Python', 'Dart']);
+  const topLangs = (repoOk && Array.isArray(repoData?.topLangs) && repoData.topLangs.length > 0)
+    ? repoData.topLangs
+    : (cache.topLangs ?? ['TypeScript', 'JavaScript', 'HTML', 'CSS']);
 
-  const latestRepoName = (typeof freshData?.latestRepoName === 'string' && freshData.latestRepoName.length > 0)
-    ? freshData.latestRepoName
+  const latestRepoName = (repoOk && typeof repoData?.latestRepoName === 'string' && repoData.latestRepoName.length > 0)
+    ? repoData.latestRepoName
     : (cache.latestRepoName ?? 'sakthirenganathan-dev');
 
-  const latestRepoTime = (typeof freshData?.latestRepoTime === 'string')
-    ? freshData.latestRepoTime
+  const latestRepoTime = (repoOk && typeof repoData?.latestRepoTime === 'string')
+    ? repoData.latestRepoTime
     : (cache.latestRepoTime ?? 'Today');
 
-  // Streak metrics: if freshData provides non-null numbers, use them; otherwise preserve cache
-  const totalContributions = (typeof freshData?.totalContributions === 'number' && freshData.totalContributions >= 0)
-    ? freshData.totalContributions
-    : (cache.totalContributions ?? 169);
+  // Validate contribution metrics
+  const totalContributions = (contribOk && typeof contribData?.totalContributions === 'number' && contribData.totalContributions >= 0)
+    ? contribData.totalContributions
+    : (cache.totalContributions ?? 38);
 
-  const currentStreak = (typeof freshData?.currentStreak === 'number' && freshData.currentStreak >= 0)
-    ? freshData.currentStreak
-    : (cache.currentStreak ?? 2);
+  const currentStreak = (contribOk && typeof contribData?.currentStreak === 'number' && contribData.currentStreak >= 0)
+    ? contribData.currentStreak
+    : (cache.currentStreak ?? 1);
 
-  const longestStreak = (typeof freshData?.longestStreak === 'number' && freshData.longestStreak >= 0)
-    ? freshData.longestStreak
-    : (cache.longestStreak ?? 5);
+  const longestStreak = (contribOk && typeof contribData?.longestStreak === 'number' && contribData.longestStreak >= 0)
+    ? contribData.longestStreak
+    : (cache.longestStreak ?? 2);
 
-  const longestStreakStart = freshData?.longestStreakStart || cache.longestStreakStart || '2025-08-19';
-  const longestStreakEnd = freshData?.longestStreakEnd || cache.longestStreakEnd || '2025-08-23';
+  const longestStreakStart = (contribOk && contribData?.longestStreakStart)
+    ? contribData.longestStreakStart
+    : (cache.longestStreakStart || '2025-11-08');
 
-  const dataRangeStart = freshData?.dataRangeStart || cache.dataRangeStart || '2025-11-02';
-  const dataRangeEnd = freshData?.dataRangeEnd || cache.dataRangeEnd || '2026-11-02';
+  const longestStreakEnd = (contribOk && contribData?.longestStreakEnd)
+    ? contribData.longestStreakEnd
+    : (cache.longestStreakEnd || '2025-11-09');
 
-  // Timestamps
+  const dataRangeStart = (contribOk && contribData?.dataRangeStart)
+    ? contribData.dataRangeStart
+    : (cache.dataRangeStart || '2025-11-02');
+
+  const dataRangeEnd = (contribOk && contribData?.dataRangeEnd)
+    ? contribData.dataRangeEnd
+    : (cache.dataRangeEnd || '2026-11-02');
+
   const lastAttempt = nowUTC;
-  const lastSuccessfulSync = isLiveSuccess
-    ? nowUTC
-    : (cache.lastSuccessfulSync || cache.lastSynced || nowUTC);
-
-  let dataSource = 'CACHE_FALLBACK';
-  if (isLiveSuccess) {
-    dataSource = (freshData && freshData.totalContributions !== null) ? 'GITHUB_GRAPHQL' : 'GITHUB_REST';
-  }
 
   return {
     publicRepos,
@@ -445,11 +450,16 @@ export function validateAndMergeTelemetry(freshData, existingCache, isLiveSucces
     dataRangeEnd,
     timezone: DEFAULT_TIMEZONE,
     lastAttempt,
-    lastSuccessfulSync,
-    lastSynced: lastSuccessfulSync, // backward compatibility
-    dataSource,
-    status: isLiveSuccess ? 'LIVE_OK' : 'CACHED_SNAPSHOT',
-    isLiveSync: isLiveSuccess,
+    repoLastSync,
+    repoStatus,
+    repoDataSource,
+    contribLastSync,
+    contribStatus,
+    contribDataSource,
+    lastSynced: contribLastSync,
+    status: (repoStatus === 'LIVE' && contribStatus === 'LIVE')
+      ? 'LIVE_OK'
+      : (repoStatus === 'LIVE' ? 'PARTIAL_LIVE' : 'CACHED_SNAPSHOT'),
   };
 }
 
@@ -469,7 +479,7 @@ export function loadCache(cachePath = CACHE_FILE) {
 }
 
 /**
- * Formats a day-level date range (e.g. "Aug 19 – 23" or "Aug 19 – Sep 2")
+ * Formats a day-level date range (e.g. "Aug 19 – 23" or "Nov 8 – 9")
  */
 export function formatDateRange(startDateStr, endDateStr) {
   if (!startDateStr || !endDateStr) return 'Peak Discipline';
@@ -515,18 +525,19 @@ export function formatMonthYearRange(startDateStr, endDateStr) {
 /**
  * Generates the clean, standards-compliant 1200 x 390 Shinobi Intelligence SVG.
  * Strictly describes contribution calendar data as "TOTAL CONTRIBUTIONS" over its verified date range.
+ * Reflects independent repository and contribution freshness statuses.
  */
 export function generateTelemetrySvg(data) {
   const lang0 = data.topLangs[0] || 'TypeScript';
   const lang1 = data.topLangs[1] || 'JavaScript';
-  const lang2 = data.topLangs[2] || 'Python';
-  const lang3 = data.topLangs[3] || 'Dart';
+  const lang2 = data.topLangs[2] || 'HTML';
+  const lang3 = data.topLangs[3] || 'CSS';
 
   const totalContributions = data.totalContributions;
   const currentStreak = data.currentStreak;
   const longestStreak = data.longestStreak;
 
-  // Objective Status Descriptor (replaces 100% UNBROKEN)
+  // Objective Status Descriptor
   const streakStatusLabel = currentStreak > 0
     ? 'ACTIVE STREAK // SYNCHRONIZED'
     : 'STANDBY // AWAITING DISPATCH';
@@ -535,13 +546,22 @@ export function generateTelemetrySvg(data) {
   const longestRecordDates = formatDateRange(data.longestStreakStart, data.longestStreakEnd);
   const contributionRange = formatMonthYearRange(data.dataRangeStart, data.dataRangeEnd);
 
-  // Footer status indicator
-  const footerStatus = data.isLiveSync
-    ? `LAST TELEMETRY SYNC: <tspan fill="#a855f7" font-weight="700">${data.lastSuccessfulSync}</tspan> // LIVE GITHUB ACTION DISPATCH · ZERO FABRICATED METRICS`
-    : `CACHED TELEMETRY: <tspan fill="#fbbf24" font-weight="700">SYNCED ${data.lastSuccessfulSync}</tspan> // ATTEMPTED ${data.lastAttempt} · STANDBY SNAPSHOT`;
+  // Panel Status Labels
+  const leftPanelStatus = data.repoStatus === 'LIVE' ? 'LIVE STATS' : 'CACHED';
+  const leftPanelColor = data.repoStatus === 'LIVE' ? '#38bdf8' : '#fbbf24';
 
-  const panelStatusText = data.isLiveSync ? 'LIVE STATS' : 'CACHED';
-  const panelStatusColor = data.isLiveSync ? '#38bdf8' : '#fbbf24';
+  const rightPanelStatus = data.contribStatus === 'LIVE' ? '火の意志 · ACTIVE' : '火の意志 · CACHED';
+  const rightPanelColor = data.contribStatus === 'LIVE' ? '#f43f5e' : '#fbbf24';
+
+  // Footer status indicator
+  let footerStatus = '';
+  if (data.repoStatus === 'LIVE' && data.contribStatus === 'LIVE') {
+    footerStatus = `LAST TELEMETRY SYNC: <tspan fill="#a855f7" font-weight="700">${data.contribLastSync}</tspan> // LIVE GITHUB ACTION DISPATCH · ZERO FABRICATED METRICS`;
+  } else if (data.repoStatus === 'LIVE' && data.contribStatus !== 'LIVE') {
+    footerStatus = `SYS.TELEMETRY // REPOS: <tspan fill="#38bdf8" font-weight="700">LIVE (${data.repoLastSync})</tspan> · CONTRIBUTIONS: <tspan fill="#fbbf24" font-weight="700">CACHED (${data.contribLastSync})</tspan>`;
+  } else {
+    footerStatus = `SYS.TELEMETRY // REPOS: <tspan fill="#fbbf24" font-weight="700">CACHED</tspan> · CONTRIBUTIONS: <tspan fill="#fbbf24" font-weight="700">CACHED (${data.contribLastSync})</tspan> // ATT: ${data.lastAttempt}`;
+  }
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="390" viewBox="0 0 1200 390" role="img" aria-label="Shinobi Intelligence Telemetry &amp; Chakra Streak Console">
   <defs>
@@ -709,8 +729,8 @@ export function generateTelemetrySvg(data) {
     <text x="74" y="23" class="f-mono" font-size="11" font-weight="800" fill="#cbd5e1" letter-spacing="1.2">
       SYS.INTEL // REPOSITORIES &amp; IMPACT
     </text>
-    <text x="526" y="23" class="f-mono" font-size="10.5" font-weight="700" fill="${panelStatusColor}" text-anchor="end">
-      ${panelStatusText}
+    <text x="526" y="23" class="f-mono" font-size="10.5" font-weight="700" fill="${leftPanelColor}" text-anchor="end">
+      ${leftPanelStatus}
     </text>
 
     <!-- Body Content -->
@@ -804,8 +824,8 @@ export function generateTelemetrySvg(data) {
     <text x="74" y="23" class="f-mono" font-size="11" font-weight="800" fill="#cbd5e1" letter-spacing="1.2">
       WILL OF FIRE // CHAKRA COMMIT STREAK
     </text>
-    <text x="526" y="23" class="f-mono" font-size="10.5" font-weight="700" fill="#f43f5e" text-anchor="end">
-      火の意志 · ACTIVE
+    <text x="526" y="23" class="f-mono" font-size="10.5" font-weight="700" fill="${rightPanelColor}" text-anchor="end">
+      ${rightPanelStatus}
     </text>
 
     <!-- Body Content: Center Flame & 3 Dynamic Streak Badges -->
@@ -887,30 +907,35 @@ export async function run(options = {}) {
   console.log(`[START] Executing Shinobi Live Telemetry Engine for @${username}...`);
 
   const existingCache = loadCache(cachePath);
-  let isLiveSuccess = false;
 
-  // 1. Try Primary: GitHub GraphQL API
-  let apiResult = await fetchGraphQLTelemetry(token, username);
-  if (apiResult.ok) {
-    console.log('[SUCCESS] Retrieved live telemetry via official GitHub GraphQL API');
-    isLiveSuccess = true;
-  } else {
-    console.log(`[NOTICE] GraphQL skipped or unavailable (${apiResult.reason}). Falling back to REST API...`);
-    // 2. Try Secondary: GitHub REST API
-    apiResult = await fetchRestTelemetry(token, username);
-    if (apiResult.ok) {
-      console.log('[SUCCESS] Retrieved live telemetry via official GitHub REST API');
-      isLiveSuccess = true;
+  // 1. Fetch Repository Telemetry (REST or GraphQL)
+  let repoResult = null;
+  let contribResult = null;
+
+  if (token) {
+    console.log('[INFO] Token detected. Attempting full GraphQL telemetry...');
+    const gqlResult = await fetchGraphQLTelemetry(token, username);
+    if (gqlResult.ok) {
+      console.log('[SUCCESS] GraphQL telemetry and contribution calendar retrieved');
+      repoResult = gqlResult;
+      contribResult = gqlResult;
     } else {
-      console.warn(`[WARN] REST API unavailable (${apiResult.reason}). Falling back to verified cache snapshot...`);
-      isLiveSuccess = false;
+      console.warn(`[WARN] GraphQL failed (${gqlResult.reason}). Falling back to REST for repos...`);
+      repoResult = await fetchRestTelemetry(token, username);
+      contribResult = { ok: false, reason: gqlResult.reason, data: null };
     }
+  } else {
+    console.log('[NOTICE] Unauthenticated mode. Fetching repository data via REST API...');
+    repoResult = await fetchRestTelemetry(null, username);
+    contribResult = { ok: false, reason: 'NO_TOKEN', data: null };
   }
 
-  // 3. Validate & Merge with Snapshot Cache
-  const validatedData = validateAndMergeTelemetry(apiResult.data, existingCache, isLiveSuccess);
+  // 2. Validate & Merge with Snapshot Cache (Independent freshness tracking)
+  const validatedData = validateAndMergeTelemetry(repoResult, contribResult, existingCache);
 
-  // 4. Save clean snapshot cache
+  console.log(`[STATUS] Telemetry state: Repos = ${validatedData.repoStatus} (${validatedData.repoDataSource}), Contributions = ${validatedData.contribStatus} (${validatedData.contribDataSource})`);
+
+  // 3. Save clean snapshot cache
   try {
     fs.writeFileSync(cachePath, JSON.stringify(validatedData, null, 2), 'utf8');
     console.log(`[INFO] Telemetry cache persisted to ${cachePath}`);
@@ -918,7 +943,7 @@ export async function run(options = {}) {
     console.warn(`[WARN] Could not write cache file: ${err.message}`);
   }
 
-  // 5. Generate and write SVG
+  // 4. Generate and write SVG
   const svgContent = generateTelemetrySvg(validatedData);
   fs.writeFileSync(outputPath, svgContent, 'utf8');
   console.log(`[SUCCESS] Shinobi Telemetry Console generated at ${outputPath}`);
